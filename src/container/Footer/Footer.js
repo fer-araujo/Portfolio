@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { images } from "../../constants";
+// import { images } from "../../constants";
 import { AppWrapp, MotionWrapp } from "../../wrapper";
 import { client } from "../../client";
 import "./Footer.scss";
@@ -38,21 +38,21 @@ const Footer = () => {
 
   return (
     <>
-      <h2 className="head-text">Lets Chat!</h2>
+      <h2 className="head-text">Lets Chat! <br /> Shoot me <span>a Message!</span></h2>
 
       <div className="app__footer-cards">
-        <div className="app__footer-card">
+        {/* <div className="app__footer-card">
           <img src={images.email} alt="email" />
           <a href="mailto:ferno93@gmail.com" className="p-text">
-            ferno93@gmail.com
+            Send me an Email!
           </a>
-        </div>
-        <div className="app__footer-card">
+        </div> */}
+        {/* <div className="app__footer-card">
           <img src={images.mobile} alt="mobile" />
           <a href="tel: +52 (961) 269-8566" className="p-text">
             +52 (961) 269-8566
           </a>
-        </div>
+        </div> */}
       </div>
       {!isFormSubmitted ? (
         <div className="app__footer-form app__flex">

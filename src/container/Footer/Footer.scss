@@ -33,6 +33,11 @@
             color: var(--black-color) !important;
         }
         a {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            margin-left: 0.5rem;
+            font-size: 0.95rem;
             text-decoration: none;
             font-weight: 600;
             color: var(--black-color) !important;
@@ -87,6 +92,7 @@
         outline: none;
         margin: 2rem 0 0 0;
         font-family: var(--font-base);
+        font-size: 0.95rem;
         cursor: pointer;
     }
     @media screen and (max-width: 768px) {
