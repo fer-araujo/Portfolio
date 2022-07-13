@@ -24,7 +24,7 @@ import logoB from '../assets/FerAraujo-black.png';
 
 import CV from '../assets/CV_Fernando_Araujo_2022.pdf';
 
-export default {
+const image = {
   email,
   mobile,
   api,
@@ -49,3 +49,5 @@ export default {
   logo,
   logoB
 };
+
+export default image
