@@ -1,0 +1,370 @@
+.app__light {
+    background-color: var(--primary-color);
+    font-family: var(--font-base);
+    color: var(--black-color) !important;
+}
+
+.app__light a,
+.app__light p,
+.app__light span,
+.app__light b,
+.app__light h1,
+.app__light h2,
+.app__light h3,
+.app__light h4,
+.app__light h5,
+.app__light .app__nav-btn-theme,
+.app__light .app__light-icon {
+    color: var(--black-color);
+}
+
+.app__light .app__nav-container {
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.app__light .app__nav-links {
+    li {
+        a {
+            text-decoration: none;
+            flex-direction: column;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+            color: var(--blackGray-color) !important;
+            &:hover {
+                color: var(--secondary-color) !important;
+            }
+        }
+        &:hover {
+            div {
+                background: var(--secondary-color);
+            }
+        }
+    }
+}
+
+.app__light .app__nav-menu {
+    background: var(--blackGray-color);
+    svg {
+        color: var(--white-color);
+    }
+    div {
+        background-color: var(--white-color);
+        ul {
+            li {
+                a {
+                    color: var(--black-color) !important;
+                }
+            }
+        }
+    }
+    .app__nav-svg {
+        svg {
+            color: var(--black-color);
+        }
+    }
+}
+
+.app__light .app__work-portfolio {
+    .app__work-item {
+        &:hover {
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2)
+        }
+    }
+}
+
+.app__light .app__skills-item {
+    div {
+        &:hover {
+            box-shadow: 0 0 10px #b6b4b4;
+        }
+    }
+}
+
+.app__light .app__whitebg {
+    background-color: var(--white-color);
+}
+
+.app__light .app__primarybg {
+    background-color: var(--primary-color);
+}
+
+.app__light .app__skills-item {
+    div {
+        background-color: var(--primary-color);
+    }
+}
+
+.app__light .app__testimonial-item {
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.app__dark {
+    background-color: var(--blackGray-color);
+    font-family: var(--font-base);
+    color: var(--primary-color) !important;
+}
+
+.app__dark a,
+.app__dark p,
+.app__dark span,
+.app__dark b,
+.app__dark h1,
+.app__dark h2,
+.app__dark h3,
+.app__dark h4,
+.app__dark h5,
+.app__dark .app__nav-btn-theme,
+.app__dark .app__dark-icon {
+    color: var(--primary-color);
+}
+
+.app__dark .app__nav-container {
+    background: rgba(100, 100, 100, 0.25);
+    border: 1px solid rgba(100, 100, 100, 0.18);
+}
+
+.app__dark .app__nav-links {
+    li {
+        a {
+            text-decoration: none;
+            flex-direction: column;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+            &:hover {
+                color: var(--white-color) !important;
+            }
+        }
+        &:hover {
+            div {
+                background: var(--white-color);
+            }
+        }
+    }
+}
+
+.app__dark .app__nav-menu {
+    background: var(--blackGray-color);
+    svg {
+        color: var(--primary-color);
+    }
+    div {
+        background-color: var(--blackGray-color);
+        ul {
+            li {
+                a {
+                    color: var(--lighter-color) !important;
+                }
+            }
+        }
+    }
+}
+
+.app__dark .app__work-portfolio {
+    .app__work-item {
+        &:hover {
+            box-shadow: 0 0 25px rgba(240, 240, 240, 0.3)
+        }
+    }
+}
+
+.app__dark .app__skills-item {
+    div {
+        &:hover {
+            box-shadow: 0 0 10px #fef4f5;
+        }
+    }
+}
+
+.app__dark .app__skills-item {
+    div {
+        background-color: #FFF;
+    }
+}
+
+.app__dark .app__whitebg {
+    background-color: var(--darker-color);
+}
+
+.app__dark .app__primarybg {
+    background-color: var(--blackGray-color);
+}
+
+.app__dark .app__testimonial-item {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.app__light .app__work-content,
+.app__dark .app__work-content {
+    h4 {
+        color: var(--black-color) !important;
+    }
+    p {
+        font-weight: 100;
+        color: var(--gray-color) !important;
+    }
+}
+
+.app__container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+
+.app__flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app__wrapper {
+    flex: 1;
+    width: 100%;
+    flex-direction: column;
+    padding: 4rem 2rem;
+    @media screen and (max-width: 450px) {
+        padding: 4rem 1rem 2rem;
+    }
+}
+
+.copyright {
+    width: 100%;
+    padding: 2rem 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    p {
+        text-transform: uppercase;
+        color: var(--black-color);
+    }
+}
+
+.head-text {
+    font-size: 2.75rem;
+    font-weight: 800;
+    text-align: center;
+    color: var(--black-color);
+    text-transform: capitalize;
+    span {
+        color: var(--secondary-color) !important;
+    }
+    @media screen and (min-width: 2000px) {
+        font-size: 4rem;
+    }
+    @media screen and (max-width: 450px) {
+        font-size: 2rem;
+    }
+}
+
+.p-text {
+    font-size: 0.8rem;
+    text-align: left;
+    line-height: 1.5;
+    @media screen and (min-width: 2000px) {
+        font-size: 1.75rem;
+    }
+}
+
+.app__light .p-text {
+    color: var(--gray-color);
+}
+
+.app__dark .p-text {
+    color: var(--lightGray-color);
+}
+
+.bold-text {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--black-color);
+    text-align: left;
+    @media screen and (min-width: 2000px) {
+        font-size: 2rem;
+    }
+    @media screen and (max-width: 450px) {
+        font-size: 0.9rem;
+    }
+}
+
+.app__social {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+    div {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--white-color);
+        margin: 0.25rem 0;
+        border: 1px solid var(--lightGray-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s ease-in-out;
+        a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            svg {
+                width: 15px;
+                height: 15px;
+                color: var(--gray-color);
+            }
+        }
+        &:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            svg {
+                color: var(--white-color);
+            }
+        }
+        @media screen and (min-width: 2000px) {
+            width: 70px;
+            height: 70px;
+            margin: 0.5rem 0;
+            svg {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    }
+}
+
+.app__navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+    .app__navigation-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #cbcbcb;
+        margin: 0.5rem;
+        transition: background-color 0.2s ease-in-out;
+        &:hover {
+            background-color: var(--secondary-color);
+        }
+        @media screen and (min-width: 2000px) {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .app__navigation,
+    .app__social {
+        display: none;
+    }
+    .copyright {
+        padding: 2rem;
+    }
+}
