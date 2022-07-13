@@ -59,6 +59,15 @@
         letter-spacing: 1px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
+    .badge-cmp,
+    .tag-cmp {
+        background-color: rgba(255, 255, 255, 0.2);
+        h1,
+        p {
+            font-weight: 700;
+            // color: var(--darker-color)!important;
+        }
+    }
     .tag-cmp {
         flex-direction: column;
         margin-top: 3rem;
@@ -69,9 +78,12 @@
         }
     }
     .tag-cv {
+        background: var(--secondary-color);
         flex-direction: column;
         margin-top: 3rem;
         a {
+            color: var(--white-color) !important;
+            font-weight: 500;
             width: 100%;
             text-transform: uppercase;
             text-align: right;
