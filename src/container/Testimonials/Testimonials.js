@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from "framer-motion";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
 import { AppWrapp, MotionWrapp } from "../../wrapper";
@@ -36,7 +35,7 @@ const Testimonials = () => {
               <p className="p-text">{TEST.feedback}</p>
               <div>
                 <h4 className="bold-text">
-                  <a href={TEST.link} target="_blank" title="LinkedIn">
+                  <a href={TEST.link} target="_blank" title="LinkedIn" rel="noreferrer">
                   {TEST.name}
                   </a>
                 </h4>

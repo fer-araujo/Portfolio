@@ -43,7 +43,6 @@ export default {
   typescript,
   vue,
   circle,
-  logo,
   CV,
   laptop_01,
   laptop_02,
