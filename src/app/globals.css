@@ -1,26 +1,98 @@
 @import "tailwindcss";
 
+/* ════════════════════════════════════════
+   Cinematic Theme — Portfolio Redesign 2026
+   Dark-first. CSS variables ready for future light mode.
+   ════════════════════════════════════════ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: oklch(0.13 0.01 300);
+  --foreground: oklch(0.92 0.005 90);
+  --muted: oklch(0.6 0.01 80);
+  --border: oklch(0.2 0.0 0.0);
+  --card-bg: oklch(0.12 0.0 0.0);
+  --muted-bg: oklch(0.15 0.0 0.0);
+  --ring: oklch(0.48 0.22 27 / 0.5);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@theme {
+  /* Backgrounds */
+  --color-bg: var(--background);
+  --color-bg-muted: var(--muted-bg);
+  --color-bg-card: var(--card-bg);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Text */
+  --color-text: var(--foreground);
+  --color-text-muted: var(--muted);
+  --color-text-inverse: oklch(0.0 0.0 0.0);
+
+  /* Accent */
+  --color-accent: oklch(0.48 0.22 27);
+  --color-accent-hover: oklch(0.55 0.25 27);
+  --color-accent-teal: oklch(0.5 0.15 195);
+
+  /* UI */
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+
+  /* Font families */
+  --font-heading: "Geist", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.6s ease-out;
+  --animate-slide-up: slide-up 0.6s ease-out;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reduced motion */
+@supports (scroll-behavior: smooth) {
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
