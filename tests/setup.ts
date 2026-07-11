@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom/vitest";
+import { beforeAll, afterAll } from "vitest";
 
 // Suppress specific console errors during tests
 const originalError = console.error;
