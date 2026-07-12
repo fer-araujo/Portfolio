@@ -21,18 +21,13 @@ interface CounterProps {
  * Skips animation when reduced motion is preferred.
  */
 function AnimatedCounter({ value, suffix = "", duration = 1 }: CounterProps) {
-  const [count, setCount] = useState(0);
+  const prefersReduced = useReducedMotion();
+  const [count, setCount] = useState(prefersReduced ? value : 0);
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const prefersReduced = useReducedMotion();
 
   useEffect(() => {
-    if (prefersReduced) {
-      setCount(value);
-      return;
-    }
-
-    if (!isInView) return;
+    if (prefersReduced || !isInView) return;
 
     let startTime: number | null = null;
     const startValue = 0;
@@ -67,8 +62,6 @@ function AnimatedCounter({ value, suffix = "", duration = 1 }: CounterProps) {
  * Responsive: stacks on mobile.
  */
 export function AboutSection() {
-  const prefersReduced = useReducedMotion();
-
   return (
     <motion.section
       className="relative py-24 md:py-32"
@@ -119,7 +112,7 @@ export function AboutSection() {
                 className="grid grid-cols-2 gap-4"
                 data-testid="about-stats"
               >
-                {about.stats.map((stat, i) => (
+                {about.stats.map((stat) => (
                   <div
                     key={stat.label}
                     className={cn(

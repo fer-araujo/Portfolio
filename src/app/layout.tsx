@@ -47,23 +47,8 @@ export default function RootLayout({
       <body className="min-h-dvh bg-bg text-text font-body antialiased">
         {/* Global atmospheric gradient — creates fog/mist connecting all sections */}
         <div
-          className="fixed inset-0 pointer-events-none"
+          className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-bg via-bg-alt to-bg"
           aria-hidden="true"
-          style={{
-            zIndex: -1,
-            background: `
-              linear-gradient(
-                to bottom,
-                var(--background) 0%,
-                var(--background) 25%,
-                var(--bg-alt) 40%,
-                var(--bg-alt) 55%,
-                var(--background) 65%,
-                var(--bg-alt) 80%,
-                var(--background) 100%
-              )
-            `,
-          }}
         />
         <LenisProvider>
           <Navbar />

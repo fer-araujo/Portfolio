@@ -22,6 +22,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
   const lenis = useLenisScroll();
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- required for portal mounting
     setMounted(true);
     const scrollY = window.scrollY;
     document.body.style.overflow = "hidden";
@@ -37,7 +38,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
       ScrollTrigger.refresh();
       lenis?.init();
     };
-  }, []);
+  }, [lenis]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
