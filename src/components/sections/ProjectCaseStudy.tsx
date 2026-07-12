@@ -23,6 +23,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
 
   useEffect(() => {
     setMounted(true);
+    const scrollY = window.scrollY;
     document.body.style.overflow = "hidden";
     lenis?.destroy();
     ScrollTrigger.normalizeScroll(false);
@@ -32,6 +33,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
       document.body.style.overflow = "";
       ScrollTrigger.getAll().forEach((st) => st.enable());
       ScrollTrigger.normalizeScroll(true);
+      window.scrollTo(0, scrollY);
       ScrollTrigger.refresh();
       lenis?.init();
     };
