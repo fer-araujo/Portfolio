@@ -88,11 +88,11 @@ export const projects: Project[] = [
     description: "Simple Pokédex built with NextJS",
     longDescription: {
       problem:
-        "Pokémon fans need a fast, searchable way to browse Pokémon data with evolutions and stats.",
+        "As a fan and developer, the urge to build something around Pokémon was irresistible. No business case — just pure enthusiasm for the craft.",
       solution:
-        "Created a Pokédex application using Next.js and the PokéAPI, with search, filtering, and detailed Pokémon cards.",
+        "A clean Pokédex with search, filtering, and detailed Pokémon cards. Built with Next.js and the PokéAPI — zero overengineering, maximum fun.",
       impact:
-        "Provides a snappy, mobile-friendly Pokédex experience for quick Pokémon lookups during gameplay.",
+        "Zero users. Infinite joy. Not every project needs a user base — some exist simply for the love of building.",
     },
     techStack: ["Next.js", "TypeScript", "API Integration"],
     thumbnail: "/images/projects/pokedex-01.png",
