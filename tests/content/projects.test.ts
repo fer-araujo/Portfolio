@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { projects } from "@/content/projects";
 
 describe("projects data", () => {
-  it("has exactly 5 projects", () => {
-    expect(projects).toHaveLength(5);
+  it("has exactly 4 projects", () => {
+    expect(projects).toHaveLength(4);
   });
 
   it("has school-system (School Attendance System)", () => {
@@ -37,16 +37,6 @@ describe("projects data", () => {
     expect(project!.githubUrl).toBe("https://github.com/fer-araujo/patient-management");
   });
 
-  it("has madlions (MadLions Database Manager)", () => {
-    const project = projects.find((p) => p.id === "madlions");
-    expect(project).toBeDefined();
-    expect(project!.title).toBe("MadLions Database Manager");
-    expect(project!.featured).toBe(true);
-    expect(project!.category).toBe("web");
-    expect(project!.techStack).toContain("Node.js");
-    expect(project!.githubUrl).toBe("https://github.com/fer-araujo/MadLions");
-  });
-
   it("has pokedex (Pokédex App)", () => {
     const project = projects.find((p) => p.id === "pokedex");
     expect(project).toBeDefined();
@@ -57,10 +47,15 @@ describe("projects data", () => {
     expect(project!.githubUrl).toBe("https://github.com/fer-araujo/pokedex");
   });
 
-  it("all 5 projects are featured", () => {
+  it("all projects are featured", () => {
     projects.forEach((project) => {
       expect(project.featured).toBe(true);
     });
+  });
+
+  it("does NOT have madlions project", () => {
+    const madlions = projects.find((p) => p.id === "madlions");
+    expect(madlions).toBeUndefined();
   });
 
   it("does NOT have the old CAT platform project", () => {
@@ -74,7 +69,6 @@ describe("projects data", () => {
   });
 
   it("does NOT have projectCategories or getProjectCategory exports", async () => {
-    // Dynamic import to check exports
     const mod = await import("@/content/projects");
     expect((mod as Record<string, unknown>).projectCategories).toBeUndefined();
     expect((mod as Record<string, unknown>).getProjectCategory).toBeUndefined();

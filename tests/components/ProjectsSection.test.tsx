@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
 
 // ── Mock projects data ─────────────────────────────────
@@ -16,7 +16,8 @@ vi.mock("@/content/projects", () => ({
         impact: "Reduced attendance processing time by 80%",
       },
       techStack: ["React", "TypeScript", "Tailwind CSS", "Firebase"],
-      thumbnail: "/images/projects/school-system.png",
+      thumbnail: "/images/projects/school-system-01.png",
+      images: ["/images/projects/school-system-02.png"],
       category: "web",
       featured: true,
       githubUrl: "https://github.com/fer-araujo/school-system",
@@ -31,7 +32,8 @@ vi.mock("@/content/projects", () => ({
         impact: "Thousands of monthly active users",
       },
       techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Express", "TMDB API"],
-      thumbnail: "/images/projects/anime-tracker.png",
+      thumbnail: "/images/projects/anime-tracker-01.png",
+      images: [],
       category: "web",
       featured: true,
       liveUrl: "https://your-anime-tracker.vercel.app",
@@ -47,25 +49,11 @@ vi.mock("@/content/projects", () => ({
         impact: "Deployed in 3 local clinics",
       },
       techStack: ["React", "TypeScript", "Vite"],
-      thumbnail: "/images/projects/patient-management.png",
+      thumbnail: "/images/projects/patient-management-01.png",
+      images: ["/images/projects/patient-management-02.png"],
       category: "web",
       featured: true,
       githubUrl: "https://github.com/fer-araujo/patient-management",
-    },
-    {
-      id: "madlions",
-      title: "MadLions Database Manager",
-      description: "GUI for database management",
-      longDescription: {
-        problem: "Database management tools lacked a clean GUI",
-        solution: "Built a GUI-based database management app with React",
-        impact: "Simplifies database management with a clean visual interface",
-      },
-      techStack: ["React", "TypeScript", "Node.js"],
-      thumbnail: "/images/projects/madlions.png",
-      category: "web",
-      featured: true,
-      githubUrl: "https://github.com/fer-araujo/MadLions",
     },
     {
       id: "pokedex",
@@ -77,7 +65,8 @@ vi.mock("@/content/projects", () => ({
         impact: "Provides snappy Pokémon lookups during gameplay",
       },
       techStack: ["Next.js", "TypeScript", "API Integration"],
-      thumbnail: "/images/projects/pokedex.png",
+      thumbnail: "/images/projects/pokedex-01.png",
+      images: ["/images/projects/pokedex-02.png"],
       category: "web",
       featured: true,
       githubUrl: "https://github.com/fer-araujo/pokedex",
@@ -108,6 +97,10 @@ vi.mock("motion/react", () => ({
 vi.mock("lucide-react", () => ({
   ExternalLink: () => <svg data-testid="icon-external-link" />,
   Github: () => <svg data-testid="icon-github" />,
+  Maximize2: () => <svg data-testid="icon-maximize" />,
+  X: () => <svg data-testid="icon-x" />,
+  ChevronLeft: () => <svg data-testid="icon-chevron-left" />,
+  ChevronRight: () => <svg data-testid="icon-chevron-right" />,
 }));
 
 // ── Mock next/image ────────────────────────────────────
@@ -129,19 +122,23 @@ describe("ProjectsSection", () => {
     expect(screen.getByText(/featured work/i)).toBeInTheDocument();
   });
 
-  it("renders all 5 projects", () => {
+  it("renders all 4 projects", () => {
     render(<ProjectsSection />);
     expect(screen.getByText("School Attendance System")).toBeInTheDocument();
     expect(screen.getByText("Anime Tracker")).toBeInTheDocument();
     expect(screen.getByText("Patient Management")).toBeInTheDocument();
-    expect(screen.getByText("MadLions Database Manager")).toBeInTheDocument();
     expect(screen.getByText("Pokédex App")).toBeInTheDocument();
   });
 
-  it("renders all 5 project cards with correct data attributes", () => {
+  it("does NOT render madlions", () => {
+    render(<ProjectsSection />);
+    expect(screen.queryByText("MadLions Database Manager")).not.toBeInTheDocument();
+  });
+
+  it("renders all 4 project cards with correct data attributes", () => {
     render(<ProjectsSection />);
     const cards = screen.getAllByTestId(/project-card-/i);
-    expect(cards.length).toBe(5);
+    expect(cards.length).toBe(4);
   });
 
   it("renders project descriptions", () => {
@@ -156,9 +153,6 @@ describe("ProjectsSection", () => {
       screen.getByText("Healthcare management starter")
     ).toBeInTheDocument();
     expect(
-      screen.getByText("GUI for database management")
-    ).toBeInTheDocument();
-    expect(
       screen.getByText("Simple Pokédex built with NextJS")
     ).toBeInTheDocument();
   });
@@ -166,11 +160,10 @@ describe("ProjectsSection", () => {
   it("renders tech stack tags for each project", () => {
     render(<ProjectsSection />);
     expect(screen.getAllByText("React").length).toBeGreaterThanOrEqual(2);
-    expect(screen.getAllByText("TypeScript").length).toBeGreaterThanOrEqual(4);
+    expect(screen.getAllByText("TypeScript").length).toBeGreaterThanOrEqual(3);
     expect(screen.getByText("Firebase")).toBeInTheDocument();
     expect(screen.getByText("TMDB API")).toBeInTheDocument();
     expect(screen.getByText("Vite")).toBeInTheDocument();
-    expect(screen.getByText("Node.js")).toBeInTheDocument();
     expect(screen.getByText("API Integration")).toBeInTheDocument();
   });
 
@@ -194,7 +187,7 @@ describe("ProjectsSection", () => {
   it("renders project thumbnails as images", () => {
     render(<ProjectsSection />);
     const images = screen.getAllByRole("img");
-    expect(images.length).toBeGreaterThanOrEqual(5);
+    expect(images.length).toBeGreaterThanOrEqual(4);
   });
 
   it("renders the grid inside a visual structure wrapper", () => {
@@ -212,16 +205,46 @@ describe("ProjectsSection", () => {
     expect(screen.getByText("School Attendance System")).toBeInTheDocument();
   });
 
-  it("does NOT render a view toggle UI", () => {
+  it("does NOT render BrowserFrame wrapper", () => {
     render(<ProjectsSection />);
-    expect(screen.queryByTestId("view-toggle")).not.toBeInTheDocument();
+    // BrowserFrame had traffic-light dots with aria-hidden
+    const trafficLights = document.querySelectorAll('[aria-hidden="true"]');
+    // FilmGrain uses aria-hidden too, but BrowserFrame traffic lights are gone
+    expect(
+      Array.from(trafficLights).filter(
+        (el) => el.tagName === "DIV" && el.classList.contains("rounded-full")
+      ).length
+    ).toBe(0);
+  });
+
+  it("shows gallery indicator for projects with multiple images", () => {
+    render(<ProjectsSection />);
+    // school-system has 1 extra image → "2 images"
+    const schoolCard = screen.getByTestId("project-card-school-system");
+    expect(within(schoolCard).getByText("2 images")).toBeInTheDocument();
+  });
+
+  it("does NOT show gallery indicator for projects without extra images", () => {
+    render(<ProjectsSection />);
+    // anime-tracker has empty images array
+    const animeCard = screen.getByTestId("project-card-anime-tracker");
+    expect(within(animeCard).queryByText(/images/i)).not.toBeInTheDocument();
+  });
+
+  it("opens lightbox when clicking gallery indicator", () => {
+    render(<ProjectsSection />);
+    const schoolCard = screen.getByTestId("project-card-school-system");
+    const galleryBtn = within(schoolCard).getByText("2 images");
+    fireEvent.click(galleryBtn);
+    // Lightbox should appear with close button
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByLabelText("Close gallery")).toBeInTheDocument();
   });
 
   it("grid is always rendered directly (no conditional rendering)", () => {
     render(<ProjectsSection />);
     const grid = screen.getByTestId("projects-grid-wrapper");
     expect(grid).toBeInTheDocument();
-    // No marquee wrapper should exist
     expect(screen.queryByTestId("projects-marquee-wrapper")).not.toBeInTheDocument();
   });
 });
