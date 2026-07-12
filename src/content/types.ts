@@ -21,6 +21,12 @@ export interface About {
   };
 }
 
+/** Simple stat displayed in project case studies */
+export interface Stat {
+  label: string;
+  value: string | number;
+}
+
 /** Portfolio project */
 export interface Project {
   id: string;
@@ -38,6 +44,14 @@ export interface Project {
   githubUrl?: string;
   category: string;
   featured: boolean;
+  /** Short editorial tagline for the film reel panel */
+  tagline?: string;
+  /** Narrative paragraph for the case study overlay */
+  narrativeText?: string;
+  /** Project timeline phase */
+  phase?: "past" | "current" | "planned";
+  /** Quick stats displayed in case study */
+  stats?: Stat[];
 }
 
 /** Technology skill */
@@ -47,6 +61,15 @@ export interface Skill {
   icon?: string; // Lucide icon name
   proficiency?: "beginner" | "intermediate" | "advanced" | "expert";
   yearsOfExperience?: number;
+}
+
+/** Skill domain for bento grid layout (Impact Architecture) */
+export interface SkillDomain {
+  id: string;
+  domain: string;
+  description: string;
+  icon: string; // Lucide icon name
+  technologies: { name: string; level: "expert" | "advanced" }[];
 }
 
 /** Work experience entry */

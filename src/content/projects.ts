@@ -7,30 +7,6 @@ import type { Project } from "./types";
 
 export const projects: Project[] = [
   {
-    id: "school-system",
-    title: "School Attendance System",
-    description: "QR-based attendance tracking with Firebase",
-    longDescription: {
-      problem:
-        "Manual attendance tracking in schools was slow and error-prone, with teachers spending hours on roll calls.",
-      solution:
-        "Built a QR-based attendance system where students scan to check in, with a Firebase backend for real-time tracking and reporting.",
-      impact:
-        "Reduced attendance processing time by 80% and eliminated data entry errors for school administrators.",
-    },
-    techStack: ["React", "TypeScript", "Tailwind CSS", "Firebase"],
-    thumbnail: "/images/projects/school-system-01.png",
-    images: [
-      "/images/projects/school-system-02.png",
-      "/images/projects/school-system-03.png",
-      "/images/projects/school-system-04.png",
-      "/images/projects/school-system-05.png",
-    ],
-    githubUrl: "https://github.com/fer-araujo/school-system",
-    category: "web",
-    featured: true,
-  },
-  {
     id: "anime-tracker",
     title: "Anime Tracker",
     description: "Streaming availability platform",
@@ -55,6 +31,35 @@ export const projects: Project[] = [
     ],
     liveUrl: "https://anime-tracker-hazel-pi.vercel.app",
     githubUrl: "https://github.com/fer-araujo/anime-tracker",
+    category: "web",
+    featured: true,
+    phase: "past",
+  },
+  {
+    id: "this-portfolio",
+    title: "This Portfolio",
+    description: "Handcrafted. Cinematic. Intentional.",
+    tagline: "Craft over templates. Intent over filler.",
+    narrativeText:
+      "Every detail — from the horizontal film reel to the Aurora animations, from the editorial typography to the GSAP-driven transitions — was designed to show not just what I can build, but how I think about building it.",
+    phase: "current",
+    stats: [
+      { label: "Stack", value: "Next.js 16" },
+      { label: "Animation", value: "GSAP + Motion" },
+      { label: "Design", value: "Tailwind v4" },
+    ],
+    longDescription: {
+      problem:
+        "Portfolios often feel templated — same grid layouts, same card patterns, same generic hero sections.",
+      solution:
+        "Designed every pixel with intention: a horizontal cinematic film reel driven by GSAP ScrollTrigger, editorial typography, and fluid Aurora animations that create an immersive storytelling experience.",
+      impact:
+        "A portfolio that is itself a case study in thoughtful frontend engineering — demonstrating mastery of animation, layout, and design system architecture.",
+    },
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Motion", "Lenis"],
+    thumbnail: "/images/projects/portfolio-2026-01.png",
+    images: [],
+    githubUrl: "https://github.com/fer-araujo/portfolio-2026",
     category: "web",
     featured: true,
   },
@@ -93,6 +98,32 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/fer-araujo/patient-management",
     category: "web",
     featured: true,
+    phase: "planned",
+  },
+  {
+    id: "school-system",
+    title: "School Attendance System",
+    description: "QR-based attendance tracking with Firebase",
+    longDescription: {
+      problem:
+        "Manual attendance tracking in schools was slow and error-prone, with teachers spending hours on roll calls.",
+      solution:
+        "Built a QR-based attendance system where students scan to check in, with a Firebase backend for real-time tracking and reporting.",
+      impact:
+        "Reduced attendance processing time by 80% and eliminated data entry errors for school administrators.",
+    },
+    techStack: ["React", "TypeScript", "Tailwind CSS", "Firebase"],
+    thumbnail: "/images/projects/school-system-01.png",
+    images: [
+      "/images/projects/school-system-02.png",
+      "/images/projects/school-system-03.png",
+      "/images/projects/school-system-04.png",
+      "/images/projects/school-system-05.png",
+    ],
+    githubUrl: "https://github.com/fer-araujo/school-system",
+    category: "web",
+    featured: true,
+    phase: "past",
   },
   {
     id: "pokedex",
@@ -117,5 +148,6 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/fer-araujo/pokedex",
     category: "web",
     featured: true,
+    phase: "past",
   },
 ];
