@@ -7,6 +7,7 @@ import { X, ExternalLink } from "lucide-react";
 import { GithubIcon } from "@/components/ui/BrandIcons";
 import { Tag } from "@/components/ui/Tag";
 import { useLenisScroll } from "@/lib/lenis";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Project } from "@/content/types";
 
 interface ProjectCaseStudyProps {
@@ -24,9 +25,14 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
     setMounted(true);
     document.body.style.overflow = "hidden";
     lenis?.destroy();
+    ScrollTrigger.normalizeScroll(false);
+    ScrollTrigger.getAll().forEach((st) => st.disable());
     closeRef.current?.focus();
     return () => {
       document.body.style.overflow = "";
+      ScrollTrigger.getAll().forEach((st) => st.enable());
+      ScrollTrigger.normalizeScroll(true);
+      ScrollTrigger.refresh();
       lenis?.init();
     };
   }, []);

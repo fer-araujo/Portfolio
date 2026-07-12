@@ -30,6 +30,15 @@ vi.mock("@/lib/lenis", () => ({
   useLenisScroll: () => ({ scrollTo: vi.fn(), destroy: vi.fn(), init: vi.fn() }),
 }));
 
+// ── Mock gsap/ScrollTrigger ────────────────────────────
+vi.mock("gsap/ScrollTrigger", () => ({
+  ScrollTrigger: {
+    normalizeScroll: vi.fn(),
+    getAll: vi.fn(() => []),
+    refresh: vi.fn(),
+  },
+}));
+
 // ── Test data ──────────────────────────────────────────
 const fullProject: Project = {
   id: "test-project",
