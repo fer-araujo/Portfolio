@@ -43,20 +43,20 @@ describe("Navbar", () => {
     expect(logo).toBeInTheDocument();
   });
 
-  it("renders all navigation links in correct order: About → Skills → Experience → Projects → Contact", () => {
+  it("renders all navigation links in correct order: About → Expertise → Experience → Projects → Contact", () => {
     render(<Navbar />);
     // Grab all rendered nav buttons (desktop links are direct button children of nav > div)
     const buttons = screen.getAllByRole("button");
     // Filter to nav buttons only (exclude hamburger menu toggle)
     const navLinks = buttons.filter(
       (btn) =>
-        ["About", "Skills", "Experience", "Projects", "Contact"].includes(
+        ["About", "Expertise", "Experience", "Projects", "Contact"].includes(
           btn.textContent ?? ""
         )
     );
     expect(navLinks).toHaveLength(5);
     expect(navLinks[0]).toHaveTextContent("About");
-    expect(navLinks[1]).toHaveTextContent("Skills");
+    expect(navLinks[1]).toHaveTextContent("Expertise");
     expect(navLinks[2]).toHaveTextContent("Experience");
     expect(navLinks[3]).toHaveTextContent("Projects");
     expect(navLinks[4]).toHaveTextContent("Contact");
@@ -169,5 +169,13 @@ describe("Navbar", () => {
 
     // After scroll, the nav should have background classes
     expect(nav.className).toContain("transition-colors");
+  });
+
+  it("mobile hamburger button has background contrast and focus ring classes", () => {
+    render(<Navbar />);
+    const menuButton = screen.getByLabelText(/open menu/i);
+    expect(menuButton.className).toContain("bg-bg-muted/80");
+    expect(menuButton.className).toContain("ring-2");
+    expect(menuButton.className).toContain("ring-accent/50");
   });
 });

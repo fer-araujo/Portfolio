@@ -250,4 +250,26 @@ describe("ExperienceSection", () => {
     expect(parallaxDiv).toBeInTheDocument();
     expect(parallaxDiv?.parentElement?.tagName).toBe("SECTION");
   });
+
+  it("mobile timeline entry has border-l-2 and pl-8 for mobile indicator", () => {
+    render(<ExperienceSection />);
+    const currentEntry = screen.getByTestId("experience-current-co");
+    // Entry should have mobile border and padding
+    expect(currentEntry.className).toContain("border-l-2");
+    expect(currentEntry.className).toContain("border-accent/30");
+    expect(currentEntry.className).toContain("pl-8");
+    // Desktop should remove the border
+    expect(currentEntry.className).toContain("md:border-l-0");
+  });
+
+  it("mobile timeline dot is visible with -left-[5px] positioning", () => {
+    render(<ExperienceSection />);
+    const currentEntry = screen.getByTestId("experience-current-co");
+    const timelineDots = currentEntry.querySelectorAll("[aria-hidden='true']");
+    const dot = timelineDots[0] as HTMLElement;
+    // Dot should be visible on mobile (no 'hidden' class)
+    expect(dot.className).not.toContain("hidden");
+    // Should have left positioning for mobile
+    expect(dot.className).toContain("-left-[5px]");
+  });
 });

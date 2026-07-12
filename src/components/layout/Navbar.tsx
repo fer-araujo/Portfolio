@@ -14,7 +14,7 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { label: "About", href: "#about", sectionId: "about" },
-  { label: "Skills", href: "#skills", sectionId: "skills" },
+  { label: "Expertise", href: "#skills", sectionId: "skills" },
   { label: "Experience", href: "#experience", sectionId: "experience" },
   { label: "Projects", href: "#work", sectionId: "work" },
   { label: "Contact", href: "#contact", sectionId: "contact" },
@@ -130,7 +130,7 @@ export function Navbar() {
         {/* ── Mobile hamburger ──────────────────────── */}
         <button
           onClick={() => setMobileOpen((prev) => !prev)}
-          className="flex items-center justify-center rounded-lg p-2 text-text-muted hover:cursor-pointer hover:text-text md:hidden"
+          className="flex items-center justify-center rounded-lg p-2 text-text-muted hover:cursor-pointer hover:text-text bg-bg-muted/80 hover:bg-bg-muted ring-2 ring-accent/50 focus-visible:ring-2 pr-2 md:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
         >
