@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ExternalLink } from "lucide-react";
 import { GithubIcon } from "@/components/ui/BrandIcons";
 import { Tag } from "@/components/ui/Tag";
+import { BrowserFrame } from "@/components/ui/BrowserFrame";
 import { cn } from "@/lib/utils";
 import type { Project } from "@/content/types";
 
@@ -34,24 +35,25 @@ export function ProjectCard({
   const prefersReduced = useReducedMotion();
 
   return (
-    <motion.div
-      data-testid={`project-card-${project.id}`}
-      data-variant={variant}
-      layout
-      initial={prefersReduced ? false : { opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.4,
-        delay: index * 0.05,
-        ease: "easeOut",
-      }}
-      className={cn(
-        "group relative overflow-hidden",
-        variant === "grid"
-          ? "aspect-[4/3] min-h-[280px] md:min-h-[320px]"
-          : "h-[80vh] min-h-[500px] min-w-[85vw] snap-start"
-      )}
-    >
+    <BrowserFrame>
+      <motion.div
+        data-testid={`project-card-${project.id}`}
+        data-variant={variant}
+        layout
+        initial={prefersReduced ? false : { opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.4,
+          delay: index * 0.05,
+          ease: "easeOut",
+        }}
+        className={cn(
+          "group relative overflow-hidden",
+          variant === "grid"
+            ? "aspect-[4/3] min-h-[280px] md:min-h-[320px]"
+            : "h-[80vh] min-h-[500px] min-w-[85vw] snap-start"
+        )}
+      >
       {/* ── Background thumbnail ─────────────── */}
       <Image
         src={project.thumbnail}
@@ -113,6 +115,7 @@ export function ProjectCard({
           </a>
         )}
       </div>
-    </motion.div>
+      </motion.div>
+    </BrowserFrame>
   );
 }

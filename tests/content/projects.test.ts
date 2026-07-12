@@ -23,7 +23,7 @@ describe("projects data", () => {
     expect(project!.featured).toBe(true);
     expect(project!.category).toBe("web");
     expect(project!.techStack).toContain("TMDB API");
-    expect(project!.liveUrl).toBe("https://your-anime-tracker.vercel.app");
+    expect(project!.liveUrl).toBe("https://anime-tracker-hazel-pi.vercel.app");
     expect(project!.githubUrl).toBe("https://github.com/fer-araujo/anime-tracker");
   });
 
@@ -78,5 +78,11 @@ describe("projects data", () => {
     const mod = await import("@/content/projects");
     expect((mod as Record<string, unknown>).projectCategories).toBeUndefined();
     expect((mod as Record<string, unknown>).getProjectCategory).toBeUndefined();
+  });
+
+  it("all project thumbnails use .png extension", () => {
+    projects.forEach((project) => {
+      expect(project.thumbnail).toMatch(/\.png$/);
+    });
   });
 });

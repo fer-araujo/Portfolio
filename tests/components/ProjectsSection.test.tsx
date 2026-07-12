@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, within, fireEvent } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
 
 // ── Mock projects data ─────────────────────────────────
@@ -16,7 +16,7 @@ vi.mock("@/content/projects", () => ({
         impact: "Reduced attendance processing time by 80%",
       },
       techStack: ["React", "TypeScript", "Tailwind CSS", "Firebase"],
-      thumbnail: "/images/projects/school-system.svg",
+      thumbnail: "/images/projects/school-system.png",
       category: "web",
       featured: true,
       githubUrl: "https://github.com/fer-araujo/school-system",
@@ -31,7 +31,7 @@ vi.mock("@/content/projects", () => ({
         impact: "Thousands of monthly active users",
       },
       techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Express", "TMDB API"],
-      thumbnail: "/images/projects/anime-tracker.svg",
+      thumbnail: "/images/projects/anime-tracker.png",
       category: "web",
       featured: true,
       liveUrl: "https://your-anime-tracker.vercel.app",
@@ -47,7 +47,7 @@ vi.mock("@/content/projects", () => ({
         impact: "Deployed in 3 local clinics",
       },
       techStack: ["React", "TypeScript", "Vite"],
-      thumbnail: "/images/projects/patient-management.svg",
+      thumbnail: "/images/projects/patient-management.png",
       category: "web",
       featured: true,
       githubUrl: "https://github.com/fer-araujo/patient-management",
@@ -62,7 +62,7 @@ vi.mock("@/content/projects", () => ({
         impact: "Simplifies database management with a clean visual interface",
       },
       techStack: ["React", "TypeScript", "Node.js"],
-      thumbnail: "/images/projects/madlions.svg",
+      thumbnail: "/images/projects/madlions.png",
       category: "web",
       featured: true,
       githubUrl: "https://github.com/fer-araujo/MadLions",
@@ -77,7 +77,7 @@ vi.mock("@/content/projects", () => ({
         impact: "Provides snappy Pokémon lookups during gameplay",
       },
       techStack: ["Next.js", "TypeScript", "API Integration"],
-      thumbnail: "/images/projects/pokedex.svg",
+      thumbnail: "/images/projects/pokedex.png",
       category: "web",
       featured: true,
       githubUrl: "https://github.com/fer-araujo/pokedex",
@@ -107,8 +107,6 @@ vi.mock("motion/react", () => ({
 // ── Mock lucide-react ──────────────────────────────────
 vi.mock("lucide-react", () => ({
   ExternalLink: () => <svg data-testid="icon-external-link" />,
-  ChevronLeft: () => <svg data-testid="icon-chevron-left" />,
-  ChevronRight: () => <svg data-testid="icon-chevron-right" />,
   Github: () => <svg data-testid="icon-github" />,
 }));
 
@@ -124,12 +122,6 @@ describe("ProjectsSection", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUseReducedMotion.mockReturnValue(false);
-    // Default to desktop viewport
-    Object.defineProperty(window, "innerWidth", {
-      writable: true,
-      configurable: true,
-      value: 1280,
-    });
   });
 
   it("renders the section heading", () => {
@@ -220,70 +212,16 @@ describe("ProjectsSection", () => {
     expect(screen.getByText("School Attendance System")).toBeInTheDocument();
   });
 
-  it("defaults to grid view", () => {
+  it("does NOT render a view toggle UI", () => {
     render(<ProjectsSection />);
-    expect(screen.getByTestId("view-toggle-grid")).toBeInTheDocument();
-    expect(screen.getByTestId("projects-grid-wrapper")).toBeInTheDocument();
+    expect(screen.queryByTestId("view-toggle")).not.toBeInTheDocument();
   });
 
-  it("renders the view toggle with Grid and Marquee buttons", () => {
+  it("grid is always rendered directly (no conditional rendering)", () => {
     render(<ProjectsSection />);
-    const toggle = screen.getByTestId("view-toggle");
-    expect(toggle).toBeInTheDocument();
-    expect(
-      within(toggle).getByRole("button", { name: /grid/i })
-    ).toBeInTheDocument();
-    expect(
-      within(toggle).getByRole("button", { name: /marquee/i })
-    ).toBeInTheDocument();
-  });
-
-  it("switches to marquee view when toggle is clicked", () => {
-    render(<ProjectsSection />);
-    fireEvent.click(screen.getByTestId("view-toggle-marquee"));
-    expect(screen.getByTestId("projects-marquee-wrapper")).toBeInTheDocument();
-    expect(screen.queryByTestId("projects-grid-wrapper")).not.toBeInTheDocument();
-  });
-
-  it("forcefully hides the toggle on mobile (< 768px)", () => {
-    Object.defineProperty(window, "innerWidth", {
-      writable: true,
-      configurable: true,
-      value: 600,
-    });
-    render(<ProjectsSection />);
-    // Toggle should not be visible on mobile (has hidden class)
-    const toggle = screen.getByTestId("view-toggle");
-    expect(toggle.className).toContain("hidden");
-  });
-
-  it("forces grid view on mobile even if marquee was previously selected", () => {
-    // Start with desktop and switch to marquee
-    const { rerender } = render(<ProjectsSection />);
-    fireEvent.click(screen.getByTestId("view-toggle-marquee"));
-    expect(screen.getByTestId("projects-marquee-wrapper")).toBeInTheDocument();
-
-    // Now shrink to mobile
-    Object.defineProperty(window, "innerWidth", {
-      writable: true,
-      configurable: true,
-      value: 600,
-    });
-    // Trigger resize event
-    window.dispatchEvent(new Event("resize"));
-
-    // Wait a tick for state update
-    rerender(<ProjectsSection />);
-
-    // Grid view should be shown despite marquee being selected
-    expect(screen.getByTestId("projects-grid-wrapper")).toBeInTheDocument();
+    const grid = screen.getByTestId("projects-grid-wrapper");
+    expect(grid).toBeInTheDocument();
+    // No marquee wrapper should exist
     expect(screen.queryByTestId("projects-marquee-wrapper")).not.toBeInTheDocument();
-  });
-
-  it("marquee view has navigation buttons", () => {
-    render(<ProjectsSection />);
-    fireEvent.click(screen.getByTestId("view-toggle-marquee"));
-    expect(screen.getByTestId("marquee-prev")).toBeInTheDocument();
-    expect(screen.getByTestId("marquee-next")).toBeInTheDocument();
   });
 });
