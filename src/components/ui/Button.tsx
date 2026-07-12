@@ -74,7 +74,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       );
     }
 
-    const { href: _href, ...buttonRest } = props as ButtonAsButton;
+    const { ...buttonRest } = props as ButtonAsButton;
     return (
       <motion.button
         ref={ref as React.Ref<HTMLButtonElement>}

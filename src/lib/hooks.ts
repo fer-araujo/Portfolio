@@ -9,7 +9,13 @@ import { useReducedMotion } from "motion/react";
  * where 0 = top and 1 = bottom.
  */
 export function useScrollProgress(): number {
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(() => {
+    if (typeof window === "undefined") return 0;
+    const scrollable =
+      document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollable <= 0) return 0;
+    return Math.min(window.scrollY / scrollable, 1);
+  });
 
   const handleScroll = useCallback(() => {
     const scrollable =
@@ -22,7 +28,6 @@ export function useScrollProgress(): number {
   }, []);
 
   useEffect(() => {
-    handleScroll(); // set initial value
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);

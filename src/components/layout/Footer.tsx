@@ -5,7 +5,6 @@ import {
   LinkedinIcon,
 } from "@/components/ui/BrandIcons";
 import { socialLinks } from "@/content/social";
-import { cn } from "@/lib/utils";
 
 const iconMap: Record<string, React.ReactNode> = {
   github: <GithubIcon className="h-4 w-4" />,

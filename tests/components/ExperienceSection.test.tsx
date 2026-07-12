@@ -45,7 +45,7 @@ vi.mock("@/content/experience", () => ({
 // ── Mock motion/react ──────────────────────────────────
 const mockUseReducedMotion = vi.fn().mockReturnValue(false);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 function createTag(Tag: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) =>
