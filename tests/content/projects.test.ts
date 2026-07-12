@@ -86,6 +86,20 @@ describe("projects data", () => {
     });
   });
 
+  describe("image count limits", () => {
+    it.each([
+      ["anime-tracker", 5],
+      ["patient-management", 5],
+      ["school-system", 5],
+      ["pokedex", 5],
+    ])("%s has at most %i images", (id, max) => {
+      const project = projects.find((p) => p.id === id);
+      expect(project).toBeDefined();
+      const imageCount = project!.images?.length ?? 0;
+      expect(imageCount).toBeLessThanOrEqual(max);
+    });
+  });
+
   describe("optional editorial fields", () => {
     it("tagline is optional — some projects lack it", () => {
       const withoutTagline = projects.filter((p: Project) => !p.tagline);

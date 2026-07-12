@@ -25,6 +25,11 @@ vi.mock("lucide-react", () => ({
   ExternalLink: () => <span data-testid="icon-external-link" />,
 }));
 
+// ── Mock lenis ─────────────────────────────────────────
+vi.mock("@/lib/lenis", () => ({
+  useLenisScroll: () => ({ scrollTo: vi.fn(), stop: vi.fn(), start: vi.fn() }),
+}));
+
 // ── Test data ──────────────────────────────────────────
 const fullProject: Project = {
   id: "test-project",
@@ -168,19 +173,56 @@ describe("ProjectCaseStudy", () => {
       expect(document.body.style.overflow).not.toBe("hidden");
     });
 
-    it("renders backdrop with overscroll-behavior containment", () => {
+    it("backdrop has NO overflow/scroll classes (click-close only)", () => {
       render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
       const backdrop = screen.getByTestId("case-study-backdrop");
-      expect(backdrop.className).toContain("overscroll-contain");
+      expect(backdrop.className).not.toContain("overflow-y-auto");
+      expect(backdrop.className).not.toContain("overscroll-contain");
+      expect(backdrop.className).not.toContain("touch-pan-y");
     });
 
-    it("renders inner scroll area with touch-action pan-y for mobile", () => {
+    it("scroll container has overflow-y-auto, overscroll-contain, and touch-pan-y", () => {
+      render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
+      const scrollContainer = screen.getByTestId("case-study-scroll-container");
+      expect(scrollContainer.className).toContain("overflow-y-auto");
+      expect(scrollContainer.className).toContain("overscroll-contain");
+      expect(scrollContainer.className).toContain("touch-pan-y");
+    });
+
+    it("scroll container has iOS -webkit-overflow-scrolling style", () => {
+      render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
+      const scrollContainer = screen.getByTestId("case-study-scroll-container");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect((scrollContainer.style as any).WebkitOverflowScrolling).toBe("touch");
+    });
+
+    it("renders content area inside scroll container", () => {
+      render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
+      const scrollContainer = screen.getByTestId("case-study-scroll-container");
+      const contentArea = screen.getByTestId("case-study-scroll-area");
+      expect(scrollContainer).toContainElement(contentArea);
+    });
+
+    // ── Phase 2: two-layer fixed modal ──────────────────
+    it("backdrop has no children (pure click surface)", () => {
       render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
       const backdrop = screen.getByTestId("case-study-backdrop");
-      // The inner scrollable div has touch-pan-y for touch device scrolling
-      const scrollArea = backdrop.querySelector("[data-testid='case-study-scroll-area']");
-      expect(scrollArea).toBeInTheDocument();
-      expect(scrollArea!.className).toContain("touch-pan-y");
+      expect(backdrop.childElementCount).toBe(0);
+    });
+
+    it("backdrop has aria-hidden=true (decorative-only layer)", () => {
+      render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
+      const backdrop = screen.getByTestId("case-study-backdrop");
+      expect(backdrop).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("dialog role is on the scroll container, not the backdrop", () => {
+      render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
+      const dialog = screen.getByRole("dialog");
+      expect(dialog).toHaveAttribute("data-testid", "case-study-scroll-container");
+      // Also verify backdrop does NOT have role="dialog"
+      const backdrop = screen.getByTestId("case-study-backdrop");
+      expect(backdrop).not.toHaveAttribute("role", "dialog");
     });
   });
 

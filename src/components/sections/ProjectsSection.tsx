@@ -38,7 +38,7 @@ export function ProjectsSection() {
           x: () => -(trackRef.current!.scrollWidth - window.innerWidth),
           ease: "none",
           scrollTrigger: {
-            trigger: "#work",
+            trigger: "#film-reel-wrapper",
             pin: true,
             start: "top top",
             end: () => `+=${trackRef.current!.scrollWidth - window.innerWidth}`,
@@ -96,7 +96,7 @@ export function ProjectsSection() {
       </div>
 
       {/* ── Film reel track ───────────────────── */}
-      <div className="md:overflow-hidden">
+      <div id="film-reel-wrapper" className="md:overflow-hidden">
         <div
           ref={trackRef}
           id="film-reel-track"

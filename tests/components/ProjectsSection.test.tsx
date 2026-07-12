@@ -112,7 +112,7 @@ vi.mock("next/image", () => ({
 
 // ── Mock lenis ─────────────────────────────────────────
 vi.mock("@/lib/lenis", () => ({
-  useLenisScroll: () => ({ scrollTo: vi.fn() }),
+  useLenisScroll: () => ({ scrollTo: vi.fn(), stop: vi.fn(), start: vi.fn() }),
 }));
 
 // ── Mock lucide-react ──────────────────────────────────
@@ -214,21 +214,29 @@ describe("ProjectsSection — film reel", () => {
     expect(overlayContainer).toBeNull();
   });
 
-  it("heading appears before the film-reel overflow wrapper in DOM order", () => {
+  it("heading appears before the #film-reel-wrapper in DOM order", () => {
     render(<ProjectsSection />);
     const heading = screen.getByText(/featured work/i);
-    const track = screen.getByTestId("film-reel-track");
-    // heading should come before the track in document order
-    const headingPos = heading.compareDocumentPosition(track);
+    const wrapper = document.getElementById("film-reel-wrapper");
+    // heading should come before the wrapper in document order
+    expect(wrapper).toBeInTheDocument();
+    const headingPos = heading.compareDocumentPosition(wrapper!);
     expect(headingPos & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
-  it("film-reel track wrapper uses md:overflow-hidden (not unconditional overflow-hidden)", () => {
+  it("film-reel-wrapper has id and wraps the film-reel-track", () => {
     render(<ProjectsSection />);
+    const wrapper = document.getElementById("film-reel-wrapper");
+    expect(wrapper).toBeInTheDocument();
     const track = screen.getByTestId("film-reel-track");
-    const wrapper = track.parentElement!;
-    // md:overflow-hidden contains the string, so split to verify it's the responsive variant
-    const classes = wrapper.className.split(/\s+/);
+    expect(wrapper).toContainElement(track);
+  });
+
+  it("film-reel wrapper uses md:overflow-hidden (not unconditional overflow-hidden)", () => {
+    render(<ProjectsSection />);
+    const wrapper = document.getElementById("film-reel-wrapper");
+    expect(wrapper).toBeInTheDocument();
+    const classes = wrapper!.className.split(/\s+/);
     expect(classes).toContain("md:overflow-hidden");
     expect(classes).not.toContain("overflow-hidden");
   });

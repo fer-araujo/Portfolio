@@ -20,6 +20,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 interface LenisContextValue {
   /** Smooth-scroll to a target element or selector */
   scrollTo: (target: string | HTMLElement) => void;
+  /** Pause Lenis smooth scroll (use when overlays/modals are open) */
+  stop: () => void;
+  /** Resume Lenis smooth scroll */
+  start: () => void;
 }
 
 const LenisContext = createContext<LenisContextValue | null>(null);
@@ -83,7 +87,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
   );
 
   return (
-    <LenisContext.Provider value={{ scrollTo }}>
+    <LenisContext.Provider value={{ scrollTo, stop: () => lenisRef.current?.stop(), start: () => lenisRef.current?.start() }}>
       {children}
     </LenisContext.Provider>
   );
