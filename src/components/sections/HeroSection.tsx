@@ -33,7 +33,7 @@ export function HeroSection() {
   const prefersReduced = useReducedMotion();
 
   const handleCtaClick = useCallback(() => {
-    const target = document.getElementById("work");
+    const target = document.getElementById("about");
     if (target) {
       target.scrollIntoView({ behavior: "smooth" });
     }
@@ -42,8 +42,7 @@ export function HeroSection() {
   return (
     <motion.section
       className={cn(
-        "relative flex min-h-dvh items-center justify-center overflow-hidden bg-bg",
-        !prefersReduced && "dot-grid-bg"
+        "relative flex min-h-dvh items-center justify-center overflow-hidden dot-grid"
       )}
       id="home"
       data-testid="hero-section"
@@ -54,10 +53,19 @@ export function HeroSection() {
         className="pointer-events-none absolute inset-0"
         aria-hidden="true"
       >
+        {/* Top-left accent */}
         <div
           data-aurora-blob
           className={cn(
-            "absolute -top-40 right-1/4 h-[600px] w-[600px] rounded-full bg-accent/5 blur-[120px]",
+            "absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full bg-accent-gold/6 blur-[120px]",
+            !prefersReduced && "animate-aurora-shift"
+          )}
+          aria-hidden="true"
+        />
+        <div
+          data-aurora-blob
+          className={cn(
+            "absolute -top-40 right-1/4 h-[600px] w-[600px] rounded-full bg-accent/10 blur-[120px]",
             !prefersReduced && "animate-aurora-shift"
           )}
         />
@@ -74,6 +82,14 @@ export function HeroSection() {
             "absolute -bottom-40 left-1/4 h-[500px] w-[500px] rounded-full bg-accent-teal/5 blur-[100px]",
             !prefersReduced && "animate-aurora-shift"
           )}
+        />
+        <div
+          data-aurora-blob
+          className={cn(
+            "absolute -bottom-20 right-0 h-[450px] w-[450px] rounded-full bg-accent/8 blur-[100px]",
+            !prefersReduced && "animate-aurora-shift"
+          )}
+          aria-hidden="true"
         />
       </div>
 
@@ -142,17 +158,26 @@ export function HeroSection() {
           transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
         >
           <Button
-            variant="primary"
+            variant="secondary"
             size="lg"
             onClick={handleCtaClick}
-            aria-label="View my work — navigate to projects section"
+            aria-label="Scroll to learn more about me"
           >
-            View my work
+            Learn more
             <ArrowDown className="h-4 w-4" aria-hidden="true" />
           </Button>
         </motion.div>
         </div>
       </div>
+
+      {/* Bottom gradient fade — smooth transition to next section */}
+      <div
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 z-10"
+        aria-hidden="true"
+        style={{
+          background: "linear-gradient(to bottom, transparent, var(--background))",
+        }}
+      />
     </motion.section>
   );
 }

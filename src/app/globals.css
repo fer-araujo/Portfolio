@@ -48,8 +48,7 @@
   /* Animations */
   --animate-fade-in: fade-in 0.6s ease-out;
   --animate-slide-up: slide-up 0.6s ease-out;
-  --animate-aurora-shift: aurora-shift 22s ease-in-out infinite;
-  --animate-signal-line: signal-line 4s ease-in-out infinite;
+  --animate-aurora-shift: aurora-shift 28s linear infinite;
 
   @keyframes fade-in {
     from {
@@ -88,59 +87,25 @@
       transform: translate(0, 0) scale(1);
     }
   }
-
-  @keyframes signal-line {
-    0% {
-      transform: translateX(-50%);
-    }
-    100% {
-      transform: translateX(150%);
-    }
-  }
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ──── Utility Classes ─────────────────────────────── */
 
-/* Dot-grid background pattern (::before on the section) */
-.dot-grid-bg {
-  position: relative;
-}
-
-.dot-grid-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
+@utility dot-grid {
   background-image: radial-gradient(circle, oklch(0.25 0.0 0.0 / 0.5) 1px, transparent 1px);
   background-size: 32px 32px;
-  pointer-events: none;
-  z-index: 0;
 }
 
-/* Signal line sweep (::after on the section, paired with dot-grid) */
-.dot-grid-bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    oklch(0.55 0.18 160 / 0.06) 40%,
-    oklch(0.55 0.18 160 / 0.12) 50%,
-    transparent 90%
+@utility diagonal-dot {
+  background-image: radial-gradient(
+    circle,
+    oklch(0.25 0.0 0.0 / 0.35) 1px,
+    transparent 1px
   );
-  mask-image: linear-gradient(
-    180deg,
-    transparent 20%,
-    black 40%,
-    black 60%,
-    transparent 80%
-  );
-  width: 200%;
-  animation: var(--animate-signal-line);
-  pointer-events: none;
-  z-index: 0;
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
 }
 
 /* Base styles */

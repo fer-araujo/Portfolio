@@ -65,6 +65,7 @@ const mockCtxRevert = vi.fn();
 
 vi.mock("gsap", () => ({
   gsap: {
+    registerPlugin: vi.fn(),
     context: vi.fn((fn: () => void) => {
       fn();
       return { revert: mockCtxRevert };
@@ -208,5 +209,45 @@ describe("ExperienceSection", () => {
     render(<ExperienceSection />);
     expect(screen.getByText("Experience")).toBeInTheDocument();
     expect(screen.getByText("Current Company")).toBeInTheDocument();
+  });
+
+  it("renders section with diagonal dot background pattern", () => {
+    render(<ExperienceSection />);
+    const section = screen.getByTestId("experience-section");
+    expect(section.className).toContain("diagonal-dot");
+    expect(section.className).not.toContain("diagonal-dot-bg");
+  });
+
+  it("renders gradient overlay using Tailwind classes not inline style", () => {
+    const { container } = render(<ExperienceSection />);
+    // The second absolute overlay div (after parallax) should use Tailwind gradient classes
+    const overlays = container.querySelectorAll("[aria-hidden='true']");
+    // There should be at least 2 overlays: parallax + gradient
+    expect(overlays.length).toBeGreaterThanOrEqual(2);
+    // The gradient overlay should NOT have an inline style prop
+    const gradientOverlay = overlays[1];
+    expect(gradientOverlay.getAttribute("style")).toBeNull();
+    expect(gradientOverlay.className).toContain("bg-gradient-to-b");
+  });
+
+  it("renders timeline dot with conditional Tailwind classes not inline style", () => {
+    render(<ExperienceSection />);
+    const currentEntry = screen.getByTestId("experience-current-co");
+    const timelineDots = currentEntry.querySelectorAll("[aria-hidden='true']");
+    // First aria-hidden element in the entry is the timeline dot div
+    const dot = timelineDots[0] as HTMLElement;
+    expect(dot).toBeInTheDocument();
+    // Should NOT have an inline style attribute
+    expect(dot.getAttribute("style")).toBeNull();
+    // Should use Tailwind classes for background and border
+    expect(dot.className).toContain("bg-accent");
+    expect(dot.className).toContain("border-accent");
+  });
+
+  it("renders a GSAP parallax overlay div", () => {
+    const { container } = render(<ExperienceSection />);
+    const parallaxDiv = container.querySelector("[data-gsap-parallax]");
+    expect(parallaxDiv).toBeInTheDocument();
+    expect(parallaxDiv?.parentElement?.tagName).toBe("SECTION");
   });
 });

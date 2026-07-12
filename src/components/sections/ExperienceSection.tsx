@@ -36,7 +36,26 @@ export function ExperienceSection() {
   useEffect(() => {
     if (prefersReduced) return;
 
+    gsap.registerPlugin(ScrollTrigger);
+
     const ctx = gsap.context(() => {
+      // Parallax dot pattern overlay
+      const parallaxEl = document.querySelector<HTMLElement>(
+        "[data-gsap-parallax]"
+      );
+      if (parallaxEl) {
+        gsap.to(parallaxEl, {
+          y: -40,
+          ease: "none",
+          scrollTrigger: {
+            trigger: parallaxEl.parentElement,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+
       // Timeline line "draws" from top to bottom
       const line = document.querySelector<HTMLElement>(
         "[data-gsap-timeline-line]"
@@ -110,11 +129,24 @@ export function ExperienceSection() {
 
   return (
     <section
-      className="relative py-24 md:py-32"
+      className="relative py-24 md:py-32 diagonal-dot"
       id="experience"
       data-testid="experience-section"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      {/* Parallax overlay for dot pattern movement */}
+      <div
+        data-gsap-parallax
+        className="pointer-events-none absolute inset-0 z-0"
+        aria-hidden="true"
+      />
+
+      {/* Gradient transition from previous section + subtle tint */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-transparent via-emerald-500/[0.02] to-transparent"
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <SectionHeading
             title="Experience"
@@ -146,16 +178,11 @@ export function ExperienceSection() {
                 >
                   {/* Timeline dot (desktop) */}
                   <div
-                    className="absolute left-[11px] top-1.5 hidden h-4 w-4 rounded-full border-2 md:block"
+                    className={cn(
+                      "absolute left-[11px] top-1.5 hidden h-4 w-4 rounded-full border-2 md:block",
+                      isCurrent ? "bg-accent border-accent" : "bg-bg-card border-border"
+                    )}
                     aria-hidden="true"
-                    style={{
-                      backgroundColor: isCurrent
-                        ? "var(--color-accent, hsl(217, 91%, 60%))"
-                        : "var(--color-bg-card, hsl(0, 0%, 10%))",
-                      borderColor: isCurrent
-                        ? "var(--color-accent, hsl(217, 91%, 60%))"
-                        : "var(--color-border, hsl(0, 0%, 20%))",
-                    }}
                   />
 
                   {/* Date range column */}
