@@ -45,6 +45,26 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} ${inter.variable} dark`}>
       <body className="min-h-dvh bg-bg text-text font-body antialiased">
+        {/* Global atmospheric gradient — creates fog/mist connecting all sections */}
+        <div
+          className="fixed inset-0 pointer-events-none"
+          aria-hidden="true"
+          style={{
+            zIndex: -1,
+            background: `
+              linear-gradient(
+                to bottom,
+                var(--background) 0%,
+                var(--background) 25%,
+                var(--bg-alt) 40%,
+                var(--bg-alt) 55%,
+                var(--background) 65%,
+                var(--bg-alt) 80%,
+                var(--background) 100%
+              )
+            `,
+          }}
+        />
         <LenisProvider>
           <Navbar />
           {children}

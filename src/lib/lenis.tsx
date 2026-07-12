@@ -10,6 +10,7 @@ import {
 } from "react";
 import { useReducedMotion } from "motion/react";
 import Lenis from "lenis";
+import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /* ═══════════════════════════════════════════════════
@@ -29,6 +30,7 @@ const LenisContext = createContext<LenisContextValue | null>(null);
  * scroll-triggered animations are registered.
  */
 export function initGsapLenisBridge() {
+  gsap.registerPlugin(ScrollTrigger);
   ScrollTrigger.normalizeScroll(true);
   ScrollTrigger.config({ ignoreMobileResize: true });
 }

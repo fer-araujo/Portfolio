@@ -29,8 +29,8 @@ test.describe("Portfolio 2026 — Smoke Tests", () => {
 
     // Desktop nav links should be visible at 1280px viewport
     const aboutBtn = nav.getByRole("button", { name: "About" });
-    const workBtn = nav.getByRole("button", { name: "Work" });
-    const skillsBtn = nav.getByRole("button", { name: "Skills" });
+    const workBtn = nav.getByRole("button", { name: "Projects" });
+    const skillsBtn = nav.getByRole("button", { name: "Expertise" });
     const experienceBtn = nav.getByRole("button", { name: "Experience" });
     const contactBtn = nav.getByRole("button", { name: "Contact" });
 
@@ -187,7 +187,7 @@ test.describe("Portfolio 2026 — Smoke Tests", () => {
 
     // Should show nav links in mobile menu
     await expect(mobileMenu.getByRole("button", { name: "About" })).toBeVisible();
-    await expect(mobileMenu.getByRole("button", { name: "Work" })).toBeVisible();
+    await expect(mobileMenu.getByRole("button", { name: "Projects" })).toBeVisible();
   });
 
   test("keyboard navigation: Tab through nav links", async ({ page }) => {
@@ -199,7 +199,7 @@ test.describe("Portfolio 2026 — Smoke Tests", () => {
     await expect(logoLink).toBeVisible();
 
     // Tab through desktop nav links
-    const navLinkCount = 5; // About, Work, Skills, Experience, Contact
+    const navLinkCount = 5; // About, Expertise, Experience, Projects, Contact
     for (let i = 0; i < navLinkCount; i++) {
       await page.keyboard.press("Tab");
     }

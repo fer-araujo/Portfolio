@@ -35,6 +35,8 @@ export function ContactSection() {
   useEffect(() => {
     if (prefersReduced) return;
 
+    gsap.registerPlugin(ScrollTrigger);
+
     const ctx = gsap.context(() => {
       const content = document.querySelector<HTMLElement>(
         "[data-gsap-contact]"

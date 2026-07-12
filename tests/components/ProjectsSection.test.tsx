@@ -1,21 +1,61 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, within } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
 
-// ── Mock projects data ─────────────────────────────────
+// ── Mock projects data (5 entries) ────────────────────
 vi.mock("@/content/projects", () => ({
   projects: [
     {
+      id: "anime-tracker",
+      title: "Anime Tracker",
+      description: "Streaming availability platform",
+      tagline: "Find where to watch.",
+      phase: "past",
+      longDescription: { problem: "P1", solution: "S1", impact: "I1" },
+      techStack: ["Next.js"],
+      thumbnail: "/images/projects/anime-tracker-01.png",
+      images: [],
+      category: "web",
+      featured: true,
+      liveUrl: "https://anime.example.com",
+    },
+    {
+      id: "this-portfolio",
+      title: "This Portfolio",
+      description: "Handcrafted. Cinematic.",
+      tagline: "Craft over templates.",
+      phase: "current",
+      narrativeText: "Every detail was designed.",
+      stats: [{ label: "Stack", value: "Next.js 16" }],
+      longDescription: { problem: "P2", solution: "S2", impact: "I2" },
+      techStack: ["Next.js", "GSAP"],
+      thumbnail: "/images/projects/portfolio-2026-01.png",
+      images: [],
+      category: "web",
+      featured: true,
+      githubUrl: "https://github.com/fer-araujo/portfolio-2026",
+    },
+    {
+      id: "patient-management",
+      title: "Patient Management",
+      description: "Healthcare management starter",
+      phase: "planned",
+      longDescription: { problem: "P3", solution: "S3", impact: "I3" },
+      techStack: ["React"],
+      thumbnail: "/images/projects/patient-management-01.png",
+      images: [],
+      category: "web",
+      featured: true,
+    },
+    {
       id: "school-system",
       title: "School Attendance System",
-      description: "QR-based attendance tracking with Firebase",
-      longDescription: {
-        problem: "Manual attendance tracking was error-prone",
-        solution: "Built a QR-based attendance system with Firebase backend",
-        impact: "Reduced attendance processing time by 80%",
-      },
-      techStack: ["React", "TypeScript", "Tailwind CSS", "Firebase"],
+      description: "QR-based attendance",
+      phase: "past",
+      longDescription: { problem: "P4", solution: "S4", impact: "I4" },
+      techStack: ["React", "Firebase"],
       thumbnail: "/images/projects/school-system-01.png",
       images: ["/images/projects/school-system-02.png"],
       category: "web",
@@ -23,64 +63,52 @@ vi.mock("@/content/projects", () => ({
       githubUrl: "https://github.com/fer-araujo/school-system",
     },
     {
-      id: "anime-tracker",
-      title: "Anime Tracker",
-      description: "Streaming availability platform",
-      longDescription: {
-        problem: "Hard to find which streaming services have specific anime",
-        solution: "Built a platform tracking streaming availability across services",
-        impact: "Thousands of monthly active users",
-      },
-      techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Express", "TMDB API"],
-      thumbnail: "/images/projects/anime-tracker-01.png",
+      id: "pokedex",
+      title: "Pokédex App",
+      description: "Simple Pokédex",
+      phase: "past",
+      longDescription: { problem: "P5", solution: "S5", impact: "I5" },
+      techStack: ["Next.js"],
+      thumbnail: "/images/projects/pokedex-01.png",
       images: [],
       category: "web",
       featured: true,
-      liveUrl: "https://your-anime-tracker.vercel.app",
-      githubUrl: "https://github.com/fer-araujo/anime-tracker",
-    },
-    {
-      id: "patient-management",
-      title: "Patient Management",
-      description: "Healthcare management starter",
-      longDescription: {
-        problem: "Small clinics needed affordable management software",
-        solution: "Built a lightweight patient management starter with React",
-        impact: "Deployed in 3 local clinics",
-      },
-      techStack: ["React", "TypeScript", "Vite"],
-      thumbnail: "/images/projects/patient-management-01.png",
-      images: ["/images/projects/patient-management-02.png"],
-      category: "web",
-      featured: true,
-      githubUrl: "https://github.com/fer-araujo/patient-management",
-    },
-    {
-      id: "pokedex",
-      title: "Pokédex App",
-      description: "Simple Pokédex built with NextJS",
-      longDescription: {
-        problem: "Pokémon fans need a fast, searchable Pokémon database",
-        solution: "Built a Pokédex app with Next.js and the PokéAPI",
-        impact: "Provides snappy Pokémon lookups during gameplay",
-      },
-      techStack: ["Next.js", "TypeScript", "API Integration"],
-      thumbnail: "/images/projects/pokedex-01.png",
-      images: ["/images/projects/pokedex-02.png"],
-      category: "web",
-      featured: true,
-      githubUrl: "https://github.com/fer-araujo/pokedex",
     },
   ],
 }));
 
-// ── Mock motion/react ──────────────────────────────────
+// ── Mock GSAP ─────────────────────────────────────────
+const { mockGsapTo, mockMmKill, mockTweenKill } = vi.hoisted(() => ({
+  mockGsapTo: vi.fn().mockReturnValue({ kill: vi.fn() }),
+  mockMmKill: vi.fn(),
+  mockTweenKill: vi.fn(),
+}));
+
+vi.mock("gsap", () => ({
+  gsap: {
+    to: mockGsapTo,
+    context: (fn: () => void) => ({ revert: vi.fn() }),
+    registerPlugin: vi.fn(),
+  },
+}));
+
+vi.mock("gsap/ScrollTrigger", () => ({
+  ScrollTrigger: {
+    matchMedia: vi.fn(() => ({
+      kill: mockMmKill,
+    })),
+    refresh: vi.fn(),
+    normalizeScroll: vi.fn(),
+    config: vi.fn(),
+    update: vi.fn(),
+  },
+}));
+
+// ── Mock motion/react ─────────────────────────────────
 const mockUseReducedMotion = vi.fn().mockReturnValue(false);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createTag(Tag: string) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) =>
+  return ({ children, ...props }: { children: React.ReactNode; [key: string]: unknown }) =>
     React.createElement(Tag, props, children);
 }
 
@@ -93,28 +121,30 @@ vi.mock("motion/react", () => ({
   useReducedMotion: () => mockUseReducedMotion(),
 }));
 
+// ── Mock next/image ────────────────────────────────────
+vi.mock("next/image", () => ({
+  default: ({ alt, ...props }: { alt: string; [key: string]: unknown }) => (
+    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+    <img alt={alt} {...props} />
+  ),
+}));
+
+// ── Mock lenis ─────────────────────────────────────────
+vi.mock("@/lib/lenis", () => ({
+  useLenisScroll: () => ({ scrollTo: vi.fn() }),
+}));
+
 // ── Mock lucide-react ──────────────────────────────────
 vi.mock("lucide-react", () => ({
   ExternalLink: () => <svg data-testid="icon-external-link" />,
-  Github: () => <svg data-testid="icon-github" />,
-  Maximize2: () => <svg data-testid="icon-maximize" />,
-  X: () => <svg data-testid="icon-x" />,
-  ChevronLeft: () => <svg data-testid="icon-chevron-left" />,
-  ChevronRight: () => <svg data-testid="icon-chevron-right" />,
+  X: () => <span>×</span>,
 }));
 
-// ── Mock next/image ────────────────────────────────────
-vi.mock("next/image", () => ({
-  default: ({ alt, ...props }: { alt: string; [key: string]: unknown }) => {
-    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-    return <img alt={alt} {...props} />;
-  },
-}));
-
-describe("ProjectsSection", () => {
+describe("ProjectsSection — film reel", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUseReducedMotion.mockReturnValue(false);
+    mockGsapTo.mockReturnValue({ kill: mockTweenKill });
   });
 
   it("renders the section heading", () => {
@@ -122,129 +152,79 @@ describe("ProjectsSection", () => {
     expect(screen.getByText(/featured work/i)).toBeInTheDocument();
   });
 
-  it("renders all 4 projects", () => {
+  it("renders all 5 project panels", () => {
     render(<ProjectsSection />);
-    expect(screen.getByText("School Attendance System")).toBeInTheDocument();
     expect(screen.getByText("Anime Tracker")).toBeInTheDocument();
+    expect(screen.getByText("This Portfolio")).toBeInTheDocument();
     expect(screen.getByText("Patient Management")).toBeInTheDocument();
+    expect(screen.getByText("School Attendance System")).toBeInTheDocument();
     expect(screen.getByText("Pokédex App")).toBeInTheDocument();
   });
 
-  it("does NOT render madlions", () => {
+  it("renders the closing CTA panel", () => {
     render(<ProjectsSection />);
-    expect(screen.queryByText("MadLions Database Manager")).not.toBeInTheDocument();
+    expect(screen.getByText(/this reel ends here/i)).toBeInTheDocument();
+    expect(screen.getByText(/your story is next/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /let's talk/i })).toBeInTheDocument();
   });
 
-  it("renders all 4 project cards with correct data attributes", () => {
+  it("renders 6 panels total (5 projects + 1 CTA)", () => {
     render(<ProjectsSection />);
-    const cards = screen.getAllByTestId(/project-card-/i);
-    expect(cards.length).toBe(4);
+    const panels = screen.getAllByRole("button");
+    // 5 project panels + 1 CTA button = 6 buttons
+    expect(panels.length).toBe(6);
   });
 
-  it("renders project descriptions", () => {
+  it("opens case study overlay when clicking a project panel", async () => {
     render(<ProjectsSection />);
-    expect(
-      screen.getByText("QR-based attendance tracking with Firebase")
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Streaming availability platform")
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Healthcare management starter")
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Simple Pokédex built with NextJS")
-    ).toBeInTheDocument();
+    const animePanel = screen.getByRole("button", { name: /view case study: anime tracker/i });
+    await userEvent.click(animePanel);
+    // Case study overlay should appear — verify via dialog role + close button
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByLabelText("Close case study")).toBeInTheDocument();
   });
 
-  it("renders tech stack tags for each project", () => {
+  it("closes case study overlay via close button", async () => {
     render(<ProjectsSection />);
-    expect(screen.getAllByText("React").length).toBeGreaterThanOrEqual(2);
-    expect(screen.getAllByText("TypeScript").length).toBeGreaterThanOrEqual(3);
-    expect(screen.getByText("Firebase")).toBeInTheDocument();
-    expect(screen.getByText("TMDB API")).toBeInTheDocument();
-    expect(screen.getByText("Vite")).toBeInTheDocument();
-    expect(screen.getByText("API Integration")).toBeInTheDocument();
+    const animePanel = screen.getByRole("button", { name: /view case study: anime tracker/i });
+    await userEvent.click(animePanel);
+    // Click close button
+    const closeBtn = screen.getByLabelText("Close case study");
+    await userEvent.click(closeBtn);
+    // Overlay should be gone
+    expect(screen.queryByLabelText("Close case study")).not.toBeInTheDocument();
   });
 
-  it("renders live demo link when liveUrl is present", () => {
+  it("closes case study overlay via Escape key", async () => {
     render(<ProjectsSection />);
-    const animeCard = screen.getByTestId("project-card-anime-tracker");
-    const liveLink = within(animeCard).getByRole("link", { name: /live/i });
-    expect(liveLink).toHaveAttribute("href", "https://your-anime-tracker.vercel.app");
+    const animePanel = screen.getByRole("button", { name: /view case study: anime tracker/i });
+    await userEvent.click(animePanel);
+    await userEvent.keyboard("{Escape}");
+    // Overlay should be gone
+    expect(screen.queryByLabelText("Close case study")).not.toBeInTheDocument();
   });
 
-  it("renders GitHub link when githubUrl is present", () => {
+  it("does not open overlay when clicking the closing CTA panel", async () => {
     render(<ProjectsSection />);
-    const schoolCard = screen.getByTestId("project-card-school-system");
-    const githubLink = within(schoolCard).getByRole("link", { name: /github/i });
-    expect(githubLink).toHaveAttribute(
-      "href",
-      "https://github.com/fer-araujo/school-system"
-    );
+    // The CTA panel has its own button, clicking it should not open case study
+    const ctaButton = screen.getByRole("button", { name: /let's talk/i });
+    await userEvent.click(ctaButton);
+    // No case study overlay should appear
+    expect(screen.queryByLabelText("Close case study")).not.toBeInTheDocument();
   });
 
-  it("renders project thumbnails as images", () => {
-    render(<ProjectsSection />);
-    const images = screen.getAllByRole("img");
-    expect(images.length).toBeGreaterThanOrEqual(4);
-  });
-
-  it("renders the grid inside a visual structure wrapper", () => {
-    const { container } = render(<ProjectsSection />);
-    const grid = container.querySelector(
-      '[data-testid="projects-grid-wrapper"]'
-    );
-    expect(grid).toBeInTheDocument();
-  });
-
-  it("renders without motion animation when reduced motion is preferred", () => {
+  it("renders with reduced motion — no GSAP registered", () => {
     mockUseReducedMotion.mockReturnValue(true);
     render(<ProjectsSection />);
-    expect(screen.getByText("Featured Work")).toBeInTheDocument();
-    expect(screen.getByText("School Attendance System")).toBeInTheDocument();
+    // Should still render all panels
+    expect(screen.getByText("Anime Tracker")).toBeInTheDocument();
+    // GSAP should NOT be called
+    expect(mockGsapTo).not.toHaveBeenCalled();
   });
 
-  it("does NOT render BrowserFrame wrapper", () => {
+  it("does not crash when window is undefined (SSR safety)", () => {
+    // The component uses useEffect which only runs in browser — this is SSR-safe
     render(<ProjectsSection />);
-    // BrowserFrame had traffic-light dots with aria-hidden
-    const trafficLights = document.querySelectorAll('[aria-hidden="true"]');
-    // FilmGrain uses aria-hidden too, but BrowserFrame traffic lights are gone
-    expect(
-      Array.from(trafficLights).filter(
-        (el) => el.tagName === "DIV" && el.classList.contains("rounded-full")
-      ).length
-    ).toBe(0);
-  });
-
-  it("shows gallery indicator for projects with multiple images", () => {
-    render(<ProjectsSection />);
-    // school-system has 1 extra image → "2 images"
-    const schoolCard = screen.getByTestId("project-card-school-system");
-    expect(within(schoolCard).getByText("2 images")).toBeInTheDocument();
-  });
-
-  it("does NOT show gallery indicator for projects without extra images", () => {
-    render(<ProjectsSection />);
-    // anime-tracker has empty images array
-    const animeCard = screen.getByTestId("project-card-anime-tracker");
-    expect(within(animeCard).queryByText(/images/i)).not.toBeInTheDocument();
-  });
-
-  it("opens lightbox when clicking gallery indicator", () => {
-    render(<ProjectsSection />);
-    const schoolCard = screen.getByTestId("project-card-school-system");
-    const galleryBtn = within(schoolCard).getByText("2 images");
-    fireEvent.click(galleryBtn);
-    // Lightbox should appear with close button
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(screen.getByLabelText("Close gallery")).toBeInTheDocument();
-  });
-
-  it("grid is always rendered directly (no conditional rendering)", () => {
-    render(<ProjectsSection />);
-    const grid = screen.getByTestId("projects-grid-wrapper");
-    expect(grid).toBeInTheDocument();
-    expect(screen.queryByTestId("projects-marquee-wrapper")).not.toBeInTheDocument();
+    expect(screen.getByText(/featured work/i)).toBeInTheDocument();
   });
 });

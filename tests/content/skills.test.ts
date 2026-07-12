@@ -1,53 +1,85 @@
 import { describe, it, expect } from "vitest";
-import { skills } from "@/content/skills";
+import { skillDomains } from "@/content/skills";
 
-describe("skills data", () => {
-  it("has 17 total skills across all categories", () => {
-    const total = skills.reduce((sum, cat) => sum + cat.items.length, 0);
-    expect(total).toBe(17);
+describe("skillDomains data", () => {
+  it("has 5-6 skill domains", () => {
+    expect(skillDomains.length).toBeGreaterThanOrEqual(5);
+    expect(skillDomains.length).toBeLessThanOrEqual(6);
   });
 
-  it("has 5 categories (Languages, Frontend, Backend, Databases, Tools & Platforms)", () => {
-    expect(skills).toHaveLength(5);
+  it("each domain has required fields: id, domain, description, icon, technologies", () => {
+    for (const domain of skillDomains) {
+      expect(domain).toHaveProperty("id");
+      expect(typeof domain.id).toBe("string");
+      expect(domain.id.length).toBeGreaterThan(0);
+
+      expect(domain).toHaveProperty("domain");
+      expect(typeof domain.domain).toBe("string");
+      expect(domain.domain.length).toBeGreaterThan(0);
+
+      expect(domain).toHaveProperty("description");
+      expect(typeof domain.description).toBe("string");
+      expect(domain.description.length).toBeGreaterThan(0);
+
+      expect(domain).toHaveProperty("icon");
+      expect(typeof domain.icon).toBe("string");
+      expect(domain.icon.length).toBeGreaterThan(0);
+
+      expect(domain).toHaveProperty("technologies");
+      expect(Array.isArray(domain.technologies)).toBe(true);
+      expect(domain.technologies.length).toBeGreaterThan(0);
+    }
   });
 
-  it("does NOT include Angular", () => {
-    const allNames = skills.flatMap((c) => c.items.map((i) => i.name));
-    expect(allNames).not.toContain("Angular");
+  it("each technology has a name and a level of 'expert' or 'advanced'", () => {
+    for (const domain of skillDomains) {
+      for (const tech of domain.technologies) {
+        expect(tech).toHaveProperty("name");
+        expect(typeof tech.name).toBe("string");
+        expect(tech.name.length).toBeGreaterThan(0);
+
+        expect(tech).toHaveProperty("level");
+        expect(["expert", "advanced"]).toContain(tech.level);
+      }
+    }
   });
 
-  it("does NOT include Vue.js", () => {
-    const allNames = skills.flatMap((c) => c.items.map((i) => i.name));
-    expect(allNames).not.toContain("Vue.js");
+  it("has Architecture & Systems as the first domain", () => {
+    const first = skillDomains[0];
+    expect(first.domain).toBe("Architecture & Systems");
+    expect(first.icon).toBe("Boxes");
   });
 
-  it("does NOT include React Native", () => {
-    const allNames = skills.flatMap((c) => c.items.map((i) => i.name));
-    expect(allNames).not.toContain("React Native");
-  });
-
-  it("does NOT include Laravel", () => {
-    const allNames = skills.flatMap((c) => c.items.map((i) => i.name));
-    expect(allNames).not.toContain("Laravel");
-  });
-
-  it("does NOT include ColdFusion", () => {
-    const allNames = skills.flatMap((c) => c.items.map((i) => i.name));
-    expect(allNames).not.toContain("ColdFusion");
-  });
-
-  it("includes Tailwind CSS at advanced level in Frontend", () => {
-    const frontend = skills.find((c) => c.category === "Frontend");
+  it("has Frontend Engineering domain with React, Next.js, TypeScript", () => {
+    const frontend = skillDomains.find((d) => d.domain === "Frontend Engineering");
     expect(frontend).toBeDefined();
-
-    const tailwind = frontend!.items.find((i) => i.name === "Tailwind CSS");
-    expect(tailwind).toBeDefined();
-    expect(tailwind!.level).toBe("advanced");
+    const names = frontend!.technologies.map((t) => t.name);
+    expect(names).toContain("React");
+    expect(names).toContain("Next.js");
+    expect(names).toContain("TypeScript");
   });
 
-  it("has expert-level entries for TypeScript and JavaScript", () => {
-    const allNames = skills.flatMap((c) => c.items.map((i) => i.name));
-    expect(allNames).toContain("TypeScript");
-    expect(allNames).toContain("JavaScript");
+  it("has at least one expert-level technology in most domains", () => {
+    const domainsWithExpert = skillDomains.filter((d) =>
+      d.technologies.some((t) => t.level === "expert")
+    );
+    // At least 4 of 5 domains should have expert techs
+    expect(domainsWithExpert.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it("does NOT contain old SkillCategory structure with categories and items", () => {
+    // skillDomains should be the new SkillDomain[] — no old-style categories
+    for (const domain of skillDomains) {
+      expect(domain).not.toHaveProperty("category");
+      expect(domain).not.toHaveProperty("items");
+    }
+  });
+
+  it("excludes Angular, Vue, React Native, Laravel, and ColdFusion from all technologies", () => {
+    const allNames = skillDomains.flatMap((d) => d.technologies.map((t) => t.name));
+    const excluded = ["Angular", "Vue.js", "React Native", "Laravel", "ColdFusion"];
+    for (const name of excluded) {
+      expect(allNames).not.toContain(name);
+    }
   });
 });

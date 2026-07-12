@@ -1,72 +1,129 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { AnimatePresence, useReducedMotion } from "motion/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { projects } from "@/content/projects";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
-import { ProjectCard } from "@/components/sections/ProjectCard";
-import { ProjectLightbox } from "@/components/sections/ProjectLightbox";
+import { FilmReelPanel } from "@/components/sections/FilmReelPanel";
+import { FilmReelClosingPanel } from "@/components/sections/FilmReelClosingPanel";
+import { ProjectCaseStudy } from "@/components/sections/ProjectCaseStudy";
 import type { Project } from "@/content/types";
 
 /**
- * Projects section — cinematic full-width grid with lightbox gallery.
+ * Projects section — cinematic horizontal film reel.
  *
- * Each project card shows its main thumbnail. Clicking the gallery
- * indicator opens a fullscreen cinematic lightbox to browse all
- * screenshots with smooth transitions and keyboard navigation.
+ * Replaces the old 2×2 grid with a GSAP ScrollTrigger-driven
+ * horizontal scrub across 6 panels (5 projects + 1 CTA).
+ * On mobile (< 768px), panels stack vertically with native scroll.
+ * Respects prefers-reduced-motion.
  */
 export function ProjectsSection() {
-  const [lightboxProject, setLightboxProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const prefersReduced = useReducedMotion();
+
+  const panelCount = projects.length + 1; // +1 for closing CTA panel
+
+  useEffect(() => {
+    if (prefersReduced || typeof window === "undefined") return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const mm = ScrollTrigger.matchMedia({
+      "(min-width: 768px)": () => {
+        if (!trackRef.current) return;
+
+        const tl = gsap.to(trackRef.current, {
+          xPercent: -((panelCount - 1) * 100),
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#work",
+            pin: true,
+            start: "top top",
+            end: () => `+=${(panelCount - 1) * window.innerWidth}`,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        return () => {
+          tl.kill();
+        };
+      },
+    });
+
+    let debounceTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+    };
+
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      mm.kill();
+      window.removeEventListener("resize", onResize);
+      clearTimeout(debounceTimer);
+    };
+  }, [prefersReduced, panelCount]);
+
+  const handleOpen = useCallback((project: Project) => {
+    setSelectedProject(project);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setSelectedProject(null);
+  }, []);
 
   return (
-    <motion.section
-      className="relative py-24 md:py-32"
+    <section
+      className="relative"
       id="work"
       data-testid="projects-section"
     >
-      <div className="mx-auto max-w-full px-0 sm:px-0 lg:px-0">
-        {/* ── Header ─────────────────────────── */}
-        <div className="mx-auto mb-12 flex max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Reveal>
-            <SectionHeading
-              title="Featured Work"
-              subtitle="Selected projects that showcase my approach to engineering."
-              aligned="left"
-            />
-          </Reveal>
-        </div>
-
-        {/* ── Grid view ──────────────────────── */}
-        <div className="w-full" data-testid="projects-grid-wrapper">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="grid gap-0 md:grid-cols-2"
-          >
-            {projects.map((project, index) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                index={index}
-                variant="grid"
-                onOpenLightbox={setLightboxProject}
-              />
-            ))}
-          </motion.div>
-        </div>
+      {/* ── Header ────────────────────────────── */}
+      <div className="mx-auto mb-12 flex max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
+        <Reveal>
+          <SectionHeading
+            title="Featured Work"
+            subtitle="Selected projects that showcase my approach to engineering."
+            aligned="left"
+          />
+        </Reveal>
       </div>
 
-      {/* ── Cinematic Lightbox ──────────────── */}
+      {/* ── Film reel track ───────────────────── */}
+      <div
+        ref={trackRef}
+        id="film-reel-track"
+        data-testid="film-reel-track"
+        className="flex flex-nowrap"
+      >
+        {projects.map((project, index) => (
+          <FilmReelPanel
+            key={project.id}
+            project={project}
+            index={index}
+            onOpen={handleOpen}
+          />
+        ))}
+        <FilmReelClosingPanel />
+      </div>
+
+      {/* ── Case study overlay ────────────────── */}
       <AnimatePresence>
-        {lightboxProject && (
-          <ProjectLightbox
-            project={lightboxProject}
-            onClose={() => setLightboxProject(null)}
+        {selectedProject && (
+          <ProjectCaseStudy
+            project={selectedProject}
+            onClose={handleClose}
           />
         )}
       </AnimatePresence>
-    </motion.section>
+    </section>
   );
 }

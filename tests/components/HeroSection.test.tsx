@@ -71,16 +71,16 @@ describe("HeroSection", () => {
     expect(badge).toBeInTheDocument();
   });
 
-  it("renders a CTA button with text 'View my work'", () => {
+  it("renders a CTA button with text 'Learn more'", () => {
     render(<HeroSection />);
-    const cta = screen.getByRole("button", { name: /view my work/i });
+    const cta = screen.getByRole("button", { name: /learn more/i });
     expect(cta).toBeInTheDocument();
   });
 
-  it("CTA button scrolls to #work section on click", async () => {
+  it("CTA button scrolls to #about section on click", async () => {
     // Set up the DOM with a target section
     const target = document.createElement("section");
-    target.id = "work";
+    target.id = "about";
     document.body.appendChild(target);
 
     const scrollIntoViewMock = vi.fn();
@@ -88,7 +88,7 @@ describe("HeroSection", () => {
 
     render(<HeroSection />);
     const user = userEvent.setup();
-    const cta = screen.getByRole("button", { name: /view my work/i });
+    const cta = screen.getByRole("button", { name: /learn more/i });
 
     await user.click(cta);
 
@@ -105,7 +105,7 @@ describe("HeroSection", () => {
 
     // Should still render name and CTA
     expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /view my work/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /learn more/i })).toBeInTheDocument();
 
     // Section should not have motion-specific data attributes (no whileInView etc)
     const sections = container.querySelectorAll("section");
@@ -118,7 +118,7 @@ describe("HeroSection", () => {
 
     // Tab to the CTA
     await user.tab();
-    const cta = screen.getByRole("button", { name: /view my work/i });
+    const cta = screen.getByRole("button", { name: /learn more/i });
 
     expect(cta).toHaveFocus();
   });
@@ -129,7 +129,7 @@ describe("HeroSection", () => {
 
     await user.tab();
     const focused = document.activeElement;
-    expect(focused).toHaveTextContent(/view my work/i);
+    expect(focused).toHaveTextContent(/learn more/i);
   });
 
   it("renders a decorative background element", () => {
@@ -166,14 +166,12 @@ describe("HeroSection", () => {
     expect(children[1].querySelector('[data-testid="hero-content-card"]')).toBeNull();
   });
 
-  it("renders an extended background with 3-4 aurora gradient blobs", () => {
+  it("renders an extended background with 5 aurora gradient blobs", () => {
     const { container } = render(<HeroSection />);
     const bgDiv = container.querySelector('[data-testid="hero-background"]');
     expect(bgDiv).toBeInTheDocument();
-    // Should have 3-4 blob divs (formerly 2)
     const blobs = bgDiv!.querySelectorAll("div");
-    expect(blobs.length).toBeGreaterThanOrEqual(3);
-    expect(blobs.length).toBeLessThanOrEqual(4);
+    expect(blobs.length).toBeGreaterThanOrEqual(5);
   });
 
   it("applies aurora-shift animation class to background blobs", () => {
@@ -190,5 +188,30 @@ describe("HeroSection", () => {
     // Blobs should still exist but without animation attribute
     const bgDiv = container.querySelector('[data-testid="hero-background"]');
     expect(bgDiv).toBeInTheDocument();
+  });
+
+  it("all aurora blobs use the slow aurora-shift animation", () => {
+    render(<HeroSection />);
+    const bgDiv = screen.getByTestId("hero-background");
+    const blobs = bgDiv.querySelectorAll("[data-aurora-blob]");
+    expect(blobs.length).toBe(5); // 2 green + 1 gold + 1 teal
+
+    for (const blob of blobs) {
+      const el = blob as HTMLElement;
+      expect(el.className).toContain("animate-aurora-shift");
+    }
+  });
+
+  it("does not apply aurora animation classes when reduced motion is preferred", () => {
+    mockUseReducedMotion.mockReturnValue(true);
+    render(<HeroSection />);
+    const bgDiv = screen.getByTestId("hero-background");
+    const blobs = bgDiv.querySelectorAll("[data-aurora-blob]");
+    expect(blobs.length).toBe(5);
+
+    for (const blob of blobs) {
+      const el = blob as HTMLElement;
+      expect(el.className).not.toContain("animate-aurora-shift");
+    }
   });
 });

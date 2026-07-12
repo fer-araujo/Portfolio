@@ -4,87 +4,46 @@ import { useEffect } from "react";
 import { useReducedMotion } from "motion/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { skills } from "@/content/skills";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Reveal } from "@/components/ui/Reveal";
-import { cn } from "@/lib/utils";
+import { Boxes, Code2, Server, Users, Rocket } from "lucide-react";
+import { skillDomains } from "@/content/skills";
 
-const levelStyles: Record<string, string> = {
-  expert: "text-sm font-semibold text-text",
-  advanced: "text-xs font-medium text-text",
-  intermediate: "text-xs text-text-muted",
-  beginner: "text-xs text-text-muted",
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Boxes,
+  Code2,
+  Server,
+  Users,
+  Rocket,
 };
 
-/**
- * Skills section displaying categorized technology tags.
- * Uses a tag cloud layout — NOT progress bars.
- * Expert-level skills get slightly larger/bolder text for visual hierarchy.
- * Responsive: wraps on mobile.
- */
 export function SkillsSection() {
   const prefersReduced = useReducedMotion();
 
   useEffect(() => {
     if (prefersReduced) return;
 
+    gsap.registerPlugin(ScrollTrigger);
+
     const ctx = gsap.context(() => {
-      const categories = document.querySelectorAll<HTMLElement>(
-        "[data-gsap-category]"
+      const items = document.querySelectorAll<HTMLElement>(
+        "[data-gsap-skill-item]",
       );
-
-      categories.forEach((category) => {
-        const tags =
-          category.querySelectorAll<HTMLElement>("[data-skill-item]");
-        const expertTags =
-          category.querySelectorAll<HTMLElement>('[data-level="expert"]');
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: category,
-            start: "top 80%",
-          },
-        });
-
-        // Category row slides up + fades in
-        tl.fromTo(
-          category,
+      if (items.length) {
+        gsap.fromTo(
+          items,
           { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: items[0].parentElement,
+              start: "top 80%",
+            },
+          },
         );
-
-        // Tags stagger in after category reveals
-        if (tags.length) {
-          tl.fromTo(
-            tags,
-            { opacity: 0, y: 16 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.35,
-              stagger: 0.07,
-              ease: "power2.out",
-            },
-            "-=0.2"
-          );
-        }
-
-        // Expert-level tags get a brief pulse glow
-        if (expertTags.length) {
-          tl.to(
-            expertTags,
-            {
-              boxShadow:
-                "0 0 14px rgba(80, 200, 130, 0.35)",
-              duration: 0.5,
-              ease: "power1.inOut",
-              yoyo: true,
-              repeat: 1,
-            },
-            "-=0.15"
-          );
-        }
-      });
+      }
     });
 
     return () => ctx.revert();
@@ -96,45 +55,70 @@ export function SkillsSection() {
       id="skills"
       data-testid="skills-section"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <SectionHeading
-            title="Skills & Technologies"
-            subtitle="Technologies and tools I work with on a daily basis."
-            aligned="left"
-          />
-        </Reveal>
+      <div className="mx-auto max-w-5xl px-6 sm:px-8 lg:px-12">
+        {/* Section label — clean, minimal */}
+        <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-accent/70">
+          Expertise
+        </p>
 
-        <div className="grid gap-6" data-testid="skills-grid">
-          {skills.map((category) => (
-            <div
-              key={category.category}
-              data-testid={`skills-category-${category.category}`}
-              data-layout="two-column"
-              data-gsap-category
-              className="grid grid-cols-[auto_1fr] gap-3 sm:gap-4 max-sm:grid-cols-1"
-            >
-              <h3 className="text-right max-sm:text-left text-lg font-heading font-semibold tracking-tight text-text">
-                {category.category}
-              </h3>
+        <h2 className="mb-6 text-3xl font-heading font-bold tracking-tight text-text sm:text-4xl md:text-5xl">
+          Engineering at scale.
+        </h2>
 
-              <div className="flex flex-wrap gap-2">
-                {category.items.map((skill) => (
-                  <span
-                    key={skill.name}
-                    data-skill-item
-                    data-level={skill.level}
-                    className={cn(
-                      "inline-flex items-center rounded-full border border-border bg-bg-card px-3 py-1.5 transition-colors hover:border-accent/30",
-                      levelStyles[skill.level]
-                    )}
-                  >
-                    {skill.name}
-                  </span>
-                ))}
+        <p className="mb-16 max-w-2xl text-lg text-text-muted leading-relaxed">
+          Six years of building products that serve millions. Architecture,
+          frontend, backend, leadership — these are the domains where I bring
+          depth.
+        </p>
+
+        {/* Domain grid — 3 cols, spacious */}
+        <div
+          className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 sm:gap-14"
+          data-testid="skills-bento-grid"
+        >
+          {skillDomains.map((domain) => {
+            const Icon = iconMap[domain.icon];
+
+            return (
+              <div
+                key={domain.id}
+                data-gsap-skill-item
+                data-testid={`skills-domain-${domain.id}`}
+                className="group"
+              >
+                {/* Icon + Domain name */}
+                <div className="mb-3 flex items-center gap-3">
+                  {Icon && (
+                    <span className="text-accent/80">
+                      <Icon className="h-6 w-6" />
+                    </span>
+                  )}
+                  <h3 className="text-lg font-heading font-bold text-text">
+                    {domain.domain}
+                  </h3>
+                </div>
+
+                {/* Description */}
+                <p className="mb-4 text-sm text-text leading-relaxed">
+                  {domain.description}
+                </p>
+
+                {/* Tech tags — subtle, comma-separated feel */}
+                <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+                  {domain.technologies.map((tech) => (
+                    <span
+                      key={tech.name}
+                      data-testid="skill-tag"
+                      data-level={tech.level}
+                      className="text-xs text-text-muted"
+                    >
+                      {tech.name}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

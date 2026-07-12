@@ -1,26 +1,42 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { SkillsSection } from "@/components/sections/SkillsSection";
 
-// ── Mock skills data ───────────────────────────────────
+// ── Mock skillDomains data ──────────────────────────────
 vi.mock("@/content/skills", () => ({
-  skills: [
+  skillDomains: [
     {
-      category: "Languages",
-      items: [
-        { name: "TypeScript", level: "expert" },
-        { name: "JavaScript", level: "expert" },
-        { name: "PHP", level: "advanced" },
-        { name: "Python", level: "advanced" },
+      id: "architecture",
+      domain: "Architecture & Systems",
+      description: "Designing scalable architectures",
+      icon: "Boxes",
+      technologies: [
+        { name: "System Design", level: "expert" },
+        { name: "Hexagonal Architecture", level: "expert" },
+        { name: "Micro-frontends", level: "advanced" },
       ],
     },
     {
-      category: "Frontend",
-      items: [
+      id: "frontend",
+      domain: "Frontend Engineering",
+      description: "Building performant UIs",
+      icon: "Code2",
+      technologies: [
         { name: "React", level: "expert" },
         { name: "Next.js", level: "expert" },
+        { name: "TypeScript", level: "expert" },
         { name: "Tailwind CSS", level: "advanced" },
+      ],
+    },
+    {
+      id: "backend",
+      domain: "Backend & APIs",
+      description: "Robust APIs and services",
+      icon: "Server",
+      technologies: [
+        { name: "Node.js", level: "advanced" },
+        { name: "REST/GraphQL", level: "advanced" },
       ],
     },
   ],
@@ -29,33 +45,27 @@ vi.mock("@/content/skills", () => ({
 // ── Mock motion/react ──────────────────────────────────
 const mockUseReducedMotion = vi.fn().mockReturnValue(false);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function createTag(Tag: string) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) =>
-    React.createElement(Tag, props, children);
-}
-
 vi.mock("motion/react", () => ({
-  motion: {
-    div: createTag("div"),
-  },
   useReducedMotion: () => mockUseReducedMotion(),
 }));
+
+// ── Mock lucide-react icons ──────────────────────────────
+vi.mock("lucide-react", () => {
+  const Icon = ({ className }: { className?: string }) =>
+    React.createElement("svg", { className, "data-testid": "lucide-icon" });
+  return { Boxes: Icon, Code2: Icon, Server: Icon, Users: Icon, Rocket: Icon };
+});
 
 // ── Mock GSAP + ScrollTrigger ──────────────────────────
 const mockCtxRevert = vi.fn();
 
 vi.mock("gsap", () => ({
   gsap: {
+    registerPlugin: vi.fn(),
     context: vi.fn((fn: () => void) => {
       fn();
       return { revert: mockCtxRevert };
     }),
-    timeline: vi.fn(() => ({
-      fromTo: vi.fn().mockReturnThis(),
-      to: vi.fn().mockReturnThis(),
-    })),
     fromTo: vi.fn(),
     to: vi.fn(),
   },
@@ -75,112 +85,87 @@ describe("SkillsSection", () => {
     mockUseReducedMotion.mockReturnValue(false);
   });
 
-  it("renders the section heading", () => {
+  it("renders the expertise eyebrow label", () => {
     render(<SkillsSection />);
-    expect(screen.getByText(/skills & technologies/i)).toBeInTheDocument();
+    expect(screen.getByText(/expertise/i)).toBeInTheDocument();
   });
 
-  it("renders all category headings from the data", () => {
+  it("renders the bold headline", () => {
     render(<SkillsSection />);
-    expect(screen.getByText("Languages")).toBeInTheDocument();
-    expect(screen.getByText("Frontend")).toBeInTheDocument();
+    expect(screen.getByText(/engineering at scale/i)).toBeInTheDocument();
   });
 
-  it("renders all skill names", () => {
+  it("renders the intro paragraph", () => {
     render(<SkillsSection />);
-    expect(screen.getByText("TypeScript")).toBeInTheDocument();
-    expect(screen.getByText("JavaScript")).toBeInTheDocument();
-    expect(screen.getByText("Python")).toBeInTheDocument();
+    expect(screen.getByText(/six years of building/i)).toBeInTheDocument();
+  });
+
+  it("renders all domain names", () => {
+    render(<SkillsSection />);
+    expect(screen.getByText("Architecture & Systems")).toBeInTheDocument();
+    expect(screen.getByText("Frontend Engineering")).toBeInTheDocument();
+    expect(screen.getByText("Backend & APIs")).toBeInTheDocument();
+  });
+
+  it("renders domain descriptions", () => {
+    render(<SkillsSection />);
+    expect(screen.getByText("Designing scalable architectures")).toBeInTheDocument();
+    expect(screen.getByText("Building performant UIs")).toBeInTheDocument();
+    expect(screen.getByText("Robust APIs and services")).toBeInTheDocument();
+  });
+
+  it("renders Lucide icons for each domain", () => {
+    render(<SkillsSection />);
+    const icons = screen.getAllByTestId("lucide-icon");
+    expect(icons.length).toBe(3);
+  });
+
+  it("renders all technology names", () => {
+    render(<SkillsSection />);
+    expect(screen.getByText("System Design")).toBeInTheDocument();
     expect(screen.getByText("React")).toBeInTheDocument();
-    expect(screen.getByText("Next.js")).toBeInTheDocument();
-    expect(screen.getByText("Tailwind CSS")).toBeInTheDocument();
+    expect(screen.getByText("Node.js")).toBeInTheDocument();
   });
 
-  it("renders the correct number of skill items per category", () => {
+  it("expert-level tech tags exist in correct quantity", () => {
     render(<SkillsSection />);
-
-    const languageCategory = screen.getByTestId("skills-category-Languages");
-    expect(languageCategory).toBeInTheDocument();
-    const languageItems = languageCategory.querySelectorAll("[data-skill-item]");
-    expect(languageItems.length).toBe(4);
-
-    const frontendCategory = screen.getByTestId("skills-category-Frontend");
-    expect(frontendCategory).toBeInTheDocument();
-    const frontendItems = frontendCategory.querySelectorAll("[data-skill-item]");
-    expect(frontendItems.length).toBe(3);
+    const expertTags = screen
+      .getAllByTestId("skill-tag")
+      .filter((tag) => tag.getAttribute("data-level") === "expert");
+    expect(expertTags.length).toBe(5);
   });
 
-  it("renders category headings as h3 elements for accessible structure", () => {
+  it("advanced-level tech tags are muted", () => {
     render(<SkillsSection />);
-    const heading = screen.getByRole("heading", { name: /languages/i, level: 3 });
-    expect(heading).toBeInTheDocument();
+    const adv = screen
+      .getAllByTestId("skill-tag")
+      .filter((tag) => tag.getAttribute("data-level") === "advanced");
+    expect(adv.length).toBeGreaterThanOrEqual(1);
+    for (const tag of adv) {
+      expect(tag.className).toContain("text-text-muted");
+    }
   });
 
-  it("renders the section with a semantic section element", () => {
-    const { container } = render(<SkillsSection />);
-    const section = container.querySelector("section");
-    expect(section).toBeInTheDocument();
-  });
-
-  it("applies expert-level visual distinction to expert skill tags", () => {
+  it("GSAP animation targets exist", () => {
     render(<SkillsSection />);
-    const expertTag = screen.getByText("TypeScript");
-    expect(expertTag.closest("[data-level]")).toHaveAttribute("data-level", "expert");
+    const items = document.querySelectorAll("[data-gsap-skill-item]");
+    expect(items.length).toBe(3);
   });
 
-  it("renders GSAP category animation targets on each row", () => {
+  it("section has correct id for navigation", () => {
     render(<SkillsSection />);
-    const categories = screen.getByTestId("skills-grid").querySelectorAll("[data-gsap-category]");
-    expect(categories.length).toBe(2);
+    expect(screen.getByTestId("skills-section")).toHaveAttribute("id", "skills");
   });
 
-  it("renders GSAP stagger target attributes on skill items", () => {
+  it("renders correct total technology tags", () => {
     render(<SkillsSection />);
-    const staggerTargets = screen.getByTestId("skills-grid").querySelectorAll("[data-skill-item]");
-    expect(staggerTargets.length).toBe(7);
+    const allTags = screen.getAllByTestId("skill-tag");
+    expect(allTags.length).toBe(9);
   });
 
-  it("renders each category in a two-column grid layout", () => {
-    render(<SkillsSection />);
-    const langCat = screen.getByTestId("skills-category-Languages");
-    expect(langCat).toHaveAttribute("data-layout", "two-column");
-
-    const frontendCat = screen.getByTestId("skills-category-Frontend");
-    expect(frontendCat).toHaveAttribute("data-layout", "two-column");
-  });
-
-  it("category heading and tags are siblings in the same row", () => {
-    render(<SkillsSection />);
-    const langCat = screen.getByTestId("skills-category-Languages");
-    const heading = within(langCat).getByRole("heading", { level: 3, name: /languages/i });
-    expect(heading).toBeInTheDocument();
-    // Heading should be in the same container as the tags (two-column layout)
-    const tags = langCat.querySelectorAll("[data-skill-item]");
-    expect(tags.length).toBe(4);
-  });
-
-  it("renders section with correct id attribute for navigation", () => {
-    render(<SkillsSection />);
-    const section = screen.getByTestId("skills-section");
-    expect(section).toHaveAttribute("id", "skills");
-  });
-
-  it("renders non-expert skills with correct data-level attribute", () => {
-    render(<SkillsSection />);
-    const phpTag = screen.getByText("PHP");
-    expect(phpTag.closest("[data-level]")).toHaveAttribute("data-level", "advanced");
-  });
-
-  it("renders all category headings as h3 elements", () => {
-    render(<SkillsSection />);
-    const frontendHeading = screen.getByRole("heading", { name: /frontend/i, level: 3 });
-    expect(frontendHeading).toBeInTheDocument();
-  });
-
-  it("renders without motion animation when reduced motion is preferred", () => {
+  it("renders without crashing when reduced motion preferred", () => {
     mockUseReducedMotion.mockReturnValue(true);
     render(<SkillsSection />);
-    expect(screen.getByText("Skills & Technologies")).toBeInTheDocument();
-    expect(screen.getByText("TypeScript")).toBeInTheDocument();
+    expect(screen.getByText(/expertise/i)).toBeInTheDocument();
   });
 });

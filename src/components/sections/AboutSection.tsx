@@ -87,7 +87,7 @@ export function AboutSection() {
         <div className="grid gap-12 lg:grid-cols-5 lg:gap-16">
           {/* Bio column */}
           <div className="lg:col-span-3" data-testid="about-bio">
-            <div className="space-y-4 text-text-muted leading-relaxed">
+            <div className="space-y-4 text-text/80 leading-relaxed">
               {about.bio.map((paragraph, i) => (
                 <Reveal key={i} delay={i * 0.1}>
                   <p className="text-base sm:text-lg">{paragraph}</p>

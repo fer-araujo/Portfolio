@@ -46,6 +46,7 @@ const mockCtxRevert = vi.fn();
 
 vi.mock("gsap", () => ({
   gsap: {
+    registerPlugin: vi.fn(),
     context: vi.fn((fn: () => void) => {
       fn();
       return { revert: mockCtxRevert };
@@ -142,5 +143,11 @@ describe("ContactSection", () => {
     expect(
       screen.getByText(/I'm currently open to opportunities/i)
     ).toBeInTheDocument();
+  });
+
+  it("renders the contact section element", () => {
+    render(<ContactSection />);
+    const section = screen.getByTestId("contact-section");
+    expect(section).toBeInTheDocument();
   });
 });
