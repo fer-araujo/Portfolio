@@ -42,3 +42,6 @@ next-env.d.ts
 
 # SDD internal tooling.atl/
 
+
+playwright-report/
+test-results/
