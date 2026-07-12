@@ -53,7 +53,7 @@ export function ProjectsSection() {
           tl.kill();
         };
       },
-    });
+    }) as unknown as { kill: () => void };
 
     let debounceTimer: ReturnType<typeof setTimeout>;
     const onResize = () => {

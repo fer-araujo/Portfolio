@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ProjectCaseStudy } from "@/components/sections/ProjectCaseStudy";
 import type { Project } from "@/content/types";
@@ -7,7 +7,6 @@ import type { Project } from "@/content/types";
 // ── Mock next/image ────────────────────────────────────
 vi.mock("next/image", () => ({
   default: ({ alt, ...props }: { alt: string; [key: string]: unknown }) => (
-    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     <img alt={alt} {...props} />
   ),
 }));

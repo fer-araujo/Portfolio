@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
 
@@ -87,7 +87,7 @@ const { mockGsapTo, mockMmKill, mockTweenKill } = vi.hoisted(() => ({
 vi.mock("gsap", () => ({
   gsap: {
     to: mockGsapTo,
-    context: (fn: () => void) => ({ revert: vi.fn() }),
+    context: () => ({ revert: vi.fn() }),
     registerPlugin: vi.fn(),
   },
 }));
@@ -107,15 +107,10 @@ vi.mock("gsap/ScrollTrigger", () => ({
 // ── Mock motion/react ─────────────────────────────────
 const mockUseReducedMotion = vi.fn().mockReturnValue(false);
 
-function createTag(Tag: string) {
-  return ({ children, ...props }: { children: React.ReactNode; [key: string]: unknown }) =>
-    React.createElement(Tag, props, children);
-}
-
 vi.mock("motion/react", () => ({
   motion: {
-    section: createTag("section"),
-    div: createTag("div"),
+    section: "section",
+    div: "div",
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   useReducedMotion: () => mockUseReducedMotion(),
@@ -124,7 +119,6 @@ vi.mock("motion/react", () => ({
 // ── Mock next/image ────────────────────────────────────
 vi.mock("next/image", () => ({
   default: ({ alt, ...props }: { alt: string; [key: string]: unknown }) => (
-    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     <img alt={alt} {...props} />
   ),
 }));

@@ -6,7 +6,6 @@ import type { Project } from "@/content/types";
 // ── Mock next/image ────────────────────────────────────
 vi.mock("next/image", () => ({
   default: ({ alt, priority, ...props }: { alt: string; priority?: boolean; [key: string]: unknown }) => (
-    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     <img alt={alt} data-priority={String(!!priority)} {...props} />
   ),
 }));
