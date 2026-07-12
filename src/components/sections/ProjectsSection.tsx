@@ -84,26 +84,24 @@ export function ProjectsSection() {
       id="work"
       data-testid="projects-section"
     >
-      {/* ── Heading overlay ─────────────────────── */}
-      <div className="pointer-events-none absolute left-0 top-0 z-30 w-full px-6 pt-20 md:px-10 md:pt-24">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <SectionHeading
-              title="Featured Work"
-              subtitle="Selected projects that showcase my approach to engineering."
-              aligned="left"
-            />
-          </Reveal>
-        </div>
+      {/* ── Heading in normal flow above the reel ── */}
+      <div className="mx-auto max-w-7xl px-4 pb-4 pt-2 sm:px-6 lg:px-8">
+        <Reveal>
+          <SectionHeading
+            title="Featured Work"
+            subtitle="Selected projects that showcase my approach to engineering."
+            aligned="left"
+          />
+        </Reveal>
       </div>
 
       {/* ── Film reel track ───────────────────── */}
-      <div className="overflow-hidden">
+      <div className="md:overflow-hidden">
         <div
           ref={trackRef}
           id="film-reel-track"
           data-testid="film-reel-track"
-          className="flex flex-nowrap"
+          className="flex flex-nowrap max-md:flex-col"
         >
           {projects.map((project, index) => (
             <FilmReelPanel

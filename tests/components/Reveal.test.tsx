@@ -60,4 +60,21 @@ describe("Reveal", () => {
     const wrapper = screen.getByTestId("reveal-wrapper");
     expect(wrapper.className).toContain("custom-class");
   });
+
+  // ── Phase 6: SSR / reduced-motion safety ──────────────
+  it("renders children without error when reduced motion is preferred (SSR-safe)", () => {
+    // Framer Motion's useReducedMotion returns false during SSR,
+    // and the Reveal component correctly gates whileInView animations.
+    // This test verifies the plain <div> fallback path works.
+    mockUseReducedMotion.mockReturnValue(true);
+    render(
+      <Reveal delay={0.5} direction="left" duration={0.8}>
+        <span>SSR Safe</span>
+      </Reveal>
+    );
+    // When reduced motion is preferred, component renders plain div (no motion)
+    expect(screen.getByText("SSR Safe")).toBeInTheDocument();
+    // No motion.div wrapper is used — the plain div fallback is active
+    expect(screen.queryByTestId("reveal-wrapper")).not.toBeInTheDocument();
+  });
 });

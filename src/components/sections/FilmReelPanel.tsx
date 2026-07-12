@@ -22,7 +22,7 @@ export function FilmReelPanel({ project, index, onOpen }: FilmReelPanelProps) {
     <button
       type="button"
       onClick={() => onOpen(project)}
-      className="group relative h-screen w-screen flex-shrink-0 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+      className="group relative h-screen w-screen flex-shrink-0 overflow-hidden max-md:w-full max-md:h-auto max-md:min-h-[50vh] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
       aria-label={`View case study: ${project.title}`}
     >
       {/* ── Background image ──────────────────── */}
@@ -44,7 +44,7 @@ export function FilmReelPanel({ project, index, onOpen }: FilmReelPanelProps) {
 
       {/* ── Action links (top-right) ──────────── */}
       <div
-        className="absolute right-4 top-4 z-20 flex gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="absolute right-4 top-20 z-20 flex gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         onClick={(e) => e.stopPropagation()}
       >
         {project.liveUrl && (
@@ -90,7 +90,7 @@ export function FilmReelPanel({ project, index, onOpen }: FilmReelPanelProps) {
         )}
 
         {/* Title */}
-        <h3 className="mb-3 max-w-2xl font-heading text-3xl font-bold tracking-tight text-white md:text-5xl">
+        <h3 className="mb-3 max-w-2xl font-heading text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">
           {project.title}
         </h3>
 

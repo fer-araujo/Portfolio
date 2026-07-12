@@ -147,6 +147,43 @@ describe("ProjectCaseStudy", () => {
     expect(images.length).toBe(3);
   });
 
+  // ── Phase 1: overlay touch scroll fix ────────────────
+  describe("overlay scroll behavior", () => {
+    it("sets body overflow to hidden when overlay mounts", () => {
+      render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
+      expect(document.body.style.overflow).toBe("hidden");
+    });
+
+    it("does NOT set body position to fixed (no body-freeze)", () => {
+      render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
+      expect(document.body.style.position).not.toBe("fixed");
+    });
+
+    it("cleans up body overflow on unmount (no leak)", () => {
+      const onClose = vi.fn();
+      const { unmount } = render(
+        <ProjectCaseStudy project={fullProject} onClose={onClose} />
+      );
+      unmount();
+      expect(document.body.style.overflow).not.toBe("hidden");
+    });
+
+    it("renders backdrop with overscroll-behavior containment", () => {
+      render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
+      const backdrop = screen.getByTestId("case-study-backdrop");
+      expect(backdrop.className).toContain("overscroll-contain");
+    });
+
+    it("renders inner scroll area with touch-action pan-y for mobile", () => {
+      render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
+      const backdrop = screen.getByTestId("case-study-backdrop");
+      // The inner scrollable div has touch-pan-y for touch device scrolling
+      const scrollArea = backdrop.querySelector("[data-testid='case-study-scroll-area']");
+      expect(scrollArea).toBeInTheDocument();
+      expect(scrollArea!.className).toContain("touch-pan-y");
+    });
+  });
+
   it("focus stays trapped inside overlay (tab cycling)", async () => {
     const user = userEvent.setup();
     render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);

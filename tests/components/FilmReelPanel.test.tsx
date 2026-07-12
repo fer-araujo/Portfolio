@@ -134,4 +134,23 @@ describe("FilmReelPanel", () => {
     const img = screen.getByRole("img");
     expect(img.className).toContain("object-contain");
   });
+
+  // ── Phase 3 + 5: mobile responsive panel + tablet titles ──
+  it("panel has max-md responsive classes for mobile vertical stack", () => {
+    render(<FilmReelPanel project={fullProject} index={0} onOpen={vi.fn()} />);
+    const panel = screen.getByRole("button");
+    expect(panel.className).toContain("max-md:w-full");
+    expect(panel.className).toContain("max-md:h-auto");
+    expect(panel.className).toContain("max-md:min-h-[50vh]");
+  });
+
+  it("panel title uses md:text-4xl lg:text-5xl (not md:text-5xl alone)", () => {
+    render(<FilmReelPanel project={fullProject} index={0} onOpen={vi.fn()} />);
+    const title = screen.getByText("Test Project");
+    const classes = title.className.split(/\s+/);
+    expect(classes).toContain("md:text-4xl");
+    expect(classes).toContain("lg:text-5xl");
+    // Should NOT have bare md:text-5xl (too aggressive on tablet)
+    expect(classes).not.toContain("md:text-5xl");
+  });
 });

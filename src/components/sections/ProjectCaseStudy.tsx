@@ -23,18 +23,12 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
-  /* ── Freeze body in place + focus first element ─── */
+  /* ── Prevent body scroll + focus first element ─── */
   useEffect(() => {
-    const scrollY = window.scrollY;
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
     closeRef.current?.focus();
     return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      window.scrollTo(0, scrollY);
+      document.body.style.overflow = "";
     };
   }, []);
 
@@ -79,14 +73,18 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
   return (
     <div
       data-testid="case-study-backdrop"
-      className="fixed inset-0 z-[100] overflow-y-auto bg-black/95 backdrop-blur-xl"
+      className="fixed inset-0 z-[100] overflow-y-auto overscroll-contain bg-black/95 backdrop-blur-xl"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
       role="dialog"
       aria-label={`${project.title} case study`}
     >
-      <div ref={dialogRef} className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+      <div
+        ref={dialogRef}
+        data-testid="case-study-scroll-area"
+        className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 touch-pan-y"
+      >
         {/* ── Header: close button + title ─────── */}
         <div className="mb-8 flex items-start justify-between">
           <div>

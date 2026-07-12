@@ -6,9 +6,9 @@ export function FilmReelClosingPanel() {
   return (
     <div
       data-testid="closing-panel"
-      className="flex h-screen w-screen flex-shrink-0 flex-col items-center justify-center bg-bg dot-grid px-6 text-center"
+      className="flex h-screen w-screen flex-shrink-0 flex-col items-center justify-center bg-bg dot-grid px-6 text-center max-md:w-full max-md:h-auto max-md:min-h-[40vh]"
     >
-      <h2 className="mb-4 max-w-2xl font-heading text-3xl font-bold tracking-tight text-text md:text-5xl">
+      <h2 className="mb-4 max-w-2xl font-heading text-3xl font-bold tracking-tight text-text md:text-4xl">
         This reel ends here.
         <br />
         <span className="text-accent">Your story is next.</span>

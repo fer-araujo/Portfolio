@@ -36,4 +36,21 @@ describe("FilmReelClosingPanel", () => {
     render(<FilmReelClosingPanel />);
     expect(screen.getByText(/let's build something extraordinary/i)).toBeInTheDocument();
   });
+
+  // ── Phase 3 + 5: mobile responsive + tablet title ─────
+  it("panel has max-md responsive classes for mobile vertical stack", () => {
+    render(<FilmReelClosingPanel />);
+    const panel = screen.getByTestId("closing-panel");
+    expect(panel.className).toContain("max-md:w-full");
+    expect(panel.className).toContain("max-md:h-auto");
+    expect(panel.className).toContain("max-md:min-h-[40vh]");
+  });
+
+  it("panel title uses md:text-4xl (not md:text-5xl for tablet)", () => {
+    render(<FilmReelClosingPanel />);
+    const title = screen.getByText(/this reel ends here/i);
+    const classes = title.className.split(/\s+/);
+    expect(classes).toContain("md:text-4xl");
+    expect(classes).not.toContain("md:text-5xl");
+  });
 });

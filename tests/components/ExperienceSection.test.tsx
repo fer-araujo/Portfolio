@@ -251,25 +251,28 @@ describe("ExperienceSection", () => {
     expect(parallaxDiv?.parentElement?.tagName).toBe("SECTION");
   });
 
-  it("mobile timeline entry has border-l-2 and pl-8 for mobile indicator", () => {
+  // ── Phase 4: mobile timeline simplified (no border-l-2, pl-6, smaller dot) ──
+  it("mobile timeline entry does NOT have border-l-2 on mobile", () => {
     render(<ExperienceSection />);
     const currentEntry = screen.getByTestId("experience-current-co");
-    // Entry should have mobile border and padding
-    expect(currentEntry.className).toContain("border-l-2");
-    expect(currentEntry.className).toContain("border-accent/30");
-    expect(currentEntry.className).toContain("pl-8");
-    // Desktop should remove the border
-    expect(currentEntry.className).toContain("md:border-l-0");
+    expect(currentEntry.className).not.toContain("border-l-2");
   });
 
-  it("mobile timeline dot is visible with -left-[5px] positioning", () => {
+  it("mobile timeline entry uses pl-6 (not pl-8) for compact padding", () => {
+    render(<ExperienceSection />);
+    const currentEntry = screen.getByTestId("experience-current-co");
+    expect(currentEntry.className).toContain("pl-6");
+    expect(currentEntry.className).not.toContain("pl-8");
+  });
+
+  it("timeline dot uses h-3 w-3 (not h-4 w-4) for cleaner mobile look", () => {
     render(<ExperienceSection />);
     const currentEntry = screen.getByTestId("experience-current-co");
     const timelineDots = currentEntry.querySelectorAll("[aria-hidden='true']");
     const dot = timelineDots[0] as HTMLElement;
-    // Dot should be visible on mobile (no 'hidden' class)
-    expect(dot.className).not.toContain("hidden");
-    // Should have left positioning for mobile
-    expect(dot.className).toContain("-left-[5px]");
+    expect(dot.className).toContain("h-3");
+    expect(dot.className).toContain("w-3");
+    expect(dot.className).not.toContain("h-4");
+    expect(dot.className).not.toContain("w-4");
   });
 });

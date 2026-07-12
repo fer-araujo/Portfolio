@@ -205,11 +205,37 @@ describe("ProjectsSection — film reel", () => {
     expect(screen.getByText(/featured work/i)).toBeInTheDocument();
   });
 
-  it("heading is rendered inside an absolute overlay container", () => {
+  // ── Phase 2: heading reposition (normal flow, not absolute overlay) ──
+  it("heading is rendered in normal flow — NOT inside an absolute overlay", () => {
     render(<ProjectsSection />);
     const heading = screen.getByText(/featured work/i);
-    // The heading parent element should have absolute positioning
+    // After fix: heading is in normal flow ABOVE the overflow-hidden wrapper
     const overlayContainer = heading.closest(".absolute");
-    expect(overlayContainer).not.toBeNull();
+    expect(overlayContainer).toBeNull();
+  });
+
+  it("heading appears before the film-reel overflow wrapper in DOM order", () => {
+    render(<ProjectsSection />);
+    const heading = screen.getByText(/featured work/i);
+    const track = screen.getByTestId("film-reel-track");
+    // heading should come before the track in document order
+    const headingPos = heading.compareDocumentPosition(track);
+    expect(headingPos & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("film-reel track wrapper uses md:overflow-hidden (not unconditional overflow-hidden)", () => {
+    render(<ProjectsSection />);
+    const track = screen.getByTestId("film-reel-track");
+    const wrapper = track.parentElement!;
+    // md:overflow-hidden contains the string, so split to verify it's the responsive variant
+    const classes = wrapper.className.split(/\s+/);
+    expect(classes).toContain("md:overflow-hidden");
+    expect(classes).not.toContain("overflow-hidden");
+  });
+
+  it("film-reel track uses flex-col on mobile (max-md:flex-col)", () => {
+    render(<ProjectsSection />);
+    const track = screen.getByTestId("film-reel-track");
+    expect(track.className).toContain("max-md:flex-col");
   });
 });

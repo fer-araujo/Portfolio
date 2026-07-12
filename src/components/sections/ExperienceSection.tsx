@@ -174,12 +174,12 @@ export function ExperienceSection() {
                   data-testid={`experience-${entry.id}`}
                   data-current={isCurrent ? "" : undefined}
                   data-gsap-entry
-                  className="relative pl-8 border-l-2 border-accent/30 md:border-l-0 md:grid md:grid-cols-5 md:gap-8 md:pl-0"
+                  className="relative pl-6 md:grid md:grid-cols-5 md:gap-8 md:pl-0"
                 >
                   {/* Timeline dot */}
                   <div
                     className={cn(
-                      "absolute -left-[5px] top-1.5 h-4 w-4 rounded-full border-2 md:left-[11px]",
+                      "absolute -left-[5px] top-1.5 h-3 w-3 rounded-full border-2 md:left-[11px]",
                       isCurrent ? "bg-accent border-accent" : "bg-bg-card border-border"
                     )}
                     aria-hidden="true"
