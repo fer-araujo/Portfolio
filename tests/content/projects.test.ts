@@ -3,33 +3,20 @@ import { projects } from "@/content/projects";
 import type { Project } from "@/content/types";
 
 describe("projects data", () => {
-  it("has exactly 5 projects", () => {
-    expect(projects).toHaveLength(5);
+  it("has exactly 4 projects", () => {
+    expect(projects).toHaveLength(4);
   });
 
-  it("is ordered: anime-tracker, this-portfolio, patient-management, school-system, pokedex", () => {
+  it("is ordered: anime-tracker, patient-management, school-system, pokedex", () => {
     expect(projects[0].id).toBe("anime-tracker");
-    expect(projects[1].id).toBe("this-portfolio");
-    expect(projects[2].id).toBe("patient-management");
-    expect(projects[3].id).toBe("school-system");
-    expect(projects[4].id).toBe("pokedex");
+    expect(projects[1].id).toBe("patient-management");
+    expect(projects[2].id).toBe("school-system");
+    expect(projects[3].id).toBe("pokedex");
   });
 
-  it("has this-portfolio at index 1 with editorial fields", () => {
-    const project = projects[1];
-    expect(project.id).toBe("this-portfolio");
-    expect(project.title).toBe("This Portfolio");
-    expect(project.description).toBe("Handcrafted. Cinematic. Intentional.");
-    expect(project.tagline).toBe("Craft over templates. Intent over filler.");
-    expect(project.phase).toBe("current");
-    expect(project.narrativeText).toContain("Every detail");
-    expect(project.stats).toBeDefined();
-    expect(project.stats).toHaveLength(3);
-    expect(project.stats![0]).toEqual({ label: "Stack", value: "Next.js 16" });
-    expect(project.stats![1]).toEqual({ label: "Animation", value: "GSAP + Motion" });
-    expect(project.stats![2]).toEqual({ label: "Design", value: "Tailwind v4" });
-    expect(project.techStack).toContain("GSAP");
-    expect(project.githubUrl).toBe("https://github.com/fer-araujo/portfolio-2026");
+  it("does NOT contain this-portfolio", () => {
+    const found = projects.find((p) => p.id === "this-portfolio" || p.title === "This Portfolio");
+    expect(found).toBeUndefined();
   });
 
   it("has anime-tracker (Anime Tracker) at index 0", () => {
@@ -43,8 +30,8 @@ describe("projects data", () => {
     expect(project.githubUrl).toBe("https://github.com/fer-araujo/anime-tracker");
   });
 
-  it("has patient-management (Patient Management) at index 2 with phase=planned", () => {
-    const project = projects[2];
+  it("has patient-management (Patient Management) at index 1 with phase=planned", () => {
+    const project = projects[1];
     expect(project.id).toBe("patient-management");
     expect(project.title).toBe("Patient Management");
     expect(project.featured).toBe(true);
@@ -54,8 +41,8 @@ describe("projects data", () => {
     expect(project.phase).toBe("planned");
   });
 
-  it("has school-system (School Attendance System) at index 3 with phase=past", () => {
-    const project = projects[3];
+  it("has school-system (School Attendance System) at index 2 with phase=past", () => {
+    const project = projects[2];
     expect(project.id).toBe("school-system");
     expect(project.title).toBe("School Attendance System");
     expect(project.featured).toBe(true);
@@ -65,8 +52,8 @@ describe("projects data", () => {
     expect(project.phase).toBe("past");
   });
 
-  it("has pokedex (Pokédex App) at index 4 with phase=past", () => {
-    const project = projects[4];
+  it("has pokedex (Pokédex App) at index 3 with phase=past", () => {
+    const project = projects[3];
     expect(project.id).toBe("pokedex");
     expect(project.title).toBe("Pokédex App");
     expect(project.featured).toBe(true);

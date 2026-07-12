@@ -23,12 +23,18 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
-  /* ── Lock body scroll + focus first element ─── */
+  /* ── Freeze body in place + focus first element ─── */
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    const scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
     closeRef.current?.focus();
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, scrollY);
     };
   }, []);
 

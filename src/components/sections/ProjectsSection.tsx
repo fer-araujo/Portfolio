@@ -16,7 +16,7 @@ import type { Project } from "@/content/types";
  * Projects section — cinematic horizontal film reel.
  *
  * Replaces the old 2×2 grid with a GSAP ScrollTrigger-driven
- * horizontal scrub across 6 panels (5 projects + 1 CTA).
+ * horizontal scrub across 5 panels (4 projects + 1 closing).
  * On mobile (< 768px), panels stack vertically with native scroll.
  * Respects prefers-reduced-motion.
  */
@@ -78,18 +78,6 @@ export function ProjectsSection() {
     setSelectedProject(null);
   }, []);
 
-  // Disable reel ScrollTrigger when case study overlay is open
-  useEffect(() => {
-    if (selectedProject) {
-      ScrollTrigger.getAll().forEach((st) => st.disable());
-    } else {
-      const timer = setTimeout(() => {
-        ScrollTrigger.getAll().forEach((st) => st.enable());
-      }, 200);
-      return () => clearTimeout(timer);
-    }
-  }, [selectedProject]);
-
   return (
     <section
       className="relative overflow-hidden"
@@ -97,7 +85,7 @@ export function ProjectsSection() {
       data-testid="projects-section"
     >
       {/* ── Heading overlay ─────────────────────── */}
-      <div className="pointer-events-none absolute left-0 top-0 z-30 w-full px-6 pt-8 md:px-10 md:pt-12">
+      <div className="pointer-events-none absolute left-0 top-0 z-30 w-full px-6 pt-20 md:px-10 md:pt-24">
         <div className="mx-auto max-w-7xl">
           <Reveal>
             <SectionHeading

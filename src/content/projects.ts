@@ -36,34 +36,6 @@ export const projects: Project[] = [
     phase: "past",
   },
   {
-    id: "this-portfolio",
-    title: "This Portfolio",
-    description: "Handcrafted. Cinematic. Intentional.",
-    tagline: "Craft over templates. Intent over filler.",
-    narrativeText:
-      "Every detail — from the horizontal film reel to the Aurora animations, from the editorial typography to the GSAP-driven transitions — was designed to show not just what I can build, but how I think about building it.",
-    phase: "current",
-    stats: [
-      { label: "Stack", value: "Next.js 16" },
-      { label: "Animation", value: "GSAP + Motion" },
-      { label: "Design", value: "Tailwind v4" },
-    ],
-    longDescription: {
-      problem:
-        "Portfolios often feel templated — same grid layouts, same card patterns, same generic hero sections.",
-      solution:
-        "Designed every pixel with intention: a horizontal cinematic film reel driven by GSAP ScrollTrigger, editorial typography, and fluid Aurora animations that create an immersive storytelling experience.",
-      impact:
-        "A portfolio that is itself a case study in thoughtful frontend engineering — demonstrating mastery of animation, layout, and design system architecture.",
-    },
-    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Motion", "Lenis"],
-    thumbnail: "/images/projects/portfolio-2026-01.png",
-    images: [],
-    githubUrl: "https://github.com/fer-araujo/portfolio-2026",
-    category: "web",
-    featured: true,
-  },
-  {
     id: "patient-management",
     title: "Patient Management",
     description: "Healthcare management starter",

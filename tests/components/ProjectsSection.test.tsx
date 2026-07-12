@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
 
-// ── Mock projects data (5 entries) ────────────────────
+// ── Mock projects data (4 entries) ────────────────────
 vi.mock("@/content/projects", () => ({
   projects: [
     {
@@ -22,27 +22,11 @@ vi.mock("@/content/projects", () => ({
       liveUrl: "https://anime.example.com",
     },
     {
-      id: "this-portfolio",
-      title: "This Portfolio",
-      description: "Handcrafted. Cinematic.",
-      tagline: "Craft over templates.",
-      phase: "current",
-      narrativeText: "Every detail was designed.",
-      stats: [{ label: "Stack", value: "Next.js 16" }],
-      longDescription: { problem: "P2", solution: "S2", impact: "I2" },
-      techStack: ["Next.js", "GSAP"],
-      thumbnail: "/images/projects/portfolio-2026-01.png",
-      images: [],
-      category: "web",
-      featured: true,
-      githubUrl: "https://github.com/fer-araujo/portfolio-2026",
-    },
-    {
       id: "patient-management",
       title: "Patient Management",
       description: "Healthcare management starter",
       phase: "planned",
-      longDescription: { problem: "P3", solution: "S3", impact: "I3" },
+      longDescription: { problem: "P2", solution: "S2", impact: "I2" },
       techStack: ["React"],
       thumbnail: "/images/projects/patient-management-01.png",
       images: [],
@@ -54,7 +38,7 @@ vi.mock("@/content/projects", () => ({
       title: "School Attendance System",
       description: "QR-based attendance",
       phase: "past",
-      longDescription: { problem: "P4", solution: "S4", impact: "I4" },
+      longDescription: { problem: "P3", solution: "S3", impact: "I3" },
       techStack: ["React", "Firebase"],
       thumbnail: "/images/projects/school-system-01.png",
       images: ["/images/projects/school-system-02.png"],
@@ -67,7 +51,7 @@ vi.mock("@/content/projects", () => ({
       title: "Pokédex App",
       description: "Simple Pokédex",
       phase: "past",
-      longDescription: { problem: "P5", solution: "S5", impact: "I5" },
+      longDescription: { problem: "P4", solution: "S4", impact: "I4" },
       techStack: ["Next.js"],
       thumbnail: "/images/projects/pokedex-01.png",
       images: [],
@@ -78,8 +62,6 @@ vi.mock("@/content/projects", () => ({
 }));
 
 // ── Mock GSAP ─────────────────────────────────────────
-const mockDisable = vi.fn();
-const mockEnable = vi.fn();
 const { mockGsapTo, mockMmKill, mockTweenKill } = vi.hoisted(() => ({
   mockGsapTo: vi.fn().mockReturnValue({ kill: vi.fn() }),
   mockMmKill: vi.fn(),
@@ -104,7 +86,7 @@ vi.mock("gsap/ScrollTrigger", () => ({
     config: vi.fn(),
     update: vi.fn(),
     getAll: vi.fn(() => [
-      { disable: mockDisable, enable: mockEnable },
+      { disable: vi.fn(), enable: vi.fn() },
     ]),
   },
 }));
@@ -151,30 +133,32 @@ describe("ProjectsSection — film reel", () => {
     expect(screen.getByText(/featured work/i)).toBeInTheDocument();
   });
 
-  it("renders all 5 project panels", () => {
+  it("renders all 4 project panels", () => {
     render(<ProjectsSection />);
     expect(screen.getByText("Anime Tracker")).toBeInTheDocument();
-    expect(screen.getByText("This Portfolio")).toBeInTheDocument();
     expect(screen.getByText("Patient Management")).toBeInTheDocument();
     expect(screen.getByText("School Attendance System")).toBeInTheDocument();
     expect(screen.getByText("Pokédex App")).toBeInTheDocument();
   });
 
-  it("renders the closing CTA panel with a mailto link", () => {
+  it("does NOT render This Portfolio", () => {
+    render(<ProjectsSection />);
+    expect(screen.queryByText("This Portfolio")).not.toBeInTheDocument();
+  });
+
+  it("renders the closing panel (text-only)", () => {
     render(<ProjectsSection />);
     expect(screen.getByText(/this reel ends here/i)).toBeInTheDocument();
     expect(screen.getByText(/your story is next/i)).toBeInTheDocument();
-    // CTA is now a mailto anchor, not a button
-    expect(screen.getByRole("link", { name: /let's talk/i })).toBeInTheDocument();
+    // Closing panel is text-only — no links, no buttons
+    expect(screen.queryByRole("link", { name: /let's talk/i })).not.toBeInTheDocument();
   });
 
-  it("renders 5 project button panels plus 1 CTA link (6 total interactive)", () => {
+  it("renders 4 project button panels (4 total interactive)", () => {
     render(<ProjectsSection />);
     const projectButtons = screen.getAllByRole("button");
-    const ctaLink = screen.getByRole("link", { name: /let's talk/i });
-    // 5 project panels (buttons) + 1 CTA (link) = 6 interactive elements
-    expect(projectButtons.length).toBe(5);
-    expect(ctaLink).toBeInTheDocument();
+    // 4 project panels = 4 buttons; closing panel has no interactive elements
+    expect(projectButtons.length).toBe(4);
   });
 
   it("opens case study overlay when clicking a project panel", async () => {
@@ -206,14 +190,6 @@ describe("ProjectsSection — film reel", () => {
     expect(screen.queryByLabelText("Close case study")).not.toBeInTheDocument();
   });
 
-  it("does not open overlay when clicking the closing CTA link", async () => {
-    render(<ProjectsSection />);
-    const ctaLink = screen.getByRole("link", { name: /let's talk/i });
-    await userEvent.click(ctaLink);
-    // No case study overlay should appear
-    expect(screen.queryByLabelText("Close case study")).not.toBeInTheDocument();
-  });
-
   it("renders with reduced motion — no GSAP registered", () => {
     mockUseReducedMotion.mockReturnValue(true);
     render(<ProjectsSection />);
@@ -235,25 +211,5 @@ describe("ProjectsSection — film reel", () => {
     // The heading parent element should have absolute positioning
     const overlayContainer = heading.closest(".absolute");
     expect(overlayContainer).not.toBeNull();
-  });
-
-  it("disables ScrollTrigger when overlay opens and re-enables on close", async () => {
-    render(<ProjectsSection />);
-    // Open the case study overlay
-    const animePanel = screen.getByRole("button", { name: /view case study: anime tracker/i });
-    await userEvent.click(animePanel);
-    // ScrollTrigger.disable should have been called
-    expect(mockDisable).toHaveBeenCalled();
-
-    // Close via Escape
-    await userEvent.keyboard("{Escape}");
-
-    // ScrollTrigger.enable should be called (debounced — need to wait)
-    await vi.waitFor(
-      () => {
-        expect(mockEnable).toHaveBeenCalled();
-      },
-      { timeout: 500 },
-    );
   });
 });

@@ -1,7 +1,6 @@
 /**
- * Final panel of the film reel — dark background, centered CTA.
- * No project, no image, no overlay trigger.
- * CTA is a mailto link that opens the user's email client.
+ * Final panel of the film reel — dark background, text-only.
+ * No project, no image, no interactive elements.
  */
 export function FilmReelClosingPanel() {
   return (
@@ -15,17 +14,10 @@ export function FilmReelClosingPanel() {
         <span className="text-accent">Your story is next.</span>
       </h2>
 
-      <p className="mb-8 max-w-md text-text-muted text-lg leading-relaxed">
+      <p className="max-w-md text-text-muted text-lg leading-relaxed">
         Let&apos;s build something extraordinary together. Reach out and tell me
         about your project.
       </p>
-
-      <a
-        href="mailto:hello@feraraujo.com?subject=Let's%20build%20something"
-        className="inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3 text-base font-medium text-white shadow-lg shadow-accent/20 transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-      >
-        Let&apos;s talk
-      </a>
     </div>
   );
 }
