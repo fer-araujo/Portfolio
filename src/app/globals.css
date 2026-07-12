@@ -98,6 +98,10 @@
   background-size: 32px 32px;
 }
 
+@utility film-reel-gradient {
+  background: linear-gradient(to top, rgb(0 0 0 / 0.8) 0%, rgb(0 0 0 / 0.3) 50%, transparent 100%);
+}
+
 @utility diagonal-dot {
   background-image: radial-gradient(
     circle,
