@@ -20,10 +20,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 interface LenisContextValue {
   /** Smooth-scroll to a target element or selector */
   scrollTo: (target: string | HTMLElement) => void;
-  /** Pause Lenis smooth scroll (use when overlays/modals are open) */
-  stop: () => void;
-  /** Resume Lenis smooth scroll */
-  start: () => void;
+  /** Destroy Lenis (use when overlays/modals are open — releases wheel events) */
+  destroy: () => void;
+  /** Recreate Lenis after destroy */
+  init: () => void;
 }
 
 const LenisContext = createContext<LenisContextValue | null>(null);
@@ -86,8 +86,31 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  const destroy = useCallback(() => {
+    lenisRef.current?.destroy();
+    lenisRef.current = null;
+  }, []);
+
+  const init = useCallback(() => {
+    if (prefersReduced || lenisRef.current) return;
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
+    });
+    lenis.on("scroll", ScrollTrigger.update);
+    lenisRef.current = lenis;
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  }, [prefersReduced]);
+
   return (
-    <LenisContext.Provider value={{ scrollTo, stop: () => lenisRef.current?.stop(), start: () => lenisRef.current?.start() }}>
+    <LenisContext.Provider value={{ scrollTo, destroy, init }}>
       {children}
     </LenisContext.Provider>
   );
