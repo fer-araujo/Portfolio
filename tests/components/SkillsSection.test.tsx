@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { SkillsSection } from "@/components/sections/SkillsSection";
 
 // ── Mock skills data ───────────────────────────────────
@@ -38,11 +38,35 @@ function createTag(Tag: string) {
 
 vi.mock("motion/react", () => ({
   motion: {
-    section: createTag("section"),
     div: createTag("div"),
-    span: createTag("span"),
   },
   useReducedMotion: () => mockUseReducedMotion(),
+}));
+
+// ── Mock GSAP + ScrollTrigger ──────────────────────────
+const mockCtxRevert = vi.fn();
+
+vi.mock("gsap", () => ({
+  gsap: {
+    context: vi.fn((fn: () => void) => {
+      fn();
+      return { revert: mockCtxRevert };
+    }),
+    timeline: vi.fn(() => ({
+      fromTo: vi.fn().mockReturnThis(),
+      to: vi.fn().mockReturnThis(),
+    })),
+    fromTo: vi.fn(),
+    to: vi.fn(),
+  },
+}));
+
+vi.mock("gsap/ScrollTrigger", () => ({
+  ScrollTrigger: {
+    normalizeScroll: vi.fn(),
+    config: vi.fn(),
+    update: vi.fn(),
+  },
 }));
 
 describe("SkillsSection", () => {
@@ -104,10 +128,35 @@ describe("SkillsSection", () => {
     expect(expertTag.closest("[data-level]")).toHaveAttribute("data-level", "expert");
   });
 
-  it("renders with responsive container classes", () => {
-    const { container } = render(<SkillsSection />);
-    const innerDiv = container.querySelector('[data-testid="skills-grid"]');
-    expect(innerDiv).toBeInTheDocument();
+  it("renders GSAP category animation targets on each row", () => {
+    render(<SkillsSection />);
+    const categories = screen.getByTestId("skills-grid").querySelectorAll("[data-gsap-category]");
+    expect(categories.length).toBe(2);
+  });
+
+  it("renders GSAP stagger target attributes on skill items", () => {
+    render(<SkillsSection />);
+    const staggerTargets = screen.getByTestId("skills-grid").querySelectorAll("[data-skill-item]");
+    expect(staggerTargets.length).toBe(7);
+  });
+
+  it("renders each category in a two-column grid layout", () => {
+    render(<SkillsSection />);
+    const langCat = screen.getByTestId("skills-category-Languages");
+    expect(langCat).toHaveAttribute("data-layout", "two-column");
+
+    const frontendCat = screen.getByTestId("skills-category-Frontend");
+    expect(frontendCat).toHaveAttribute("data-layout", "two-column");
+  });
+
+  it("category heading and tags are siblings in the same row", () => {
+    render(<SkillsSection />);
+    const langCat = screen.getByTestId("skills-category-Languages");
+    const heading = within(langCat).getByRole("heading", { level: 3, name: /languages/i });
+    expect(heading).toBeInTheDocument();
+    // Heading should be in the same container as the tags (two-column layout)
+    const tags = langCat.querySelectorAll("[data-skill-item]");
+    expect(tags.length).toBe(4);
   });
 
   it("renders section with correct id attribute for navigation", () => {

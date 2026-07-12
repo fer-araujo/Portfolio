@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { projects } from "@/content/projects";
 
 describe("projects data", () => {
-  it("has exactly 3 projects", () => {
-    expect(projects).toHaveLength(3);
+  it("has exactly 5 projects", () => {
+    expect(projects).toHaveLength(5);
   });
 
   it("has school-system (School Attendance System)", () => {
@@ -35,6 +35,32 @@ describe("projects data", () => {
     expect(project!.category).toBe("web");
     expect(project!.techStack).toContain("Vite");
     expect(project!.githubUrl).toBe("https://github.com/fer-araujo/patient-management");
+  });
+
+  it("has madlions (MadLions Database Manager)", () => {
+    const project = projects.find((p) => p.id === "madlions");
+    expect(project).toBeDefined();
+    expect(project!.title).toBe("MadLions Database Manager");
+    expect(project!.featured).toBe(true);
+    expect(project!.category).toBe("web");
+    expect(project!.techStack).toContain("Node.js");
+    expect(project!.githubUrl).toBe("https://github.com/fer-araujo/MadLions");
+  });
+
+  it("has pokedex (Pokédex App)", () => {
+    const project = projects.find((p) => p.id === "pokedex");
+    expect(project).toBeDefined();
+    expect(project!.title).toBe("Pokédex App");
+    expect(project!.featured).toBe(true);
+    expect(project!.category).toBe("web");
+    expect(project!.techStack).toContain("API Integration");
+    expect(project!.githubUrl).toBe("https://github.com/fer-araujo/pokedex");
+  });
+
+  it("all 5 projects are featured", () => {
+    projects.forEach((project) => {
+      expect(project.featured).toBe(true);
+    });
   });
 
   it("does NOT have the old CAT platform project", () => {

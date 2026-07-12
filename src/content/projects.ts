@@ -19,7 +19,7 @@ export const projects: Project[] = [
         "Reduced attendance processing time by 80% and eliminated data entry errors for school administrators.",
     },
     techStack: ["React", "TypeScript", "Tailwind CSS", "Firebase"],
-    thumbnail: "/images/projects/school-system.jpg",
+    thumbnail: "/images/projects/school-system.svg",
     images: [],
     githubUrl: "https://github.com/fer-araujo/school-system",
     category: "web",
@@ -38,7 +38,7 @@ export const projects: Project[] = [
         "Serves thousands of monthly active users looking for where to watch their favorite anime.",
     },
     techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Express", "TMDB API"],
-    thumbnail: "/images/projects/anime-tracker.jpg",
+    thumbnail: "/images/projects/anime-tracker.svg",
     images: [],
     liveUrl: "https://your-anime-tracker.vercel.app",
     githubUrl: "https://github.com/fer-araujo/anime-tracker",
@@ -58,9 +58,47 @@ export const projects: Project[] = [
         "Deployed in 3 local clinics, helping streamline patient intake and appointment scheduling.",
     },
     techStack: ["React", "TypeScript", "Vite"],
-    thumbnail: "/images/projects/patient-management.jpg",
+    thumbnail: "/images/projects/patient-management.svg",
     images: [],
     githubUrl: "https://github.com/fer-araujo/patient-management",
+    category: "web",
+    featured: true,
+  },
+  {
+    id: "madlions",
+    title: "MadLions Database Manager",
+    description: "GUI for database management",
+    longDescription: {
+      problem:
+        "Database management tools are either too complex or lack a clean graphical interface for common operations.",
+      solution:
+        "Built a GUI-based database management application with React and TypeScript, providing an intuitive interface for querying and managing databases.",
+      impact:
+        "Simplifies database management with a clean, visual interface for developers who prefer GUIs over raw CLI tools.",
+    },
+    techStack: ["React", "TypeScript", "Node.js"],
+    thumbnail: "/images/projects/madlions.svg",
+    images: [],
+    githubUrl: "https://github.com/fer-araujo/MadLions",
+    category: "web",
+    featured: true,
+  },
+  {
+    id: "pokedex",
+    title: "Pokédex App",
+    description: "Simple Pokédex built with NextJS",
+    longDescription: {
+      problem:
+        "Pokémon fans need a fast, searchable way to browse Pokémon data with evolutions and stats.",
+      solution:
+        "Created a Pokédex application using Next.js and the PokéAPI, with search, filtering, and detailed Pokémon cards.",
+      impact:
+        "Provides a snappy, mobile-friendly Pokédex experience for quick Pokémon lookups during gameplay.",
+    },
+    techStack: ["Next.js", "TypeScript", "API Integration"],
+    thumbnail: "/images/projects/pokedex.svg",
+    images: [],
+    githubUrl: "https://github.com/fer-araujo/pokedex",
     category: "web",
     featured: true,
   },

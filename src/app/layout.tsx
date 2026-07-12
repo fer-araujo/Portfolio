@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Inter } from "next/font/google";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { LenisProvider } from "@/lib/lenis";
+import { FilmGrain } from "@/components/ui/FilmGrain";
 import "./globals.css";
 
 const geist = Geist({
@@ -41,7 +45,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} ${inter.variable} dark`}>
       <body className="min-h-dvh bg-bg text-text font-body antialiased">
-        {children}
+        <LenisProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </LenisProvider>
+        <FilmGrain />
       </body>
     </html>
   );

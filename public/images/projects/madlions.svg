@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="50%" stop-color="#0f1a12"/>
+      <stop offset="100%" stop-color="#0a0a0a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="icon" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="cylinder" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.25"/>
+      <stop offset="50%" stop-color="#059669" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0.15"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bg)"/>
+
+  <!-- Subtle pattern dots -->
+  <g fill="#10b981" fill-opacity="0.03">
+    <circle cx="50" cy="50" r="2"/><circle cx="150" cy="50" r="2"/>
+    <circle cx="250" cy="50" r="2"/><circle cx="350" cy="50" r="2"/>
+    <circle cx="450" cy="50" r="2"/><circle cx="550" cy="50" r="2"/>
+    <circle cx="650" cy="50" r="2"/><circle cx="750" cy="50" r="2"/>
+    <circle cx="50" cy="100" r="2"/><circle cx="150" cy="100" r="2"/>
+    <circle cx="250" cy="100" r="2"/><circle cx="350" cy="100" r="2"/>
+    <circle cx="450" cy="100" r="2"/><circle cx="550" cy="100" r="2"/>
+    <circle cx="650" cy="100" r="2"/><circle cx="750" cy="100" r="2"/>
+    <circle cx="50" cy="150" r="2"/><circle cx="150" cy="150" r="2"/>
+    <circle cx="250" cy="150" r="2"/><circle cx="350" cy="150" r="2"/>
+    <circle cx="450" cy="150" r="2"/><circle cx="550" cy="150" r="2"/>
+    <circle cx="650" cy="150" r="2"/><circle cx="750" cy="150" r="2"/>
+    <circle cx="50" cy="200" r="2"/><circle cx="150" cy="200" r="2"/>
+    <circle cx="250" cy="200" r="2"/><circle cx="350" cy="200" r="2"/>
+    <circle cx="450" cy="200" r="2"/><circle cx="550" cy="200" r="2"/>
+    <circle cx="650" cy="200" r="2"/><circle cx="750" cy="200" r="2"/>
+    <circle cx="50" cy="250" r="2"/><circle cx="150" cy="250" r="2"/>
+    <circle cx="250" cy="250" r="2"/><circle cx="350" cy="250" r="2"/>
+    <circle cx="450" cy="250" r="2"/><circle cx="550" cy="250" r="2"/>
+    <circle cx="650" cy="250" r="2"/><circle cx="750" cy="250" r="2"/>
+    <circle cx="50" cy="300" r="2"/><circle cx="150" cy="300" r="2"/>
+    <circle cx="250" cy="300" r="2"/><circle cx="350" cy="300" r="2"/>
+    <circle cx="450" cy="300" r="2"/><circle cx="550" cy="300" r="2"/>
+    <circle cx="650" cy="300" r="2"/><circle cx="750" cy="300" r="2"/>
+    <circle cx="50" cy="350" r="2"/><circle cx="150" cy="350" r="2"/>
+    <circle cx="250" cy="350" r="2"/><circle cx="350" cy="350" r="2"/>
+    <circle cx="450" cy="350" r="2"/><circle cx="550" cy="350" r="2"/>
+    <circle cx="650" cy="350" r="2"/><circle cx="750" cy="350" r="2"/>
+    <circle cx="50" cy="400" r="2"/><circle cx="150" cy="400" r="2"/>
+    <circle cx="250" cy="400" r="2"/><circle cx="350" cy="400" r="2"/>
+    <circle cx="450" cy="400" r="2"/><circle cx="550" cy="400" r="2"/>
+    <circle cx="650" cy="400" r="2"/><circle cx="750" cy="400" r="2"/>
+    <circle cx="50" cy="450" r="2"/><circle cx="150" cy="450" r="2"/>
+    <circle cx="250" cy="450" r="2"/><circle cx="350" cy="450" r="2"/>
+    <circle cx="450" cy="450" r="2"/><circle cx="550" cy="450" r="2"/>
+    <circle cx="650" cy="450" r="2"/><circle cx="750" cy="450" r="2"/>
+  </g>
+
+  <!-- Glow -->
+  <rect width="800" height="500" fill="url(#glow)"/>
+
+  <!-- Accent bar top -->
+  <rect width="800" height="2" fill="#10b981" opacity="0.3"/>
+
+  <!-- Bottom accent bar -->
+  <rect y="498" width="800" height="2" fill="#10b981" opacity="0.3"/>
+
+  <!-- Title text -->
+  <text x="400" y="390" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="600" fill="#6ee7b7" opacity="0.8">MadLions Database Manager</text>
+  <text x="400" y="415" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#6ee7b7" opacity="0.4">React · TypeScript · Node.js</text>
+
+  <!-- Database / Server Rack Icon -->
+  <g transform="translate(400, 185)">
+    <!-- Server rack frame -->
+    <rect x="-75" y="-65" width="150" height="130" rx="6" fill="none" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.2"/>
+    
+    <!-- Server rows -->
+    <g fill="url(#cylinder)" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.3">
+      <!-- Server 1 -->
+      <rect x="-60" y="-52" width="120" height="22" rx="3"/>
+      <!-- Server 2 -->
+      <rect x="-60" y="-22" width="120" height="22" rx="3"/>
+      <!-- Server 3 -->
+      <rect x="-60" y="8" width="120" height="22" rx="3"/>
+      <!-- Server 4 -->
+      <rect x="-60" y="38" width="120" height="22" rx="3"/>
+    </g>
+
+    <!-- Server LEDs -->
+    <g fill="#34d399" fill-opacity="0.6">
+      <circle cx="-48" cy="-41" r="2.5"/>
+      <circle cx="-48" cy="-11" r="2.5"/>
+      <circle cx="-48" cy="19" r="2.5"/>
+      <circle cx="-48" cy="49" r="2.5"/>
+    </g>
+
+    <!-- Activity indicators -->
+    <g fill="#10b981" fill-opacity="0.3">
+      <rect x="-35" y="-46" width="6" height="2" rx="1"/>
+      <rect x="-25" y="-46" width="8" height="2" rx="1"/>
+      <rect x="-35" y="-16" width="10" height="2" rx="1"/>
+      <rect x="-25" y="-16" width="6" height="2" rx="1"/>
+      <rect x="-35" y="14" width="8" height="2" rx="1"/>
+      <rect x="-25" y="14" width="6" height="2" rx="1"/>
+      <rect x="-35" y="44" width="6" height="2" rx="1"/>
+      <rect x="-25" y="44" width="10" height="2" rx="1"/>
+    </g>
+
+    <!-- Database cylinder on top -->
+    <g transform="translate(0, -72)">
+      <ellipse cx="0" cy="0" rx="40" ry="8" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.3"/>
+      <rect x="-40" y="0" width="80" height="30" rx="0" fill="url(#cylinder)" stroke="#34d399" stroke-width="0.8" stroke-opacity="0.2"/>
+      <ellipse cx="0" cy="30" rx="40" ry="8" fill="none" stroke="#34d399" stroke-width="1" stroke-opacity="0.2"/>
+      <ellipse cx="0" cy="0" rx="40" ry="8" fill="url(#cylinder)" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.3"/>
+      <!-- Database lines -->
+      <line x1="-25" y1="10" x2="25" y2="10" stroke="#34d399" stroke-width="0.5" stroke-opacity="0.2"/>
+      <line x1="-25" y1="18" x2="25" y2="18" stroke="#34d399" stroke-width="0.5" stroke-opacity="0.15"/>
+      <line x1="-25" y1="26" x2="25" y2="26" stroke="#34d399" stroke-width="0.5" stroke-opacity="0.1"/>
+    </g>
+
+    <!-- Connection lines from database to servers -->
+    <line x1="0" y1="-34" x2="-45" y2="-52" stroke="#10b981" stroke-width="0.8" stroke-opacity="0.15"/>
+    <line x1="0" y1="-34" x2="45" y2="-52" stroke="#10b981" stroke-width="0.8" stroke-opacity="0.15"/>
+    <line x1="0" y1="-34" x2="-45" y2="-22" stroke="#10b981" stroke-width="0.8" stroke-opacity="0.15"/>
+    <line x1="0" y1="-34" x2="45" y2="-22" stroke="#10b981" stroke-width="0.8" stroke-opacity="0.15"/>
+  </g>
+</svg>

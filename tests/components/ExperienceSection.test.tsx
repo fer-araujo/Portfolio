@@ -1,0 +1,212 @@
+import React from "react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { ExperienceSection } from "@/components/sections/ExperienceSection";
+
+// ── Mock experience data ──────────────────────────────
+vi.mock("@/content/experience", () => ({
+  experiences: [
+    {
+      id: "current-co",
+      company: "Current Company",
+      role: "Senior Software Engineer",
+      startDate: "2023-01",
+      current: true,
+      achievements: [
+        "Architected and delivered a design system serving 5 product teams",
+        "Reduced bundle size by 45% through code-splitting optimization",
+      ],
+    },
+    {
+      id: "prev-co",
+      company: "Previous Company",
+      role: "Software Engineer II",
+      startDate: "2020-06",
+      endDate: "2022-12",
+      current: false,
+      achievements: [
+        "Built real-time collaborative features serving 100K+ daily active users",
+      ],
+    },
+    {
+      id: "startup-co",
+      company: "Early Startup",
+      role: "Full Stack Developer",
+      startDate: "2018-03",
+      endDate: "2020-05",
+      current: false,
+      achievements: [
+        "Built the MVP that secured $2M in seed funding",
+      ],
+    },
+  ],
+}));
+
+// ── Mock motion/react ──────────────────────────────────
+const mockUseReducedMotion = vi.fn().mockReturnValue(false);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function createTag(Tag: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) =>
+    React.createElement(Tag, props, children);
+}
+
+vi.mock("motion/react", () => ({
+  motion: {
+    div: createTag("div"),
+    span: createTag("span"),
+  },
+  useReducedMotion: () => mockUseReducedMotion(),
+}));
+
+// ── Mock GSAP + ScrollTrigger ──────────────────────────
+const mockCtxRevert = vi.fn();
+
+vi.mock("gsap", () => ({
+  gsap: {
+    context: vi.fn((fn: () => void) => {
+      fn();
+      return { revert: mockCtxRevert };
+    }),
+    timeline: vi.fn(() => ({
+      fromTo: vi.fn().mockReturnThis(),
+      to: vi.fn().mockReturnThis(),
+    })),
+    fromTo: vi.fn(),
+    to: vi.fn(),
+  },
+}));
+
+vi.mock("gsap/ScrollTrigger", () => ({
+  ScrollTrigger: {
+    normalizeScroll: vi.fn(),
+    config: vi.fn(),
+    update: vi.fn(),
+  },
+}));
+
+// ── Mock lucide-react ──────────────────────────────────
+vi.mock("lucide-react", () => ({
+  Briefcase: () => <svg data-testid="icon-briefcase" />,
+}));
+
+describe("ExperienceSection", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUseReducedMotion.mockReturnValue(false);
+  });
+
+  it("renders the section heading", () => {
+    render(<ExperienceSection />);
+    expect(screen.getByText(/experience/i)).toBeInTheDocument();
+  });
+
+  it("renders all company names in order", () => {
+    render(<ExperienceSection />);
+    const companies = screen.getAllByTestId("experience-company");
+    expect(companies.length).toBe(3);
+    expect(companies[0]).toHaveTextContent("Current Company");
+    expect(companies[1]).toHaveTextContent("Previous Company");
+    expect(companies[2]).toHaveTextContent("Early Startup");
+  });
+
+  it("renders all role titles", () => {
+    render(<ExperienceSection />);
+    expect(screen.getByText("Senior Software Engineer")).toBeInTheDocument();
+    expect(screen.getByText("Software Engineer II")).toBeInTheDocument();
+    expect(screen.getByText("Full Stack Developer")).toBeInTheDocument();
+  });
+
+  it("shows a current indicator for the active role", () => {
+    render(<ExperienceSection />);
+    const currentEntry = screen.getByTestId("experience-current-co");
+    expect(currentEntry).toBeInTheDocument();
+    expect(currentEntry).toHaveAttribute("data-current");
+  });
+
+  it("renders achievements for each entry", () => {
+    render(<ExperienceSection />);
+    expect(
+      screen.getByText(
+        "Architected and delivered a design system serving 5 product teams"
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Built real-time collaborative features serving 100K+ daily active users"
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Built the MVP that secured $2M in seed funding")
+    ).toBeInTheDocument();
+  });
+
+  it("renders the section as a semantic section element", () => {
+    const { container } = render(<ExperienceSection />);
+    const section = container.querySelector("section");
+    expect(section).toBeInTheDocument();
+  });
+
+  it("renders date range for non-current roles", () => {
+    render(<ExperienceSection />);
+    const prevEntry = screen.getByTestId("experience-prev-co");
+    expect(prevEntry).toBeInTheDocument();
+    expect(screen.getByText("2020 — 2022")).toBeInTheDocument();
+  });
+
+  it("renders 'Present' for the current role date", () => {
+    render(<ExperienceSection />);
+    expect(screen.getByText(/present/i)).toBeInTheDocument();
+  });
+
+  it("renders section with correct id attribute for navigation", () => {
+    render(<ExperienceSection />);
+    const section = screen.getByTestId("experience-section");
+    expect(section).toHaveAttribute("id", "experience");
+  });
+
+  it("does not set data-current on non-current entries", () => {
+    render(<ExperienceSection />);
+    const prevEntry = screen.getByTestId("experience-prev-co");
+    expect(prevEntry).not.toHaveAttribute("data-current");
+    const startupEntry = screen.getByTestId("experience-startup-co");
+    expect(startupEntry).not.toHaveAttribute("data-current");
+  });
+
+  it("renders current badge with text 'Current'", () => {
+    render(<ExperienceSection />);
+    const currentBadge = screen.getByTestId("current-badge");
+    expect(currentBadge).toBeInTheDocument();
+    expect(currentBadge).toHaveTextContent(/current/i);
+  });
+
+  it("renders GSAP timeline draw line element", () => {
+    const { container } = render(<ExperienceSection />);
+    const line = container.querySelector("[data-gsap-timeline-line]");
+    expect(line).toBeInTheDocument();
+  });
+
+  it("renders GSAP entry animation targets on each experience", () => {
+    render(<ExperienceSection />);
+    const currentEntry = screen.getByTestId("experience-current-co");
+    expect(currentEntry).toHaveAttribute("data-gsap-entry");
+
+    const prevEntry = screen.getByTestId("experience-prev-co");
+    expect(prevEntry).toHaveAttribute("data-gsap-entry");
+  });
+
+  it("renders GSAP achievement stagger targets within entries", () => {
+    render(<ExperienceSection />);
+    const currentEntry = screen.getByTestId("experience-current-co");
+    const achievements = currentEntry.querySelectorAll("[data-gsap-achievement]");
+    expect(achievements.length).toBe(2);
+  });
+
+  it("renders without motion animation when reduced motion is preferred", () => {
+    mockUseReducedMotion.mockReturnValue(true);
+    render(<ExperienceSection />);
+    expect(screen.getByText("Experience")).toBeInTheDocument();
+    expect(screen.getByText("Current Company")).toBeInTheDocument();
+  });
+});

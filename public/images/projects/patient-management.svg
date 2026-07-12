@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="50%" stop-color="#0f1a12"/>
+      <stop offset="100%" stop-color="#0a0a0a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="icon" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bg)"/>
+
+  <!-- Subtle pattern dots -->
+  <g fill="#10b981" fill-opacity="0.03">
+    <circle cx="50" cy="50" r="2"/><circle cx="150" cy="50" r="2"/>
+    <circle cx="250" cy="50" r="2"/><circle cx="350" cy="50" r="2"/>
+    <circle cx="450" cy="50" r="2"/><circle cx="550" cy="50" r="2"/>
+    <circle cx="650" cy="50" r="2"/><circle cx="750" cy="50" r="2"/>
+    <circle cx="50" cy="100" r="2"/><circle cx="150" cy="100" r="2"/>
+    <circle cx="250" cy="100" r="2"/><circle cx="350" cy="100" r="2"/>
+    <circle cx="450" cy="100" r="2"/><circle cx="550" cy="100" r="2"/>
+    <circle cx="650" cy="100" r="2"/><circle cx="750" cy="100" r="2"/>
+    <circle cx="50" cy="150" r="2"/><circle cx="150" cy="150" r="2"/>
+    <circle cx="250" cy="150" r="2"/><circle cx="350" cy="150" r="2"/>
+    <circle cx="450" cy="150" r="2"/><circle cx="550" cy="150" r="2"/>
+    <circle cx="650" cy="150" r="2"/><circle cx="750" cy="150" r="2"/>
+    <circle cx="50" cy="200" r="2"/><circle cx="150" cy="200" r="2"/>
+    <circle cx="250" cy="200" r="2"/><circle cx="350" cy="200" r="2"/>
+    <circle cx="450" cy="200" r="2"/><circle cx="550" cy="200" r="2"/>
+    <circle cx="650" cy="200" r="2"/><circle cx="750" cy="200" r="2"/>
+    <circle cx="50" cy="250" r="2"/><circle cx="150" cy="250" r="2"/>
+    <circle cx="250" cy="250" r="2"/><circle cx="350" cy="250" r="2"/>
+    <circle cx="450" cy="250" r="2"/><circle cx="550" cy="250" r="2"/>
+    <circle cx="650" cy="250" r="2"/><circle cx="750" cy="250" r="2"/>
+    <circle cx="50" cy="300" r="2"/><circle cx="150" cy="300" r="2"/>
+    <circle cx="250" cy="300" r="2"/><circle cx="350" cy="300" r="2"/>
+    <circle cx="450" cy="300" r="2"/><circle cx="550" cy="300" r="2"/>
+    <circle cx="650" cy="300" r="2"/><circle cx="750" cy="300" r="2"/>
+    <circle cx="50" cy="350" r="2"/><circle cx="150" cy="350" r="2"/>
+    <circle cx="250" cy="350" r="2"/><circle cx="350" cy="350" r="2"/>
+    <circle cx="450" cy="350" r="2"/><circle cx="550" cy="350" r="2"/>
+    <circle cx="650" cy="350" r="2"/><circle cx="750" cy="350" r="2"/>
+    <circle cx="50" cy="400" r="2"/><circle cx="150" cy="400" r="2"/>
+    <circle cx="250" cy="400" r="2"/><circle cx="350" cy="400" r="2"/>
+    <circle cx="450" cy="400" r="2"/><circle cx="550" cy="400" r="2"/>
+    <circle cx="650" cy="400" r="2"/><circle cx="750" cy="400" r="2"/>
+    <circle cx="50" cy="450" r="2"/><circle cx="150" cy="450" r="2"/>
+    <circle cx="250" cy="450" r="2"/><circle cx="350" cy="450" r="2"/>
+    <circle cx="450" cy="450" r="2"/><circle cx="550" cy="450" r="2"/>
+    <circle cx="650" cy="450" r="2"/><circle cx="750" cy="450" r="2"/>
+  </g>
+
+  <!-- Glow -->
+  <rect width="800" height="500" fill="url(#glow)"/>
+
+  <!-- Accent bar top -->
+  <rect width="800" height="2" fill="#10b981" opacity="0.3"/>
+
+  <!-- Bottom accent bar -->
+  <rect y="498" width="800" height="2" fill="#10b981" opacity="0.3"/>
+
+  <!-- Title text -->
+  <text x="400" y="390" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="600" fill="#6ee7b7" opacity="0.8">Patient Management</text>
+  <text x="400" y="415" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#6ee7b7" opacity="0.4">Healthcare · React · TypeScript</text>
+
+  <!-- Medical + Monitor -->
+  <g transform="translate(400, 185)">
+    <!-- Clipboard / Monitor frame -->
+    <rect x="-70" y="-55" width="140" height="110" rx="8" fill="none" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.25"/>
+    <!-- Screen -->
+    <rect x="-58" y="-42" width="116" height="72" rx="4" fill="#10b981" fill-opacity="0.04" stroke="#34d399" stroke-width="0.5" stroke-opacity="0.12"/>
+
+    <!-- Heartbeat line -->
+    <polyline points="-50,0 -35,0 -30,-20 -25,20 -20,-20 -15,20 -10,0 0,0 30,0 35,-15 40,15 45,-15 50,15 55,0 58,0"
+              fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="round"/>
+
+    <!-- Pulse glow under heart beat -->
+    <polyline points="-50,0 -35,0 -30,-20 -25,20 -20,-20 -15,20 -10,0 0,0 30,0 35,-15 40,15 45,-15 50,15 55,0 58,0"
+              fill="none" stroke="#10b981" stroke-width="3" stroke-opacity="0.08" stroke-linejoin="round" stroke-linecap="round"/>
+
+    <!-- Grid lines on screen -->
+    <line x1="-50" y1="-30" x2="50" y2="-30" stroke="#10b981" stroke-width="0.3" stroke-opacity="0.08"/>
+    <line x1="-50" y1="-15" x2="50" y2="-15" stroke="#10b981" stroke-width="0.3" stroke-opacity="0.08"/>
+    <line x1="-50" y1="15" x2="50" y2="15" stroke="#10b981" stroke-width="0.3" stroke-opacity="0.08"/>
+    <line x1="-50" y1="30" x2="50" y2="30" stroke="#10b981" stroke-width="0.3" stroke-opacity="0.08"/>
+    <line x1="-30" y1="-40" x2="-30" y2="30" stroke="#10b981" stroke-width="0.3" stroke-opacity="0.08"/>
+    <line x1="0" y1="-40" x2="0" y2="30" stroke="#10b981" stroke-width="0.3" stroke-opacity="0.08"/>
+    <line x1="30" y1="-40" x2="30" y2="30" stroke="#10b981" stroke-width="0.3" stroke-opacity="0.08"/>
+
+    <!-- Stand -->
+    <rect x="-20" y="55" width="40" height="8" rx="2" fill="#10b981" fill-opacity="0.2"/>
+    <rect x="-35" y="63" width="70" height="4" rx="2" fill="#10b981" fill-opacity="0.1"/>
+
+    <!-- Medical cross -->
+    <g transform="translate(0, -60)">
+      <rect x="-18" y="-5" width="36" height="10" rx="2" fill="url(#icon)" fill-opacity="0.2" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+      <rect x="-5" y="-18" width="10" height="36" rx="2" fill="url(#icon)" fill-opacity="0.2" stroke="#34d399" stroke-width="1" stroke-opacity="0.4"/>
+    </g>
+
+    <!-- Small data blocks -->
+    <g fill="#10b981" fill-opacity="0.08">
+      <rect x="-45" y="-35" width="12" height="3" rx="1"/>
+      <rect x="-25" y="-35" width="8" height="3" rx="1"/>
+      <rect x="30" y="-35" width="18" height="3" rx="1"/>
+      <rect x="30" y="25" width="15" height="3" rx="1"/>
+    </g>
+  </g>
+</svg>

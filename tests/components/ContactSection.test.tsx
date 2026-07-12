@@ -33,13 +33,38 @@ function createTag(Tag: string) {
 
 vi.mock("motion/react", () => ({
   motion: {
-    section: createTag("section"),
     div: createTag("div"),
     p: createTag("p"),
     span: createTag("span"),
     a: createTag("a"),
   },
   useReducedMotion: () => mockUseReducedMotion(),
+}));
+
+// ── Mock GSAP + ScrollTrigger ──────────────────────────
+const mockCtxRevert = vi.fn();
+
+vi.mock("gsap", () => ({
+  gsap: {
+    context: vi.fn((fn: () => void) => {
+      fn();
+      return { revert: mockCtxRevert };
+    }),
+    timeline: vi.fn(() => ({
+      fromTo: vi.fn().mockReturnThis(),
+      to: vi.fn().mockReturnThis(),
+    })),
+    fromTo: vi.fn(),
+    to: vi.fn(),
+  },
+}));
+
+vi.mock("gsap/ScrollTrigger", () => ({
+  ScrollTrigger: {
+    normalizeScroll: vi.fn(),
+    config: vi.fn(),
+    update: vi.fn(),
+  },
 }));
 
 // ── Mock lucide-react ──────────────────────────────────
@@ -99,6 +124,15 @@ describe("ContactSection", () => {
     const { container } = render(<ContactSection />);
     const section = container.querySelector("section");
     expect(section).toHaveAttribute("id", "contact");
+  });
+
+  it("renders GSAP reveal wrapper around contact content", () => {
+    const { container } = render(<ContactSection />);
+    const revealWrapper = container.querySelector("[data-gsap-contact]");
+    expect(revealWrapper).toBeInTheDocument();
+    // Wrapper should contain the email CTA and social links
+    expect(revealWrapper?.querySelector('[data-testid="contact-social-links"]')).toBeInTheDocument();
+    expect(revealWrapper?.querySelector("a[href^='mailto:']")).toBeInTheDocument();
   });
 
   it("renders without motion animation when reduced motion is preferred", () => {
