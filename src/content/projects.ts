@@ -88,7 +88,7 @@ export const projects: Project[] = [
     description: "Simple Pokédex built with NextJS",
     longDescription: {
       problem:
-        "As a fan and developer, the urge to build something around Pokémon was irresistible. No business case — just pure enthusiasm for the craft.",
+        "As a fan and developer, building something around Pokémon was simply about having fun. No business case — just pure enthusiasm for the craft.",
       solution:
         "A clean Pokédex with search, filtering, and detailed Pokémon cards. Built with Next.js and the PokéAPI — zero overengineering, maximum fun.",
       impact:
