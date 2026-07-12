@@ -48,10 +48,19 @@ vi.mock("@/content/social", () => ({
 vi.mock("lenis", () => {
   return {
     default: function MockLenis() {
-      return { raf: () => {}, destroy: () => {}, scrollTo: () => {} };
+      return { raf: () => {}, destroy: () => {}, scrollTo: () => {}, on: () => {} };
     },
   };
 });
+
+// Mock gsap/ScrollTrigger (initGsapLenisBridge calls normalizeScroll/config)
+vi.mock("gsap/ScrollTrigger", () => ({
+  ScrollTrigger: {
+    normalizeScroll: vi.fn(),
+    config: vi.fn(),
+    update: vi.fn(),
+  },
+}));
 
 // Mock FilmGrain (uses useReducedMotion, which is already mocked)
 vi.mock("@/components/ui/FilmGrain", () => ({
