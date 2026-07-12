@@ -22,9 +22,11 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
 
   useEffect(() => {
     setMounted(true);
+    document.body.style.overflow = "hidden";
     lenis?.destroy();
     closeRef.current?.focus();
     return () => {
+      document.body.style.overflow = "";
       lenis?.init();
     };
   }, []);
