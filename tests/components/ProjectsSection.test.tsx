@@ -78,6 +78,8 @@ vi.mock("@/content/projects", () => ({
 }));
 
 // ── Mock GSAP ─────────────────────────────────────────
+const mockDisable = vi.fn();
+const mockEnable = vi.fn();
 const { mockGsapTo, mockMmKill, mockTweenKill } = vi.hoisted(() => ({
   mockGsapTo: vi.fn().mockReturnValue({ kill: vi.fn() }),
   mockMmKill: vi.fn(),
@@ -101,6 +103,9 @@ vi.mock("gsap/ScrollTrigger", () => ({
     normalizeScroll: vi.fn(),
     config: vi.fn(),
     update: vi.fn(),
+    getAll: vi.fn(() => [
+      { disable: mockDisable, enable: mockEnable },
+    ]),
   },
 }));
 
@@ -155,18 +160,21 @@ describe("ProjectsSection — film reel", () => {
     expect(screen.getByText("Pokédex App")).toBeInTheDocument();
   });
 
-  it("renders the closing CTA panel", () => {
+  it("renders the closing CTA panel with a mailto link", () => {
     render(<ProjectsSection />);
     expect(screen.getByText(/this reel ends here/i)).toBeInTheDocument();
     expect(screen.getByText(/your story is next/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /let's talk/i })).toBeInTheDocument();
+    // CTA is now a mailto anchor, not a button
+    expect(screen.getByRole("link", { name: /let's talk/i })).toBeInTheDocument();
   });
 
-  it("renders 6 panels total (5 projects + 1 CTA)", () => {
+  it("renders 5 project button panels plus 1 CTA link (6 total interactive)", () => {
     render(<ProjectsSection />);
-    const panels = screen.getAllByRole("button");
-    // 5 project panels + 1 CTA button = 6 buttons
-    expect(panels.length).toBe(6);
+    const projectButtons = screen.getAllByRole("button");
+    const ctaLink = screen.getByRole("link", { name: /let's talk/i });
+    // 5 project panels (buttons) + 1 CTA (link) = 6 interactive elements
+    expect(projectButtons.length).toBe(5);
+    expect(ctaLink).toBeInTheDocument();
   });
 
   it("opens case study overlay when clicking a project panel", async () => {
@@ -198,11 +206,10 @@ describe("ProjectsSection — film reel", () => {
     expect(screen.queryByLabelText("Close case study")).not.toBeInTheDocument();
   });
 
-  it("does not open overlay when clicking the closing CTA panel", async () => {
+  it("does not open overlay when clicking the closing CTA link", async () => {
     render(<ProjectsSection />);
-    // The CTA panel has its own button, clicking it should not open case study
-    const ctaButton = screen.getByRole("button", { name: /let's talk/i });
-    await userEvent.click(ctaButton);
+    const ctaLink = screen.getByRole("link", { name: /let's talk/i });
+    await userEvent.click(ctaLink);
     // No case study overlay should appear
     expect(screen.queryByLabelText("Close case study")).not.toBeInTheDocument();
   });
@@ -220,5 +227,33 @@ describe("ProjectsSection — film reel", () => {
     // The component uses useEffect which only runs in browser — this is SSR-safe
     render(<ProjectsSection />);
     expect(screen.getByText(/featured work/i)).toBeInTheDocument();
+  });
+
+  it("heading is rendered inside an absolute overlay container", () => {
+    render(<ProjectsSection />);
+    const heading = screen.getByText(/featured work/i);
+    // The heading parent element should have absolute positioning
+    const overlayContainer = heading.closest(".absolute");
+    expect(overlayContainer).not.toBeNull();
+  });
+
+  it("disables ScrollTrigger when overlay opens and re-enables on close", async () => {
+    render(<ProjectsSection />);
+    // Open the case study overlay
+    const animePanel = screen.getByRole("button", { name: /view case study: anime tracker/i });
+    await userEvent.click(animePanel);
+    // ScrollTrigger.disable should have been called
+    expect(mockDisable).toHaveBeenCalled();
+
+    // Close via Escape
+    await userEvent.keyboard("{Escape}");
+
+    // ScrollTrigger.enable should be called (debounced — need to wait)
+    await vi.waitFor(
+      () => {
+        expect(mockEnable).toHaveBeenCalled();
+      },
+      { timeout: 500 },
+    );
   });
 });

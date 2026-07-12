@@ -1,12 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
 import { FilmReelClosingPanel } from "@/components/sections/FilmReelClosingPanel";
-
-// ── Mock lenis scroll hook ─────────────────────────────
-const mockScrollTo = vi.fn();
-vi.mock("@/lib/lenis", () => ({
-  useLenisScroll: () => ({ scrollTo: mockScrollTo }),
-}));
 
 // ── Mock motion/react ─────────────────────────────────
 vi.mock("motion/react", () => ({
@@ -16,10 +10,6 @@ vi.mock("motion/react", () => ({
 }));
 
 describe("FilmReelClosingPanel", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("renders the closing headline", () => {
     render(<FilmReelClosingPanel />);
     expect(screen.getByText(/this reel ends here/i)).toBeInTheDocument();
@@ -30,26 +20,29 @@ describe("FilmReelClosingPanel", () => {
     expect(screen.getByText(/your story is next/i)).toBeInTheDocument();
   });
 
-  it("renders the Let's talk button", () => {
+  it("renders the Let's talk CTA as a mailto link", () => {
     render(<FilmReelClosingPanel />);
-    expect(screen.getByRole("button", { name: /let's talk/i })).toBeInTheDocument();
+    const link = screen.getByRole("link", { name: /let's talk/i });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute("href", expect.stringContaining("mailto:"));
+    expect(link).toHaveAttribute("href", expect.stringContaining("hello@feraraujo.com"));
   });
 
-  it("calls scrollTo with #contact when CTA button is clicked", () => {
+  it("applies dot-grid background class to the outer container", () => {
     render(<FilmReelClosingPanel />);
-    const button = screen.getByRole("button", { name: /let's talk/i });
-    fireEvent.click(button);
-    expect(mockScrollTo).toHaveBeenCalledTimes(1);
-    expect(mockScrollTo).toHaveBeenCalledWith("#contact");
-  });
-
-  it("does NOT call onOpen or render a case study trigger", () => {
-    render(<FilmReelClosingPanel />);
-    // This panel should NOT have a click handler that opens an overlay
     const panel = screen.getByTestId("closing-panel");
-    fireEvent.click(panel);
-    // scrollTo is only called by the button, not by the panel itself
-    // So clicking the panel itself should not trigger scrollTo
-    expect(mockScrollTo).not.toHaveBeenCalled();
+    expect(panel.className).toContain("dot-grid");
+  });
+
+  it("does NOT trigger overlay or scroll behavior when panel div is clicked", () => {
+    render(<FilmReelClosingPanel />);
+    // The outer panel div should render without error — it has no onClick handler
+    const panel = screen.getByTestId("closing-panel");
+    expect(panel).toBeInTheDocument();
+    expect(panel).not.toHaveAttribute("onClick");
+    // The mailto link is the only interactive element
+    expect(screen.getByRole("link")).toBeInTheDocument();
+    // There should be no buttons in this component
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 });

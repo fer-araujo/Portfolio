@@ -1,23 +1,13 @@
-"use client";
-
-import { useLenisScroll } from "@/lib/lenis";
-
 /**
  * Final panel of the film reel — dark background, centered CTA.
  * No project, no image, no overlay trigger.
- * CTA button scrolls to #contact via Lenis smooth scroll.
+ * CTA is a mailto link that opens the user's email client.
  */
 export function FilmReelClosingPanel() {
-  const lenis = useLenisScroll();
-
-  const handleCTA = () => {
-    lenis?.scrollTo("#contact");
-  };
-
   return (
     <div
       data-testid="closing-panel"
-      className="flex h-screen w-screen flex-shrink-0 flex-col items-center justify-center bg-bg px-6 text-center"
+      className="flex h-screen w-screen flex-shrink-0 flex-col items-center justify-center bg-bg dot-grid px-6 text-center"
     >
       <h2 className="mb-4 max-w-2xl font-heading text-3xl font-bold tracking-tight text-text md:text-5xl">
         This reel ends here.
@@ -30,13 +20,12 @@ export function FilmReelClosingPanel() {
         about your project.
       </p>
 
-      <button
-        type="button"
-        onClick={handleCTA}
+      <a
+        href="mailto:hello@feraraujo.com?subject=Let's%20build%20something"
         className="inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3 text-base font-medium text-white shadow-lg shadow-accent/20 transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
       >
         Let&apos;s talk
-      </button>
+      </a>
     </div>
   );
 }

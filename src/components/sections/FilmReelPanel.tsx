@@ -30,7 +30,7 @@ export function FilmReelPanel({ project, index, onOpen }: FilmReelPanelProps) {
         src={project.thumbnail}
         alt={`${project.title} project screenshot`}
         fill
-        className="object-cover transition-transform duration-1000 group-hover:scale-[1.02]"
+        className="object-contain transition-transform duration-1000 group-hover:scale-[1.02]"
         sizes="100vw"
         priority={index < 2}
         loading={index >= 2 ? "lazy" : undefined}
@@ -74,10 +74,10 @@ export function FilmReelPanel({ project, index, onOpen }: FilmReelPanelProps) {
       </div>
 
       {/* ── Bottom-left text stack ────────────── */}
-      <div className="absolute bottom-0 left-0 z-10 p-6 pb-8 md:p-10 md:pb-12">
+      <div className="absolute bottom-0 left-0 z-10 p-6 pb-8 md:p-10 md:pb-12 [text-shadow:_0_2px_12px_rgb(0_0_0_/_0.9)]">
         {/* Phase badge */}
         {project.phase && (
-          <span className="mb-3 inline-block rounded-full bg-accent/20 px-3 py-1 text-xs font-medium uppercase tracking-wider text-accent backdrop-blur-sm">
+          <span className="mb-3 inline-block rounded-full bg-black/40 px-3 py-1 text-xs font-bold uppercase tracking-wider text-accent backdrop-blur-sm">
             {project.phase}
           </span>
         )}

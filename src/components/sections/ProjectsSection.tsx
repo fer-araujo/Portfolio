@@ -25,8 +25,6 @@ export function ProjectsSection() {
   const trackRef = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
 
-  const panelCount = projects.length + 1; // +1 for closing CTA panel
-
   useEffect(() => {
     if (prefersReduced || typeof window === "undefined") return;
 
@@ -37,13 +35,13 @@ export function ProjectsSection() {
         if (!trackRef.current) return;
 
         const tl = gsap.to(trackRef.current, {
-          xPercent: -((panelCount - 1) * 100),
+          x: () => -(trackRef.current!.scrollWidth - window.innerWidth),
           ease: "none",
           scrollTrigger: {
             trigger: "#work",
             pin: true,
             start: "top top",
-            end: () => `+=${(panelCount - 1) * window.innerWidth}`,
+            end: () => `+=${trackRef.current!.scrollWidth - window.innerWidth}`,
             scrub: 1,
             invalidateOnRefresh: true,
           },
@@ -70,7 +68,7 @@ export function ProjectsSection() {
       window.removeEventListener("resize", onResize);
       clearTimeout(debounceTimer);
     };
-  }, [prefersReduced, panelCount]);
+  }, [prefersReduced]);
 
   const handleOpen = useCallback((project: Project) => {
     setSelectedProject(project);
@@ -80,39 +78,55 @@ export function ProjectsSection() {
     setSelectedProject(null);
   }, []);
 
+  // Disable reel ScrollTrigger when case study overlay is open
+  useEffect(() => {
+    if (selectedProject) {
+      ScrollTrigger.getAll().forEach((st) => st.disable());
+    } else {
+      const timer = setTimeout(() => {
+        ScrollTrigger.getAll().forEach((st) => st.enable());
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedProject]);
+
   return (
     <section
-      className="relative"
+      className="relative overflow-hidden"
       id="work"
       data-testid="projects-section"
     >
-      {/* ── Header ────────────────────────────── */}
-      <div className="mx-auto mb-12 flex max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
-        <Reveal>
-          <SectionHeading
-            title="Featured Work"
-            subtitle="Selected projects that showcase my approach to engineering."
-            aligned="left"
-          />
-        </Reveal>
+      {/* ── Heading overlay ─────────────────────── */}
+      <div className="pointer-events-none absolute left-0 top-0 z-30 w-full px-6 pt-8 md:px-10 md:pt-12">
+        <div className="mx-auto max-w-7xl">
+          <Reveal>
+            <SectionHeading
+              title="Featured Work"
+              subtitle="Selected projects that showcase my approach to engineering."
+              aligned="left"
+            />
+          </Reveal>
+        </div>
       </div>
 
       {/* ── Film reel track ───────────────────── */}
-      <div
-        ref={trackRef}
-        id="film-reel-track"
-        data-testid="film-reel-track"
-        className="flex flex-nowrap"
-      >
-        {projects.map((project, index) => (
-          <FilmReelPanel
-            key={project.id}
-            project={project}
-            index={index}
-            onOpen={handleOpen}
-          />
-        ))}
-        <FilmReelClosingPanel />
+      <div className="overflow-hidden">
+        <div
+          ref={trackRef}
+          id="film-reel-track"
+          data-testid="film-reel-track"
+          className="flex flex-nowrap"
+        >
+          {projects.map((project, index) => (
+            <FilmReelPanel
+              key={project.id}
+              project={project}
+              index={index}
+              onOpen={handleOpen}
+            />
+          ))}
+          <FilmReelClosingPanel />
+        </div>
       </div>
 
       {/* ── Case study overlay ────────────────── */}
