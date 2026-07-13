@@ -16,14 +16,25 @@ interface FilmReelPanelProps {
  * Full-bleed cinematic panel for the horizontal film reel.
  * 100vw × 100vh, background image with gradient overlay,
  * editorial text at bottom-left. Click triggers case study overlay.
+ *
+ * Uses a div with role="button" (not a <button>) to avoid invalid
+ * HTML from nesting <a> links inside. Keyboard accessible via
+ * tabIndex + onKeyDown (Enter/Space).
  */
 export function FilmReelPanel({ project, index, onOpen }: FilmReelPanelProps) {
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       onClick={() => onOpen(project)}
-      className="group relative h-screen w-screen flex-shrink-0 overflow-hidden max-md:w-full max-md:h-auto max-md:min-h-[50vh] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen(project);
+        }
+      }}
       aria-label={`View case study: ${project.title}`}
+      className="group relative h-screen w-screen flex-shrink-0 cursor-pointer overflow-hidden max-md:w-full max-md:h-auto max-md:min-h-[50vh] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-text"
     >
       {/* ── Background image ──────────────────── */}
       <Image
@@ -32,8 +43,8 @@ export function FilmReelPanel({ project, index, onOpen }: FilmReelPanelProps) {
         fill
         className="object-contain transition-transform duration-1000 group-hover:scale-[1.02]"
         sizes="100vw"
-        priority={index < 2}
-        loading={index >= 2 ? "lazy" : undefined}
+        priority={index === 0}
+        loading={index >= 1 ? "lazy" : undefined}
       />
 
       {/* ── Gradient overlay ──────────────────── */}
@@ -44,7 +55,7 @@ export function FilmReelPanel({ project, index, onOpen }: FilmReelPanelProps) {
 
       {/* ── Action links (top-right) ──────────── */}
       <div
-        className="absolute right-4 top-20 z-20 flex gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="absolute right-4 top-20 z-20 flex gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100 max-md:opacity-100"
         onClick={(e) => e.stopPropagation()}
       >
         {project.liveUrl && (
@@ -75,14 +86,7 @@ export function FilmReelPanel({ project, index, onOpen }: FilmReelPanelProps) {
 
       {/* ── Bottom-left text stack ────────────── */}
       <div className="absolute bottom-0 left-0 z-10 p-6 pb-8 md:p-10 md:pb-12 [text-shadow:_0_2px_12px_rgb(0_0_0_/_0.9)]">
-        {/* Phase badge */}
-        {project.phase && (
-          <span className="mb-3 inline-block rounded-full bg-black/40 px-3 py-1 text-xs font-bold uppercase tracking-wider text-accent backdrop-blur-sm">
-            {project.phase}
-          </span>
-        )}
-
-        {/* Tagline */}
+        {/* Tagline (optional, only shows if data exists) */}
         {project.tagline && (
           <p className="mb-2 max-w-xl font-heading text-lg font-light italic tracking-wide text-white/80 md:text-xl">
             {project.tagline}
@@ -101,6 +105,6 @@ export function FilmReelPanel({ project, index, onOpen }: FilmReelPanelProps) {
           ))}
         </div>
       </div>
-    </button>
+    </div>
   );
 }
