@@ -30,7 +30,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
     triggerRef.current = document.activeElement as HTMLElement;
     const scrollY = window.scrollY;
     document.body.style.overflow = "hidden";
-    lenis?.stop();
+    lenis?.destroy();
     ScrollTrigger.normalizeScroll(false);
     ScrollTrigger.getAll().forEach((st) => st.disable());
     closeRef.current?.focus();
@@ -38,11 +38,9 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
       document.body.style.overflow = "";
       ScrollTrigger.getAll().forEach((st) => st.enable());
       ScrollTrigger.normalizeScroll(true);
-      // Refresh FIRST so the pin recalculates dimensions, THEN restore scroll position.
-      // Doing it the other way around makes the pin move the reel forward on close.
-      ScrollTrigger.refresh();
       window.scrollTo(0, scrollY);
-      lenis?.start();
+      ScrollTrigger.refresh();
+      lenis?.init();
       // Restore focus to the trigger element
       triggerRef.current?.focus();
     };

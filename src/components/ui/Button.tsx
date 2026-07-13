@@ -57,7 +57,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
 
     const motionProps = prefersReduced
       ? {}
-      : { whileHover: { transform: "scale(1.03)" }, whileTap: { transform: "scale(0.97)" } };
+      : { whileHover: { scale: 1.03 }, whileTap: { scale: 0.97 } };
 
     if (isHrefProps(props as ButtonProps)) {
       const { href, target, rel, ...linkRest } = props as ButtonAsLink;

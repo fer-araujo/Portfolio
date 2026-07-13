@@ -27,7 +27,7 @@ vi.mock("lucide-react", () => ({
 
 // ── Mock lenis ─────────────────────────────────────────
 vi.mock("@/lib/lenis", () => ({
-  useLenisScroll: () => ({ scrollTo: vi.fn(), stop: vi.fn(), start: vi.fn() }),
+  useLenisScroll: () => ({ scrollTo: vi.fn(), destroy: vi.fn(), init: vi.fn() }),
 }));
 
 // ── Mock @/lib/gsap (centralised ScrollTrigger) ───────
@@ -164,7 +164,7 @@ describe("ProjectCaseStudy", () => {
 
   // ── Phase 1: overlay touch scroll fix ────────────────
   describe("overlay scroll behavior", () => {
-    it("sets body overflow to hidden + calls lenis.stop() on mount", () => {
+    it("sets body overflow to hidden + calls lenis.destroy() on mount", () => {
       render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
       expect(document.body.style.overflow).toBe("hidden");
     });

@@ -4,11 +4,10 @@ import { render, screen } from "@testing-library/react";
 import { LenisProvider, initGsapLenisBridge } from "@/lib/lenis";
 
 // ── Hoisted mocks (before vi.mock) ────────────────────
-const { mockLenisOn, mockLenisStop, mockLenisStart, mockNormalizeScroll, mockConfig, mockUpdate, mockUseReducedMotion, mockTickerAdd, mockTickerRemove, mockLagSmoothing } =
+const { mockLenisOn, mockLenisDestroy, mockNormalizeScroll, mockConfig, mockUpdate, mockUseReducedMotion, mockTickerAdd, mockTickerRemove, mockLagSmoothing } =
   vi.hoisted(() => ({
     mockLenisOn: vi.fn(),
-    mockLenisStop: vi.fn(),
-    mockLenisStart: vi.fn(),
+    mockLenisDestroy: vi.fn(),
     mockNormalizeScroll: vi.fn(),
     mockConfig: vi.fn(),
     mockUpdate: vi.fn(),
@@ -28,11 +27,11 @@ vi.mock("lenis", () => ({
   default: function LenisMock() {
     return {
       on: mockLenisOn,
-      stop: mockLenisStop,
-      start: mockLenisStart,
+      destroy: mockLenisDestroy,
       raf: vi.fn(),
       scrollTo: vi.fn(),
-      destroy: vi.fn(),
+      stop: vi.fn(),
+      start: vi.fn(),
     };
   },
 }));
