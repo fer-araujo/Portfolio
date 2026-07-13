@@ -156,8 +156,9 @@ export function HeroSection() {
           Available for opportunities
         </motion.div>
 
-        {/* CTA button */}
+        {/* CTA button — hidden via CSS when reduced motion to avoid hydration mismatches */}
         <motion.div
+          className="motion-reduce:hidden"
           initial={prefersReduced ? undefined : { y: 20, opacity: 0 }}
           animate={prefersReduced ? undefined : { y: 0, opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}

@@ -28,19 +28,18 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
     setMounted(true);
     // Capture the element that opened this modal so we can restore focus on close
     triggerRef.current = document.activeElement as HTMLElement;
-    const scrollY = window.scrollY;
     document.body.style.overflow = "hidden";
     lenis?.destroy();
     ScrollTrigger.normalizeScroll(false);
-    ScrollTrigger.getAll().forEach((st) => st.disable());
+    // NOTE: we do NOT disable ScrollTriggers here — the pin-spacer stays in
+    // place, document height doesn't change, and scroll position is preserved.
+    // body.overflow = "hidden" + normalizeScroll(false) are enough to prevent
+    // unwanted scroll during the overlay.
     closeRef.current?.focus();
     return () => {
       document.body.style.overflow = "";
-      ScrollTrigger.getAll().forEach((st) => st.enable());
-      ScrollTrigger.normalizeScroll(true);
-      window.scrollTo(0, scrollY);
-      ScrollTrigger.refresh();
       lenis?.init();
+      ScrollTrigger.normalizeScroll(true);
       // Restore focus to the trigger element
       triggerRef.current?.focus();
     };
