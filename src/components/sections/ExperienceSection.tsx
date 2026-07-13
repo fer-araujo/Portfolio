@@ -206,7 +206,7 @@ export function ExperienceSection() {
                       </h3>
                       {isCurrent && (
                         <span
-                          className="mt-1 inline-flex items-center gap-1 rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-accent"
+                          className="mt-1 inline-flex items-center gap-1 rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-accent-text"
                           data-testid="current-badge"
                         >
                           <Briefcase className="h-3 w-3" aria-hidden="true" />

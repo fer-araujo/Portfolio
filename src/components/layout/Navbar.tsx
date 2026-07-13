@@ -47,25 +47,25 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* ── Active section tracking ─────────────────────── */
+  /* ── Active section tracking (IntersectionObserver) ──── */
   useEffect(() => {
-    const handleActive = () => {
-      const scrollY = window.scrollY + 120;
-      let active = "";
+    const sections = NAV_LINKS.map((l) => document.getElementById(l.sectionId)).filter(
+      (s): s is HTMLElement => Boolean(s)
+    );
+    if (sections.length === 0) return;
 
-      for (const link of NAV_LINKS) {
-        const section = document.getElementById(link.sectionId);
-        if (section && section.offsetTop <= scrollY) {
-          active = link.sectionId;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setActiveSection((e.target as HTMLElement).id);
+          }
         }
-      }
-
-      setActiveSection(active);
-    };
-
-    window.addEventListener("scroll", handleActive, { passive: true });
-    handleActive();
-    return () => window.removeEventListener("scroll", handleActive);
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
   }, []);
 
   /* ── Smooth scroll helper ────────────────────────── */
@@ -104,7 +104,7 @@ export function Navbar() {
             e.preventDefault();
             scrollToSection("home");
           }}
-          className="text-lg font-heading font-bold tracking-tight text-text"
+          className="text-lg font-heading font-bold tracking-tight text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-text focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-lg"
         >
           Fer Araujo
         </a>
@@ -116,9 +116,9 @@ export function Navbar() {
               key={link.sectionId}
               onClick={() => scrollToSection(link.sectionId)}
               className={cn(
-                "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-text focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
                 activeSection === link.sectionId
-                  ? "text-accent"
+                  ? "text-accent-text"
                   : "text-text-muted hover:cursor-pointer hover:text-text hover:bg-white/5"
               )}
             >
@@ -130,7 +130,7 @@ export function Navbar() {
         {/* ── Mobile hamburger ──────────────────────── */}
         <button
           onClick={() => setMobileOpen((prev) => !prev)}
-          className="flex items-center justify-center rounded-lg p-2 text-text-muted hover:cursor-pointer hover:text-text bg-bg-muted/80 hover:bg-bg-muted ring-2 ring-accent/50 focus-visible:ring-2 pr-2 md:hidden"
+          className="flex items-center justify-center rounded-lg p-2 text-text-muted hover:cursor-pointer hover:text-text bg-bg-muted/80 hover:bg-bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-text focus-visible:ring-offset-2 focus-visible:ring-offset-bg pr-2 md:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
         >
@@ -152,9 +152,9 @@ export function Navbar() {
                 key={link.sectionId}
                 onClick={() => scrollToSection(link.sectionId)}
                 className={cn(
-                  "w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors hover:cursor-pointer",
+                  "w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-text focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
                   activeSection === link.sectionId
-                    ? "bg-accent/5 text-accent"
+                    ? "bg-accent/5 text-accent-text"
                     : "text-text-muted hover:text-text hover:bg-white/5"
                 )}
               >

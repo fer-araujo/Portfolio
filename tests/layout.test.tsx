@@ -55,7 +55,14 @@ vi.mock("lenis", () => {
 
 // Mock @/lib/gsap (centralised gsap + ScrollTrigger — initGsapLenisBridge calls normalizeScroll/config)
 vi.mock("@/lib/gsap", () => ({
-  gsap: { registerPlugin: vi.fn() },
+  gsap: {
+    registerPlugin: vi.fn(),
+    ticker: {
+      add: vi.fn(),
+      remove: vi.fn(),
+      lagSmoothing: vi.fn(),
+    },
+  },
   ScrollTrigger: {
     normalizeScroll: vi.fn(),
     config: vi.fn(),

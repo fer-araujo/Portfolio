@@ -18,6 +18,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://portfolio-teal-psi-nly582g8iq.vercel.app/"),
   title: "Fer Araujo — Sr Software Engineer",
   description:
     "Senior Software Engineer specializing in modern frontend architecture, React, TypeScript, and building performant web experiences.",
@@ -29,6 +30,28 @@ export const metadata: Metadata = {
     "portfolio",
   ],
   robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    url: "https://portfolio-teal-psi-nly582g8iq.vercel.app/",
+    title: "Fer Araujo — Sr Software Engineer",
+    description:
+      "Senior Software Engineer specializing in modern frontend architecture, React, TypeScript, and building performant web experiences.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Fer Araujo — Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fer Araujo — Sr Software Engineer",
+    description:
+      "Senior Software Engineer specializing in modern frontend architecture, React, TypeScript, and building performant web experiences.",
+    images: ["/opengraph-image"],
+  },
 };
 
 export const viewport: Viewport = {

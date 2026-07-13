@@ -84,7 +84,7 @@ export function ContactSection() {
             <a
               href={`mailto:${EMAIL}`}
               aria-label={`Email me at ${EMAIL}`}
-              className="inline-flex items-center gap-3 rounded-xl bg-accent px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-accent/20 transition-all hover:bg-accent-hover hover:shadow-xl hover:shadow-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+              className="inline-flex items-center gap-3 rounded-xl bg-accent px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-accent/20 transition-all hover:bg-accent-hover hover:shadow-xl hover:shadow-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-text focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
             >
               <Mail className="h-5 w-5" aria-hidden="true" />
               Send an Email
@@ -103,7 +103,7 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.platform}
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-border text-text-muted transition-colors hover:border-accent/30 hover:text-accent"
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-border text-text-muted transition-colors hover:border-accent/30 hover:text-accent-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-text focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
               >
                 {iconMap[link.icon.toLowerCase()] ?? null}
               </a>

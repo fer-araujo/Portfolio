@@ -27,7 +27,7 @@ vi.mock("lucide-react", () => ({
 
 // ── Mock lenis ─────────────────────────────────────────
 vi.mock("@/lib/lenis", () => ({
-  useLenisScroll: () => ({ scrollTo: vi.fn(), destroy: vi.fn(), init: vi.fn() }),
+  useLenisScroll: () => ({ scrollTo: vi.fn(), stop: vi.fn(), start: vi.fn() }),
 }));
 
 // ── Mock @/lib/gsap (centralised ScrollTrigger) ───────
@@ -164,7 +164,7 @@ describe("ProjectCaseStudy", () => {
 
   // ── Phase 1: overlay touch scroll fix ────────────────
   describe("overlay scroll behavior", () => {
-    it("sets body overflow to hidden + calls lenis.destroy() on mount", () => {
+    it("sets body overflow to hidden + calls lenis.stop() on mount", () => {
       render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
       expect(document.body.style.overflow).toBe("hidden");
     });
@@ -199,11 +199,10 @@ describe("ProjectCaseStudy", () => {
       expect(scrollContainer.className).toContain("touch-pan-y");
     });
 
-    it("scroll container has iOS -webkit-overflow-scrolling style", () => {
+    it("scroll container has touch-pan-y for mobile scroll", () => {
       render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
       const scrollContainer = screen.getByTestId("case-study-scroll-container");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expect((scrollContainer.style as any).WebkitOverflowScrolling).toBe("touch");
+      expect(scrollContainer.className).toContain("touch-pan-y");
     });
 
     it("renders content area inside scroll container", () => {

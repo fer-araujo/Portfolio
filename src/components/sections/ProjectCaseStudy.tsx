@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
+import { motion } from "motion/react";
 import Image from "next/image";
 import { X, ExternalLink } from "lucide-react";
 import { GithubIcon } from "@/components/ui/BrandIcons";
@@ -18,15 +19,18 @@ interface ProjectCaseStudyProps {
 export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
   const lenis = useLenisScroll();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- required for portal mounting
     setMounted(true);
+    // Capture the element that opened this modal so we can restore focus on close
+    triggerRef.current = document.activeElement as HTMLElement;
     const scrollY = window.scrollY;
     document.body.style.overflow = "hidden";
-    lenis?.destroy();
+    lenis?.stop();
     ScrollTrigger.normalizeScroll(false);
     ScrollTrigger.getAll().forEach((st) => st.disable());
     closeRef.current?.focus();
@@ -34,9 +38,13 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
       document.body.style.overflow = "";
       ScrollTrigger.getAll().forEach((st) => st.enable());
       ScrollTrigger.normalizeScroll(true);
-      window.scrollTo(0, scrollY);
+      // Refresh FIRST so the pin recalculates dimensions, THEN restore scroll position.
+      // Doing it the other way around makes the pin move the reel forward on close.
       ScrollTrigger.refresh();
-      lenis?.init();
+      window.scrollTo(0, scrollY);
+      lenis?.start();
+      // Restore focus to the trigger element
+      triggerRef.current?.focus();
     };
   }, [lenis]);
 
@@ -79,32 +87,39 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
 
   return createPortal(
     <>
-      <div
+      <motion.div
         data-testid="case-study-backdrop"
         className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
         onClick={onClose}
         aria-hidden="true"
       />
       <div
         data-testid="case-study-scroll-container"
         className="fixed inset-0 z-[101] overflow-y-auto overscroll-contain touch-pan-y"
-        style={{ WebkitOverflowScrolling: "touch" }}
         role="dialog"
-        aria-label={`${project.title} case study`}
+        aria-modal="true"
+        aria-labelledby="case-study-title"
       >
         <div
           ref={dialogRef}
           data-testid="case-study-scroll-area"
-          className="mx-auto max-w-5xl px-4 py-8 pb-24 sm:px-6 lg:px-8"
+          className="mx-auto max-w-6xl px-4 py-8 pb-24 sm:px-6 lg:px-8"
         >
           {/* Header */}
           <div className="mb-8 flex items-start justify-between">
             <div>
-              <h2 className="font-heading text-3xl font-bold tracking-tight text-white md:text-4xl">
+              <h2
+                id="case-study-title"
+                className="font-heading text-3xl font-bold tracking-tight text-white md:text-4xl"
+              >
                 {project.title}
               </h2>
               {project.tagline && (
-                <p className="mt-2 font-heading text-lg italic text-accent">
+                <p className="mt-2 font-heading text-lg italic text-accent-text">
                   {project.tagline}
                 </p>
               )}
@@ -112,7 +127,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
             <button
               ref={closeRef}
               onClick={onClose}
-              className="rounded-full bg-white/10 p-2 text-white/60 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+              className="rounded-full bg-white/10 p-2 text-white/60 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-text focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               aria-label="Close case study"
             >
               <X size={24} />
@@ -140,7 +155,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
           {/* Problem / Solution / Impact */}
           <div className="mb-12 grid gap-6 sm:grid-cols-3">
             <div className="rounded-lg border border-white/10 bg-white/5 p-6">
-              <h3 className="mb-2 font-heading text-sm font-bold uppercase tracking-wider text-accent">
+              <h3 className="mb-2 font-heading text-sm font-bold uppercase tracking-wider text-accent-text">
                 Problem
               </h3>
               <p className="text-sm leading-relaxed text-white/70">
@@ -148,7 +163,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
               </p>
             </div>
             <div className="rounded-lg border border-white/10 bg-white/5 p-6">
-              <h3 className="mb-2 font-heading text-sm font-bold uppercase tracking-wider text-accent">
+              <h3 className="mb-2 font-heading text-sm font-bold uppercase tracking-wider text-accent-text">
                 Solution
               </h3>
               <p className="text-sm leading-relaxed text-white/70">
@@ -156,7 +171,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
               </p>
             </div>
             <div className="rounded-lg border border-white/10 bg-white/5 p-6">
-              <h3 className="mb-2 font-heading text-sm font-bold uppercase tracking-wider text-accent">
+              <h3 className="mb-2 font-heading text-sm font-bold uppercase tracking-wider text-accent-text">
                 Impact
               </h3>
               <p className="text-sm leading-relaxed text-white/70">
@@ -219,7 +234,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-text focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 aria-label={`GitHub: ${project.title}`}
               >
                 <GithubIcon className="h-4 w-4" />
@@ -231,7 +246,7 @@ export function ProjectCaseStudy({ project, onClose }: ProjectCaseStudyProps) {
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-accent/20 transition-colors hover:bg-accent-hover"
+                className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-accent/20 transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-text focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 aria-label={`Live Demo: ${project.title}`}
               >
                 <ExternalLink size={16} />

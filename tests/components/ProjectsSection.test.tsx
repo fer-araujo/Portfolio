@@ -109,7 +109,7 @@ vi.mock("next/image", () => ({
 
 // ── Mock lenis ─────────────────────────────────────────
 vi.mock("@/lib/lenis", () => ({
-  useLenisScroll: () => ({ scrollTo: vi.fn(), destroy: vi.fn(), init: vi.fn() }),
+  useLenisScroll: () => ({ scrollTo: vi.fn(), stop: vi.fn(), start: vi.fn() }),
 }));
 
 // ── Mock lucide-react ──────────────────────────────────

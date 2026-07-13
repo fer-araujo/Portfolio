@@ -180,7 +180,7 @@ describe("Navbar", () => {
     render(<Navbar />);
     const menuButton = screen.getByLabelText(/open menu/i);
     expect(menuButton.className).toContain("bg-bg-muted/80");
-    expect(menuButton.className).toContain("ring-2");
-    expect(menuButton.className).toContain("ring-accent/50");
+    expect(menuButton.className).toContain("focus-visible:ring-2");
+    expect(menuButton.className).toContain("focus-visible:ring-accent-text");
   });
 });

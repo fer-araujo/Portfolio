@@ -52,9 +52,9 @@ export function SkillsSection() {
       id="skills"
       data-testid="skills-section"
     >
-      <div className="mx-auto max-w-5xl px-6 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Section label — clean, minimal */}
-        <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-accent/70">
+        <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-accent-text">
           Expertise
         </p>
 
@@ -86,7 +86,7 @@ export function SkillsSection() {
                 {/* Icon + Domain name */}
                 <div className="mb-3 flex items-center gap-3">
                   {Icon && (
-                    <span className="text-accent/80">
+                    <span className="text-accent-text">
                       <Icon className="h-6 w-6" />
                     </span>
                   )}

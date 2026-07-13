@@ -4,14 +4,18 @@ import { render, screen } from "@testing-library/react";
 import { LenisProvider, initGsapLenisBridge } from "@/lib/lenis";
 
 // ── Hoisted mocks (before vi.mock) ────────────────────
-const { mockLenisOn, mockLenisDestroy, mockNormalizeScroll, mockConfig, mockUpdate, mockUseReducedMotion } =
+const { mockLenisOn, mockLenisStop, mockLenisStart, mockNormalizeScroll, mockConfig, mockUpdate, mockUseReducedMotion, mockTickerAdd, mockTickerRemove, mockLagSmoothing } =
   vi.hoisted(() => ({
     mockLenisOn: vi.fn(),
-    mockLenisDestroy: vi.fn(),
+    mockLenisStop: vi.fn(),
+    mockLenisStart: vi.fn(),
     mockNormalizeScroll: vi.fn(),
     mockConfig: vi.fn(),
     mockUpdate: vi.fn(),
     mockUseReducedMotion: vi.fn().mockReturnValue(false),
+    mockTickerAdd: vi.fn(),
+    mockTickerRemove: vi.fn(),
+    mockLagSmoothing: vi.fn(),
   }));
 
 // ── Mock motion/react ──────────────────────────────────
@@ -24,16 +28,25 @@ vi.mock("lenis", () => ({
   default: function LenisMock() {
     return {
       on: mockLenisOn,
-      destroy: mockLenisDestroy,
+      stop: mockLenisStop,
+      start: mockLenisStart,
       raf: vi.fn(),
       scrollTo: vi.fn(),
+      destroy: vi.fn(),
     };
   },
 }));
 
-// ── Mock @/lib/gsap (centralised ScrollTrigger) ───────
+// ── Mock @/lib/gsap (centralised ScrollTrigger + ticker) ───────
 vi.mock("@/lib/gsap", () => ({
-  gsap: { registerPlugin: vi.fn() },
+  gsap: {
+    registerPlugin: vi.fn(),
+    ticker: {
+      add: mockTickerAdd,
+      remove: mockTickerRemove,
+      lagSmoothing: mockLagSmoothing,
+    },
+  },
   ScrollTrigger: {
     normalizeScroll: mockNormalizeScroll,
     config: mockConfig,
@@ -93,6 +106,8 @@ describe("LenisProvider", () => {
       </LenisProvider>
     );
     expect(mockNormalizeScroll).toHaveBeenCalledWith(true);
+    expect(mockTickerAdd).toHaveBeenCalled();
+    expect(mockLagSmoothing).toHaveBeenCalledWith(0);
   });
 
   it("does not create Lenis when reduced motion is preferred", () => {
