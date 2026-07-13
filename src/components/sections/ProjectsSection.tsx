@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, useReducedMotion } from "motion/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { projects } from "@/content/projects";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -27,8 +26,6 @@ export function ProjectsSection() {
 
   useEffect(() => {
     if (prefersReduced || typeof window === "undefined") return;
-
-    gsap.registerPlugin(ScrollTrigger);
 
     const mm = ScrollTrigger.matchMedia({
       "(min-width: 768px)": () => {

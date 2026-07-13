@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { useReducedMotion } from "motion/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap } from "@/lib/gsap";
 import { Boxes, Code2, Server, Users, Rocket } from "lucide-react";
 import { skillDomains } from "@/content/skills";
 
@@ -20,8 +19,6 @@ export function SkillsSection() {
 
   useEffect(() => {
     if (prefersReduced) return;
-
-    gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
       const items = document.querySelectorAll<HTMLElement>(

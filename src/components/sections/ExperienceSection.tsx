@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { useReducedMotion } from "motion/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap } from "@/lib/gsap";
 import { Briefcase } from "lucide-react";
 import { experiences } from "@/content/experience";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -35,8 +34,6 @@ export function ExperienceSection() {
 
   useEffect(() => {
     if (prefersReduced) return;
-
-    gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
       // Parallax dot pattern overlay

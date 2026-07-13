@@ -30,8 +30,9 @@ vi.mock("@/lib/lenis", () => ({
   useLenisScroll: () => ({ scrollTo: vi.fn(), destroy: vi.fn(), init: vi.fn() }),
 }));
 
-// ── Mock gsap/ScrollTrigger ────────────────────────────
-vi.mock("gsap/ScrollTrigger", () => ({
+// ── Mock @/lib/gsap (centralised ScrollTrigger) ───────
+vi.mock("@/lib/gsap", () => ({
+  gsap: { registerPlugin: vi.fn() },
   ScrollTrigger: {
     normalizeScroll: vi.fn(),
     getAll: vi.fn(() => []),

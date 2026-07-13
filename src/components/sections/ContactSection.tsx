@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { useReducedMotion } from "motion/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap } from "@/lib/gsap";
 import { Mail } from "lucide-react";
 import {
   GithubIcon,
@@ -34,8 +33,6 @@ export function ContactSection() {
 
   useEffect(() => {
     if (prefersReduced) return;
-
-    gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
       const content = document.querySelector<HTMLElement>(

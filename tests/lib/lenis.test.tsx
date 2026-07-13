@@ -31,8 +31,9 @@ vi.mock("lenis", () => ({
   },
 }));
 
-// ── Mock gsap/ScrollTrigger ────────────────────────────
-vi.mock("gsap/ScrollTrigger", () => ({
+// ── Mock @/lib/gsap (centralised ScrollTrigger) ───────
+vi.mock("@/lib/gsap", () => ({
+  gsap: { registerPlugin: vi.fn() },
   ScrollTrigger: {
     normalizeScroll: mockNormalizeScroll,
     config: mockConfig,

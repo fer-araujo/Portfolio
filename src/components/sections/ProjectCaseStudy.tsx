@@ -7,7 +7,7 @@ import { X, ExternalLink } from "lucide-react";
 import { GithubIcon } from "@/components/ui/BrandIcons";
 import { Tag } from "@/components/ui/Tag";
 import { useLenisScroll } from "@/lib/lenis";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollTrigger } from "@/lib/gsap";
 import type { Project } from "@/content/types";
 
 interface ProjectCaseStudyProps {

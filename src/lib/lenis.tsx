@@ -10,8 +10,7 @@ import {
 } from "react";
 import { useReducedMotion } from "motion/react";
 import Lenis from "lenis";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollTrigger } from "@/lib/gsap";
 
 /* ═══════════════════════════════════════════════════
    Lenis Smooth Scroll — Provider + Hook
@@ -32,9 +31,11 @@ const LenisContext = createContext<LenisContextValue | null>(null);
  * Initialises the GSAP ScrollTrigger bridge for Lenis coexistence.
  * Must be called after ScrollTrigger is imported and before any
  * scroll-triggered animations are registered.
+ *
+ * Note: `registerPlugin` is centralised in `@/lib/gsap` (runs once at module
+ * scope on first import). This bridge only configures normalisation.
  */
 export function initGsapLenisBridge() {
-  gsap.registerPlugin(ScrollTrigger);
   ScrollTrigger.normalizeScroll(true);
   ScrollTrigger.config({ ignoreMobileResize: true });
 }

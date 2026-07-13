@@ -31,6 +31,11 @@ vi.mock("lucide-react", () => ({
   X: () => <svg data-testid="icon-x" />,
 }));
 
+// ── Mock @/lib/lenis (Navbar uses useLenisScroll) ──────
+vi.mock("@/lib/lenis", () => ({
+  useLenisScroll: () => null,
+}));
+
 describe("Navbar", () => {
   beforeEach(() => {
     vi.clearAllMocks();
