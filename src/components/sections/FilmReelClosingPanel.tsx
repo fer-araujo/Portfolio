@@ -11,7 +11,7 @@ export function FilmReelClosingPanel() {
       <h2 className="mb-4 max-w-2xl font-heading text-3xl font-bold tracking-tight text-text md:text-4xl">
         This reel ends here.
         <br />
-        <span className="text-accent">Your story is next.</span>
+        <span className="text-accent-text">Your story is next.</span>
       </h2>
 
       <p className="max-w-md text-text-muted text-lg leading-relaxed">

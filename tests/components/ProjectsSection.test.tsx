@@ -68,15 +68,12 @@ const { mockGsapTo, mockMmKill, mockTweenKill } = vi.hoisted(() => ({
   mockTweenKill: vi.fn(),
 }));
 
-vi.mock("gsap", () => ({
+vi.mock("@/lib/gsap", () => ({
   gsap: {
     to: mockGsapTo,
     context: () => ({ revert: vi.fn() }),
     registerPlugin: vi.fn(),
   },
-}));
-
-vi.mock("gsap/ScrollTrigger", () => ({
   ScrollTrigger: {
     matchMedia: vi.fn(() => ({
       kill: mockMmKill,

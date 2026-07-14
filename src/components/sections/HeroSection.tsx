@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useLenisScroll } from "@/lib/lenis";
 import { cn } from "@/lib/utils";
 
 const NAME = "Fer Araujo";
@@ -31,13 +32,17 @@ const staggerVariants = {
  */
 export function HeroSection() {
   const prefersReduced = useReducedMotion();
+  const lenis = useLenisScroll();
 
   const handleCtaClick = useCallback(() => {
     const target = document.getElementById("about");
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
+    if (!target) return;
+    if (lenis?.scrollTo) {
+      lenis.scrollTo(target);
+    } else {
+      target.scrollIntoView({ behavior: "auto" });
     }
-  }, []);
+  }, [lenis]);
 
   return (
     <motion.section
@@ -132,7 +137,7 @@ export function HeroSection() {
         <motion.div
           role="status"
           className={cn(
-            "inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/5 px-4 py-1.5 text-sm text-accent"
+            "inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/5 px-4 py-1.5 text-sm text-accent-text"
           )}
           data-testid="hero-status"
           initial={prefersReduced ? undefined : { y: 20, opacity: 0 }}
@@ -151,8 +156,9 @@ export function HeroSection() {
           Available for opportunities
         </motion.div>
 
-        {/* CTA button */}
+        {/* CTA button — hidden via CSS when reduced motion to avoid hydration mismatches */}
         <motion.div
+          className="motion-reduce:hidden"
           initial={prefersReduced ? undefined : { y: 20, opacity: 0 }}
           animate={prefersReduced ? undefined : { y: 0, opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}

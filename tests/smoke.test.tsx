@@ -1,6 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { Navbar } from "@/components/layout/Navbar";
+
+// Navbar imports @/lib/lenis → @/lib/gsap; mock to avoid real gsap in jsdom.
+vi.mock("@/lib/lenis", () => ({
+  useLenisScroll: () => null,
+}));
 
 describe("Vitest setup", () => {
   it("should render a simple component", () => {
@@ -15,7 +20,7 @@ describe("Smoke: Mobile UX", () => {
     const menuButton = screen.getByLabelText(/open menu/i);
     const classes = menuButton.getAttribute("class") ?? "";
     expect(classes).toContain("bg-bg-muted/80");
-    expect(classes).toContain("ring-2");
-    expect(classes).toContain("ring-accent/50");
+    expect(classes).toContain("focus-visible:ring-2");
+    expect(classes).toContain("focus-visible:ring-accent-text");
   });
 });

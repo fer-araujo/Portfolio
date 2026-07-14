@@ -60,10 +60,10 @@ vi.mock("motion/react", () => ({
   useReducedMotion: () => mockUseReducedMotion(),
 }));
 
-// ── Mock GSAP + ScrollTrigger ──────────────────────────
+// ── Mock @/lib/gsap (centralised gsap + ScrollTrigger) ──────────────────────────
 const mockCtxRevert = vi.fn();
 
-vi.mock("gsap", () => ({
+vi.mock("@/lib/gsap", () => ({
   gsap: {
     registerPlugin: vi.fn(),
     context: vi.fn((fn: () => void) => {
@@ -77,9 +77,6 @@ vi.mock("gsap", () => ({
     fromTo: vi.fn(),
     to: vi.fn(),
   },
-}));
-
-vi.mock("gsap/ScrollTrigger", () => ({
   ScrollTrigger: {
     normalizeScroll: vi.fn(),
     config: vi.fn(),

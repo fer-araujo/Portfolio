@@ -53,8 +53,16 @@ vi.mock("lenis", () => {
   };
 });
 
-// Mock gsap/ScrollTrigger (initGsapLenisBridge calls normalizeScroll/config)
-vi.mock("gsap/ScrollTrigger", () => ({
+// Mock @/lib/gsap (centralised gsap + ScrollTrigger — initGsapLenisBridge calls normalizeScroll/config)
+vi.mock("@/lib/gsap", () => ({
+  gsap: {
+    registerPlugin: vi.fn(),
+    ticker: {
+      add: vi.fn(),
+      remove: vi.fn(),
+      lagSmoothing: vi.fn(),
+    },
+  },
   ScrollTrigger: {
     normalizeScroll: vi.fn(),
     config: vi.fn(),
@@ -73,18 +81,71 @@ describe("RootLayout", () => {
 
     render(
       <RootLayout>
-        <main>Test Content</main>
+        <div>Test Content</div>
       </RootLayout>
     );
 
     // Navbar renders its logo
     expect(screen.getByText("Fer Araujo")).toBeInTheDocument();
 
-    // Children render
+    // Children render inside the layout's <main> landmark
     expect(screen.getByText("Test Content")).toBeInTheDocument();
     expect(screen.getByRole("main")).toHaveTextContent("Test Content");
 
     // Footer renders copyright
     expect(screen.getByText(/built with/i)).toBeInTheDocument();
+  });
+});
+
+describe("RootLayout — A11Y-01 main landmark + skip link", () => {
+  it("wraps page content in <main id=\"main-content\">", async () => {
+    const { default: RootLayout } = await import("@/app/layout");
+    render(
+      <RootLayout>
+        <div>body content</div>
+      </RootLayout>
+    );
+    const main = screen.getByRole("main");
+    expect(main).toHaveAttribute("id", "main-content");
+    expect(main).toHaveTextContent("body content");
+  });
+
+  it("renders a skip link as the first focusable element targeting #main-content", async () => {
+    const { default: RootLayout } = await import("@/app/layout");
+    const { container } = render(
+      <RootLayout>
+        <div>body content</div>
+      </RootLayout>
+    );
+
+    const skipLink = screen.getByRole("link", { name: /skip to content/i });
+    expect(skipLink).toHaveAttribute("href", "#main-content");
+
+    // Skip link is visually hidden until focused (sr-only + focus:not-sr-only)
+    expect(skipLink.className).toContain("sr-only");
+    expect(skipLink.className).toContain("focus:not-sr-only");
+
+    // Skip link precedes the main landmark in DOM order
+    const main = screen.getByRole("main");
+    const allFocusable = Array.from(
+      container.querySelectorAll("a[href], button, [tabindex]")
+    );
+    const skipIndex = allFocusable.indexOf(skipLink);
+    const mainIndex = Array.from(container.querySelectorAll("*")).indexOf(main);
+    expect(skipIndex).toBeGreaterThanOrEqual(0);
+    expect(skipIndex).toBe(0); // first focusable element
+    // skip link comes before main in document order
+    expect(skipLink.compareDocumentPosition(main) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    void mainIndex;
+  });
+
+  it("renders exactly one main landmark", async () => {
+    const { default: RootLayout } = await import("@/app/layout");
+    render(
+      <RootLayout>
+        <div>body content</div>
+      </RootLayout>
+    );
+    expect(screen.getAllByRole("main")).toHaveLength(1);
   });
 });

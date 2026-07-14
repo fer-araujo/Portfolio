@@ -16,7 +16,7 @@ export const projects: Project[] = [
       solution:
         "Created a platform that tracks anime streaming availability across multiple services, using the TMDB API for show data and metadata.",
       impact:
-        "Serves thousands of monthly active users looking for where to watch their favorite anime.",
+        "Gives anime fans a single, well-designed place to discover which official streaming platforms carry their favorite shows — no more jumping between tabs or landing on shady sites that don't actually have what you're looking for.",
     },
     techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Express", "TMDB API"],
     thumbnail: "/images/projects/anime-tracker-01.png",
@@ -42,7 +42,7 @@ export const projects: Project[] = [
       solution:
         "Developed a lightweight patient management starter application with React and TypeScript, focused on core scheduling and records.",
       impact:
-        "Deployed in 3 local clinics, helping streamline patient intake and appointment scheduling.",
+        "Built for a clinic with a large patient base where most people are 50–80 years old and not comfortable with technology. The doctor needed a better way to manage appointments and records — this system gives her exactly that, with a UI her patients can actually navigate.",
     },
     techStack: ["React", "TypeScript", "Vite"],
     thumbnail: "/images/projects/patient-management-01.png",
@@ -67,7 +67,7 @@ export const projects: Project[] = [
       solution:
         "Built a QR-based attendance system where students scan to check in, with a Firebase backend for real-time tracking and reporting.",
       impact:
-        "Reduced attendance processing time by 80% and eliminated data entry errors for school administrators.",
+        "Currently in production testing with school staff for employee attendance tracking. The architecture is designed to expand into full student attendance management — starting small, validating with real users, then scaling.",
     },
     techStack: ["React", "TypeScript", "Tailwind CSS", "Firebase"],
     thumbnail: "/images/projects/school-system-01.png",

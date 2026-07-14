@@ -29,6 +29,7 @@ function AnimatedCounter({ value, suffix = "", duration = 1 }: CounterProps) {
   useEffect(() => {
     if (prefersReduced || !isInView) return;
 
+    let rafId: number;
     let startTime: number | null = null;
     const startValue = 0;
 
@@ -41,11 +42,12 @@ function AnimatedCounter({ value, suffix = "", duration = 1 }: CounterProps) {
       setCount(Math.floor(startValue + (value - startValue) * eased));
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       }
     }
 
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
   }, [isInView, value, duration, prefersReduced]);
 
   return (
@@ -96,7 +98,7 @@ export function AboutSection() {
                   size="md"
                   href={about.cvUrl}
                   download
-                  aria-label={`Download CV (PDF, 120KB)`}
+                  aria-label="Download CV (PDF)"
                 >
                   <Download className="h-4 w-4" aria-hidden="true" />
                   Download CV

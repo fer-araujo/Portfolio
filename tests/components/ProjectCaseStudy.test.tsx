@@ -30,8 +30,9 @@ vi.mock("@/lib/lenis", () => ({
   useLenisScroll: () => ({ scrollTo: vi.fn(), destroy: vi.fn(), init: vi.fn() }),
 }));
 
-// ── Mock gsap/ScrollTrigger ────────────────────────────
-vi.mock("gsap/ScrollTrigger", () => ({
+// ── Mock @/lib/gsap (centralised ScrollTrigger) ───────
+vi.mock("@/lib/gsap", () => ({
+  gsap: { registerPlugin: vi.fn() },
   ScrollTrigger: {
     normalizeScroll: vi.fn(),
     getAll: vi.fn(() => []),
@@ -198,11 +199,10 @@ describe("ProjectCaseStudy", () => {
       expect(scrollContainer.className).toContain("touch-pan-y");
     });
 
-    it("scroll container has iOS -webkit-overflow-scrolling style", () => {
+    it("scroll container has touch-pan-y for mobile scroll", () => {
       render(<ProjectCaseStudy project={fullProject} onClose={vi.fn()} />);
       const scrollContainer = screen.getByTestId("case-study-scroll-container");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expect((scrollContainer.style as any).WebkitOverflowScrolling).toBe("touch");
+      expect(scrollContainer.className).toContain("touch-pan-y");
     });
 
     it("renders content area inside scroll container", () => {

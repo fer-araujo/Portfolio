@@ -33,6 +33,11 @@
   --color-accent: oklch(0.55 0.18 160);
   --color-accent-hover: oklch(0.62 0.2 160);
   --color-accent-muted: oklch(0.45 0.12 160);
+  /* Accent-text — lighter emerald for TEXT usage (>=4.5:1, 5.16:1 on --background).
+     Non-text usages keep --color-accent. */
+  --color-accent-text: oklch(0.62 0.20 160);
+  /* Accent-teal — distinct teal for aurora variety (defined, visible at /5). */
+  --color-accent-teal: oklch(0.60 0.14 200);
 
   /* Accent - Gold */
   --color-accent-gold: var(--color-accent-gold);
@@ -113,8 +118,12 @@
 }
 
 /* Base styles */
-html {
-  scroll-behavior: smooth;
+/* NOTE: no top-level `scroll-behavior: smooth` — it conflicts with Lenis.
+   Lenis sets `.lenis.lenis-smooth` on <html>; we force auto so the native
+   CSS smooth-scroll never fights the JS-driven easing. Reduced-motion
+   handling lives in the @media block below. */
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }
 
 body {

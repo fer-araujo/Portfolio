@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef, type ButtonHTMLAttributes, type AnchorHTMLAttributes } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 type Variant = "primary" | "secondary" | "ghost";
@@ -47,12 +47,17 @@ function isHrefProps(props: ButtonProps): props is ButtonAsLink {
  */
 export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   function Button({ variant = "primary", size = "md", className, children, ...props }, ref) {
+    const prefersReduced = useReducedMotion();
     const classes = cn(
-      "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:pointer-events-none disabled:opacity-50",
+      "inline-flex items-center justify-center gap-2 rounded-lg font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:pointer-events-none disabled:opacity-50",
       variantStyles[variant],
       sizeStyles[size],
       className
     );
+
+    const motionProps = prefersReduced
+      ? {}
+      : { whileHover: { scale: 1.03 }, whileTap: { scale: 0.97 } };
 
     if (isHrefProps(props as ButtonProps)) {
       const { href, target, rel, ...linkRest } = props as ButtonAsLink;
@@ -65,8 +70,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
           className={classes}
           data-variant={variant}
           data-size={size}
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
+          {...motionProps}
           {...(linkRest as Record<string, unknown>)}
         >
           {children}
@@ -81,8 +85,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
         className={classes}
         data-variant={variant}
         data-size={size}
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
+        {...motionProps}
         {...(buttonRest as Record<string, unknown>)}
       >
         {children}

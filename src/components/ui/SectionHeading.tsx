@@ -53,11 +53,11 @@ export function SectionHeading({
 
       <motion.div
         className={cn(
-          "h-1 w-16 rounded-full bg-accent mt-4",
+          "h-1 w-16 rounded-full bg-accent mt-4 origin-left",
           aligned === "center" && "mx-auto"
         )}
-        initial={prefersReduced ? false : { width: 0 }}
-        whileInView={{ width: 64 }}
+        initial={prefersReduced ? false : { scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
       />
