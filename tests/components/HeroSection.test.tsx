@@ -93,7 +93,7 @@ describe("HeroSection", () => {
     await user.click(cta);
 
     expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
-    expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: "smooth" });
+    expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: "auto" });
 
     document.body.removeChild(target);
   });

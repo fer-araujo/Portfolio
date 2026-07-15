@@ -18,7 +18,7 @@ const variantStyles: Record<TagVariant, string> = {
   default:
     "bg-bg-muted text-text-muted hover:text-text hover:bg-white/10",
   accent:
-    "bg-accent/10 text-accent hover:bg-accent/20",
+    "bg-accent/10 text-accent-text hover:bg-accent/20",
 };
 
 /**

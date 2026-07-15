@@ -38,7 +38,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.platform}
-                className="text-text-muted transition-colors hover:text-text"
+                className="flex h-12 w-12 items-center justify-center rounded-full text-text-muted transition-colors hover:text-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-text focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
               >
                 {iconMap[link.icon.toLowerCase()] ?? null}
               </a>

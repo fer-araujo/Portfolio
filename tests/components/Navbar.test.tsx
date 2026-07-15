@@ -31,6 +31,11 @@ vi.mock("lucide-react", () => ({
   X: () => <svg data-testid="icon-x" />,
 }));
 
+// ── Mock @/lib/lenis (Navbar uses useLenisScroll) ──────
+vi.mock("@/lib/lenis", () => ({
+  useLenisScroll: () => null,
+}));
+
 describe("Navbar", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -175,7 +180,7 @@ describe("Navbar", () => {
     render(<Navbar />);
     const menuButton = screen.getByLabelText(/open menu/i);
     expect(menuButton.className).toContain("bg-bg-muted/80");
-    expect(menuButton.className).toContain("ring-2");
-    expect(menuButton.className).toContain("ring-accent/50");
+    expect(menuButton.className).toContain("focus-visible:ring-2");
+    expect(menuButton.className).toContain("focus-visible:ring-accent-text");
   });
 });

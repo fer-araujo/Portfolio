@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, useReducedMotion } from "motion/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { projects } from "@/content/projects";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -27,8 +26,6 @@ export function ProjectsSection() {
 
   useEffect(() => {
     if (prefersReduced || typeof window === "undefined") return;
-
-    gsap.registerPlugin(ScrollTrigger);
 
     const mm = ScrollTrigger.matchMedia({
       "(min-width: 768px)": () => {
@@ -85,7 +82,7 @@ export function ProjectsSection() {
       data-testid="projects-section"
     >
       {/* ── Heading in normal flow above the reel ── */}
-      <div className="mx-auto max-w-7xl px-4 pb-4 pt-2 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 pb-4 pt-2 sm:px-6 lg:px-8">
         <Reveal>
           <SectionHeading
             title="Featured Work"
@@ -96,12 +93,12 @@ export function ProjectsSection() {
       </div>
 
       {/* ── Film reel track ───────────────────── */}
-      <div id="film-reel-wrapper" className="md:overflow-hidden">
+      <div id="film-reel-wrapper" className={prefersReduced ? "" : "md:overflow-hidden"}>
         <div
           ref={trackRef}
           id="film-reel-track"
           data-testid="film-reel-track"
-          className="flex flex-nowrap max-md:flex-col"
+          className={prefersReduced ? "flex flex-col" : "flex flex-nowrap max-md:flex-col"}
         >
           {projects.map((project, index) => (
             <FilmReelPanel

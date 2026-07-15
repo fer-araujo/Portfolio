@@ -67,16 +67,9 @@ describe("FilmReelPanel", () => {
     expect(screen.queryByText("Build better. Ship faster.")).not.toBeInTheDocument();
   });
 
-  it("renders phase badge when phase is present", () => {
+  it("does not render phase badge even when phase is present (removed per user request)", () => {
     render(<FilmReelPanel project={fullProject} index={0} onOpen={vi.fn()} />);
-    expect(screen.getByText("current")).toBeInTheDocument();
-  });
-
-  it("renders phase badge with bg-black/40 and font-bold for contrast", () => {
-    render(<FilmReelPanel project={fullProject} index={0} onOpen={vi.fn()} />);
-    const badge = screen.getByText("current");
-    expect(badge.className).toContain("bg-black/40");
-    expect(badge.className).toContain("font-bold");
+    expect(screen.queryByText("current")).not.toBeInTheDocument();
   });
 
   it("does not render phase badge when phase is absent", () => {
