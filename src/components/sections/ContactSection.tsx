@@ -18,7 +18,7 @@ const iconMap: Record<string, React.ReactNode> = {
   linkedin: <LinkedinIcon className="h-5 w-5" />,
 };
 
-const EMAIL = "hello@feraraujo.com";
+const EMAIL = "ferno93@gmail.com";
 
 /**
  * Contact section with email CTA and social links.
